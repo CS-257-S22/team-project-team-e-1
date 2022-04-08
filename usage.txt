@@ -1,0 +1,7 @@
+getMovie(title) {
+    From a title, return all relevant information regarding a movie.
+}
+
+search(actors, release year, genre) {
+    return a list of movies which matches each actor, year, and genre argument provided.
+}
