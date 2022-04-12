@@ -3,5 +3,5 @@ getMovie(title) {
 }
 
 search(actors, release year, genre) {
-    return a list of movies which matches each actor, year, and genre argument provided.
+    return a list of movies which matches each actor, year, and genre argument provided, if provided.
 }
