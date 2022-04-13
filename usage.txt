@@ -2,6 +2,13 @@ getMovie(title) {
     From a title, return all relevant information regarding a movie.
 }
 
-search(actors, release year, genre) {
+findMatchingMovie(actors, release year, genre) {
     return a list of movies which matches each actor, year, and genre argument provided, if provided.
+    For each search argument provided, we call a helper search function which searches the database
+    for movies which match only that respective search criterion.
+}
+
+searchFactory(search criterion) {
+    a factory which generates a search function which searches the database for movies matching
+    some given search criterion
 }
