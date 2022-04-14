@@ -8,6 +8,10 @@ findMatchingMovie(actors, release year, genre) {
     for movies which match only that respective search criterion.
 }
 
+getRandomMovie(actors, release year, genre) {
+     a function that provides a random movie given a specified genre, actor, or release year
+}
+    
 searchFactory(search criterion) {
     a factory which generates a search function which searches the database for movies matching
     some given search criterion
