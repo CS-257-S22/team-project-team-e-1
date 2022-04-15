@@ -7,7 +7,13 @@ with open('Data (CS257)/netflix_titles.csv', newline='') as csvfile:
     dataArray = []
     for row in data:
         dataArray.append(row)
-    #print(dataArray[0][2])
+    #print(dataArray[0][3])
+
+def getMovie(title):
+    curRow = 1
+    curMovie = dataArray[curRow][2]
+    if curMovie == title:
+        return 
 
 
 
