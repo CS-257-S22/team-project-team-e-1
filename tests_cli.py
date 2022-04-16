@@ -1,8 +1,8 @@
 import unittest
-import command_line
+import main
 
-class TestSOMETHING(unittest.TestCase):
-    def test_A_GOOD_NAME(self):
+class TestRandom(unittest.TestCase):
+    def test_basicRandom(self):
         """ A GOOD DOCSTRING """
     
         pass
