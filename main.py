@@ -13,7 +13,6 @@ def initializeData():
     return dataArray
 
 def getMovie(title):
-    
     print(title)
     curRow = 1
     curMovie = dataArray[curRow][2]
@@ -23,6 +22,8 @@ def getMovie(title):
             exit()
         curRow += 1
         curMovie = dataArray[curRow][2]
+    for item in dataArray[curRow]:
+        print(item)
     return dataArray[curRow]
 
 
@@ -76,7 +77,8 @@ def main():
             myKwargs[curCategory] = specifiedCategory
         getRandomMovie(**myKwargs)
     elif functionName == "getMovie":
-        getMovie()
+        title = sys.argv[2]
+        filmInfo = getMovie(title)
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser
