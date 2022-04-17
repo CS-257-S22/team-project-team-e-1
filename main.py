@@ -12,8 +12,8 @@ def initializeData():
             dataArray.append(row)
     return dataArray
 
-def getMovie():
-    title = sys.argv[2]
+def getMovie(title):
+    
     print(title)
     curRow = 1
     curMovie = dataArray[curRow][2]
@@ -23,8 +23,7 @@ def getMovie():
             exit()
         curRow += 1
         curMovie = dataArray[curRow][2]
-    for item in dataArray[curRow]:
-        print(item)
+    return dataArray[curRow]
 
 
 
