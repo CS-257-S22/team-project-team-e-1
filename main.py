@@ -13,7 +13,6 @@ def initializeData():
     return dataArray
 
 def getMovie(title):
-    
     print(title)
     curRow = 1
     curMovie = dataArray[curRow][2]
