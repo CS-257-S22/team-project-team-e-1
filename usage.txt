@@ -16,3 +16,8 @@ searchFactory(search criterion) {
     a factory which generates a search function which searches the database for movies matching
     some given search criterion
 }
+
+getPopularMovies() {
+    return a list of movies that are currently the most popular.
+    popularity is determined by how many times a movie's description has been viewed.
+}
