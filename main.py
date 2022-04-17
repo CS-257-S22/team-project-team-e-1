@@ -1,11 +1,12 @@
 import csv
 import sys
 import random
+import argparse
+
 
 def initializeData():
     with open('Data (CS257)/netflix_titles.csv', newline='') as csvfile:
         data = csv.reader(csvfile)
-        #print(type(data))
         dataArray = []
         for row in data:
             dataArray.append(row)
@@ -27,11 +28,11 @@ def getMovie():
 
 
 
-def getRandomMovie(*kwargs):
-    randInt
-    curData = dataArray[1]
+def getRandomMovie(**kwargs):
+    print("director is:", dataArray[14][3])
+    curData = dataArray
     if len(kwargs)==0:
-        randInt = random.randint(0,len(dataArray))
+        randInt = random.randint(0,len(dataArray)-1)
         print(dataArray[randInt])
         #also return it for testing
         return dataArray[randInt]
@@ -40,58 +41,58 @@ def getRandomMovie(*kwargs):
         #pull the cases that match those options
         for key, value in kwargs.items():
             if key in ["-t","-type"]:
-                for i in len(dataArray):
-                    curValue = dataArray[i][1]
-                    if value in curValue and dataArray[i] not in curData:
-                        curData.append(dataArray[i])
+                curData = [row for row in curData if value in row[1]]
             elif key in ["-g","-genre"]:
-                for i in len(dataArray):
-                    curValue = dataArray[i][10]
-                    if value in curValue and dataArray[i] not in curData:
-                        curData.append(dataArray[i])
+                curData = [row for row in curData if value in row[10]]  
             elif key in ["-d","-director"]:
-                for i in len(dataArray):
-                    curValue = dataArray[i][3]
-                    if value in curValue and dataArray[i] not in curData:
-                        curData.append(dataArray[i])
+                curData = [row for row in curData if value in row[3]]
             elif key in ["-c","-cast"]:
-                for i in len(dataArray):
-                    curValue = dataArray[i][4]
-                    if value in curValue and dataArray[i] not in curData:
-                        curData.append(dataArray[i])
+                curData = [row for row in curData if value in row[4]]
             elif key in ["-y","-year"]:
-                for i in len(dataArray):
-                    curValue = dataArray[i][7]
-                    if value in curValue and dataArray[i] not in curData:
-                        curData.append(dataArray[i])
+                curData = [row for row in curData if value in row[7]]
             elif key in ["-r","-rating"]:
-                for i in len(dataArray):
-                    curValue = dataArray[i][8]
-                    if value in curValue and dataArray[i] not in curData:
-                        curData.append(dataArray[i])
+                curData = [row for row in curData if value in row[8]]
             else:
                 print("Invalid command line arguments.")
                 sys.exit(kwargs)
-
-        randInt = random.randint(0,len(curData))
+        
+        randInt = random.randint(0,len(curData)-1)
+        print("length:",len(curData))
         print(curData[randInt])
         return curData[randInt]
 
 
 def main():
-    global dataArray = initializeData()
+    global dataArray 
+    dataArray = initializeData()
     print(f"Arguments count: {len(sys.argv)}")
+    print(sys.argv)
     functionName = sys.argv[1]
     numArgs = len(sys.argv)
     print("function name: ", functionName)
+   
     if functionName=="getRandomMovie":
         myKwargs = {}
         for i in range(2, numArgs, 2):
             curCategory = sys.argv[i]
             specifiedCategory = sys.argv[i+1]
             myKwargs[curCategory] = specifiedCategory
-        getRandomMovie(myKwargs)
+        getRandomMovie(**myKwargs)
     elif functionName == "getMovie":
         getMovie()
 
+
+#  # Create the parser
+#     parser = argparse.ArgumentParser()
+#     # Add an argument
+#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
+#     help="takes in a str formatted genre")
+#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
+#     help="takes in a str formatted genre")
+#     parser.add_argument('-r', '--rating', type=str, action='store_true', 
+#     help="shows output")
+#     # Parse the argument
+#     args = parser.parse_args()
+#     # Print "Hello" + the user input argument
+#     print('Hello,', args.name)
 main()
