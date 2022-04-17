@@ -29,7 +29,6 @@ def getMovie():
 
 
 def getRandomMovie(**kwargs):
-    print("director is:", dataArray[14][3])
     curData = dataArray
     if len(kwargs)==0:
         randInt = random.randint(0,len(dataArray)-1)
@@ -57,7 +56,6 @@ def getRandomMovie(**kwargs):
                 sys.exit(kwargs)
         
         randInt = random.randint(0,len(curData)-1)
-        print("length:",len(curData))
         print(curData[randInt])
         return curData[randInt]
 
@@ -81,7 +79,7 @@ def main():
     elif functionName == "getMovie":
         getMovie()
 
-
+#if we want to implement argparse to make things cleaner
 #  # Create the parser
 #     parser = argparse.ArgumentParser()
 #     # Add an argument
