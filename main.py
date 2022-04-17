@@ -14,18 +14,27 @@ def initializeData():
 
 def getMovie(title):
     print(title)
+    filmRow = dataSearch(title)
+    if filmRow == None:
+       print("Title not found", file = sys.stderr)
+       return
+    selectedMovieInfo = dataArray[filmRow]
+    printList(selectedMovieInfo)
+    return selectedMovieInfo#Definitely clearer, not sure if it's actually less code
+
+def dataSearch(keyword):
     curRow = 1
     curMovie = dataArray[curRow][2]
-    while curMovie != title:
+    while curMovie != keyword:
         if curRow+1 == len(dataArray):
-            print("Title not found", file = sys.stderr)
-            exit()
+            return None
         curRow += 1
         curMovie = dataArray[curRow][2]
-    for item in dataArray[curRow]:
-        print(item)
-    return dataArray[curRow]
+    return curRow
 
+def printList(data):
+    for datapoint in data:
+        print(datapoint)
 
 
 def getRandomMovie(**kwargs):
