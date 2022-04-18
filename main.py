@@ -14,6 +14,7 @@ def initializeData():
 
 def getMovie(title):
     print(title)
+    title = title.strip()
     filmRow = dataSearch(title)
     if filmRow == None:
        print("Title not found", file = sys.stderr)
@@ -88,6 +89,8 @@ def main():
     elif functionName == "getMovie":
         title = sys.argv[2]
         filmInfo = getMovie(title)
+    else:
+        print("Function name not recognized-- please choose either getMovie or getRandomMovie", file = sys.stderr)
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser
