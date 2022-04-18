@@ -7,12 +7,13 @@ import os
 class TestRandom(unittest.TestCase):
     """ A GOOD DOCSTRING """
     def test_basicRandom(self):
-        self.assertIn(subprocess.run("python3 main.py getRandomMovie"), main.initializeData, "Ouput is not a valid show/movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser([])), main.initializeData, "Ouput is not a valid show/movie in dataset.")
     def test_optionsRandom(self):
-        self.assertIn(subprocess.run("python3 main.py getRandomMovie -t Movie -g Documentaries"), main.initializeData, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-t", "Movie", "-g", "Documentaries"])), main.initializeData, "Ouput is not a valid documentary movie in dataset.")
     def test_edgeRandom(self):
-        self.assertIn(subprocess.run("python3 main.py getRandomMovie -t Movie -g Documentaries -d Bruno Garotti -c Klara Castanho -y 2021"), main.initializeData[14], "Ouput is not a valid documentary movie in dataset.")
-    
+        self.assertIn(main.getRandomMovie(main.Parser(["-t", "Movie", "-g", "Comedies","-d", "Bruno Garotti", "-c", "Klara Castanho", "-y", "2021"])), main.initializeData[14], "Ouput is not a valid documentary movie in dataset.")
+    def test_Randomness(self):
+        self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
 
 class TestGettingPopularMovies(unittest.TestCase):
     def test_Opening_Popular_Titles_File(self):

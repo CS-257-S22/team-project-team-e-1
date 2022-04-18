@@ -2,6 +2,7 @@ import csv
 import sys
 import random
 import argparse
+from turtle import tiltangle
 
 
 def initializeData():
@@ -38,36 +39,18 @@ def printList(data):
         print(datapoint)
 
 
-def getRandomMovie(**kwargs):
-    curData = dataArray
-    if len(kwargs)==0:
+def getRandomMovie(parsedArgs):
+
+    if parsedArgs.noArgs():
         randInt = random.randint(0,len(dataArray)-1)
         print(dataArray[randInt])
         #also return it for testing
         return dataArray[randInt]
     else:
-        #loop over all the possible options
-        #pull the cases that match those options
-        for key, value in kwargs.items():
-            if key in ["-t","-type"]:
-                curData = [row for row in curData if value in row[1]]
-            elif key in ["-g","-genre"]:
-                curData = [row for row in curData if value in row[10]]  
-            elif key in ["-d","-director"]:
-                curData = [row for row in curData if value in row[3]]
-            elif key in ["-c","-cast"]:
-                curData = [row for row in curData if value in row[4]]
-            elif key in ["-y","-year"]:
-                curData = [row for row in curData if value in row[7]]
-            elif key in ["-r","-rating"]:
-                curData = [row for row in curData if value in row[8]]
-            else:
-                print("Invalid command line arguments.")
-                sys.exit(kwargs)
-        
-        randInt = random.randint(0,len(curData)-1)
-        print(curData[randInt])
-        return curData[randInt]
+        filteredData = search(parsedArgs)
+        randInt = random.randint(0,len(filteredData)-1)
+        print(filteredData[randInt])
+        return filteredData[randInt]
 
 
 def getPopularMovies():
