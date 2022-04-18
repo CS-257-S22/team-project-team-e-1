@@ -14,6 +14,7 @@ def initializeData():
 
 def getMovie():
     title = sys.argv[2]
+    increaseMoviePopularity(title)
     print(title)
     curRow = 1
     curMovie = dataArray[curRow][2]
@@ -59,6 +60,78 @@ def getRandomMovie(**kwargs):
         print(curData[randInt])
         return curData[randInt]
 
+def getPopularMovies():
+    finalList = []
+    popularTitlesList = open("popularTitles.txt", 'r')
+    for line in popularTitlesList:
+        currline = line.split('|')
+        if currline[0] == "Movie":
+            if len(finalList) != 10:
+                finalList.append([currline[1], currline[2]])
+                finalList = bubble_sort(finalList)
+            else:
+                if finalList[0][1] < currline[2]:
+                    finalList[0] = [currline[1], currline[2]]
+                    finalList = bubble_sort(finalList)
+    popularTitlesList.close()
+    
+    count = 0
+    for title in finalList:
+        finalList[count] = title[0]
+        count += 1
+    print(finalList)
+
+
+def increaseMoviePopularity(movieTitle):
+    allMoviesList = open('popularTitles.txt', 'r').readlines()
+    
+    movieNewPopularity = ""
+    counter = 0
+    for movieInfo in allMoviesList:
+        if movieTitle in movieInfo:
+            data = movieInfo.split('|')
+            data[2] = int(data[2]) + 1
+            data[2] = str(data[2])
+            movieNewPopularity = '|'.join(data)
+            break
+        counter += 1       
+    allMoviesList[counter] = movieNewPopularity
+    
+    transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
+                    
+#This sorting algorithm was made by Santiago Valdarrama 
+#and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
+#Only the indices in the if statement were changed from the original function.
+def bubble_sort(array):
+    n = len(array)
+
+    for i in range(n):
+        # Create a flag that will allow the function to
+        # terminate early if there's nothing left to sort
+        already_sorted = True
+
+        # Start looking at each item of the list one by one,
+        # comparing it with its adjacent value. With each
+        # iteration, the portion of the array that you look at
+        # shrinks because the remaining items have already been
+        # sorted.
+        for j in range(n - i - 1):
+            if array[j][1] > array[j + 1][1]:
+                # If the item you're looking at is greater than its
+                # adjacent value, then swap them
+                array[j], array[j + 1] = array[j + 1], array[j]
+
+                # Since you had to swap two elements,
+                # set the `already_sorted` flag to `False` so the
+                # algorithm doesn't finish prematurely
+                already_sorted = False
+
+        # If there were no swaps during the last iteration,
+        # the array is already sorted, and you can terminate
+        if already_sorted:
+            break
+
+    return array
 
 def main():
     global dataArray 
@@ -78,6 +151,8 @@ def main():
         getRandomMovie(**myKwargs)
     elif functionName == "getMovie":
         getMovie()
+    elif functionName == "getPopularMovies":
+        getPopularMovies()
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser
