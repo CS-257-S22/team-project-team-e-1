@@ -12,21 +12,30 @@ def initializeData():
             dataArray.append(row)
     return dataArray
 
-def getMovie():
-    title = sys.argv[2]
+def getMovie(title):
     increaseMoviePopularity(title)
     print(title)
+    filmRow = dataSearch(title)
+    if filmRow == None:
+       print("Title not found", file = sys.stderr)
+       return
+    selectedMovieInfo = dataArray[filmRow]
+    printList(selectedMovieInfo)
+    return selectedMovieInfo#Definitely clearer, not sure if it's actually less code
+
+def dataSearch(keyword):
     curRow = 1
     curMovie = dataArray[curRow][2]
-    while curMovie != title:
+    while curMovie != keyword:
         if curRow+1 == len(dataArray):
-            print("Title not found", file = sys.stderr)
-            exit()
+            return None
         curRow += 1
         curMovie = dataArray[curRow][2]
-    for item in dataArray[curRow]:
-        print(item)
+    return curRow
 
+def printList(data):
+    for datapoint in data:
+        print(datapoint)
 
 
 def getRandomMovie(**kwargs):
@@ -59,6 +68,7 @@ def getRandomMovie(**kwargs):
         randInt = random.randint(0,len(curData)-1)
         print(curData[randInt])
         return curData[randInt]
+
 
 def getPopularMovies():
     finalList = []
@@ -98,7 +108,8 @@ def increaseMoviePopularity(movieTitle):
     allMoviesList[counter] = movieNewPopularity
     
     transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
-                    
+
+
 #This sorting algorithm was made by Santiago Valdarrama 
 #and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
 #Only the indices in the if statement were changed from the original function.
@@ -133,6 +144,46 @@ def bubble_sort(array):
 
     return array
 
+
+class Parser:
+    def __init__(self, args):
+        
+        self.type = []
+        self.title = []
+        self.director = []
+        self.cast = []
+        self.country = []
+        self.date_added = []
+        self.release_year = []
+        self.rating = []
+        self.duration = []
+        self.listed_in = []
+        self.description = []
+
+        for i in range(2, len(args), 2):
+            curCategory = sys.argv[i]
+            criterion = sys.argv[i+1]
+            if curCategory in ["-t","-type"]:
+                self.type.append(criterion)
+            elif curCategory in ["-t","-type"]:
+                self.type.append(criterion)
+            elif curCategory in ["-g","-genre"]:
+                curData = [row for row in curData if value in row[10]]  
+            elif curCategory in ["-d","-director"]:
+                curData = [row for row in curData if value in row[3]]
+            elif curCategory in ["-c","-cast"]:
+                curData = [row for row in curData if value in row[4]]
+            elif curCategory in ["-y","-year"]:
+                curData = [row for row in curData if value in row[7]]
+            elif curCategory in ["-r","-rating"]:
+                self.rating.append(criterion)
+            else:
+                print("Invalid command line arguments.")
+                sys.exit(kwargs)
+            myKwargs[curCategory] = specifiedCategory
+
+
+
 def main():
     global dataArray 
     dataArray = initializeData()
@@ -150,9 +201,12 @@ def main():
             myKwargs[curCategory] = specifiedCategory
         getRandomMovie(**myKwargs)
     elif functionName == "getMovie":
-        getMovie()
+        title = sys.argv[2]
+        filmInfo = getMovie(title)
     elif functionName == "getPopularMovies":
         getPopularMovies()
+
+#usage should be for without function (specifies functions) and for certain function (gives criterion)
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser
