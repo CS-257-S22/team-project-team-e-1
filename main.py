@@ -254,5 +254,4 @@ def main():
 #     args = parser.parse_args()
 #     # Print "Hello" + the user input argument
 #     print('Hello,', args.name)
-7d894bbe4e34e18ae5cf1d759d7d3ae3e998870a
 main()
