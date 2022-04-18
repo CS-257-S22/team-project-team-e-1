@@ -76,37 +76,51 @@ def getPopularMovies():
     for line in popularTitlesList:
         currline = line.split('|')
         if currline[0] == "Movie":
+            #ensures that the popular list has only 10 movies 
             if len(finalList) != 10:
                 finalList.append([currline[1], currline[2]])
                 finalList = bubble_sort(finalList)
+            #checks popularity of current movie with that of the least popular movie currently in the final list
+            #always sorts after a change so the movies are always listed in ascending popularity order
             else:
                 if finalList[0][1] < currline[2]:
                     finalList[0] = [currline[1], currline[2]]
                     finalList = bubble_sort(finalList)
     popularTitlesList.close()
-    
+
+    printTenMostPopularMovies(finalList)
+
+
+#Helper function for getPopularMovies()
+#reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
+def printTenMostPopularMovies(popularMovieList):    
     count = 0
-    for title in finalList:
-        finalList[count] = title[0]
+    for title in popularMovieList:
+        popularMovieList[count] = title[0]
         count += 1
-    print(finalList)
+    print(popularMovieList)
 
 
+#Helper function for getMovie()
+#Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
 def increaseMoviePopularity(movieTitle):
     allMoviesList = open('popularTitles.txt', 'r').readlines()
     
     movieNewPopularity = ""
     counter = 0
+
+    #finds the movie that was viewed and adds 1 to its popularity tracker
     for movieInfo in allMoviesList:
         if movieTitle in movieInfo:
-            data = movieInfo.split('|')
-            data[2] = int(data[2]) + 1
-            data[2] = str(data[2])
-            movieNewPopularity = '|'.join(data)
+            tempMovieInfo = movieInfo.split('|')
+            tempMovieInfo[2] = int(tempMovieInfo[2]) + 1
+            tempMovieInfo[2] = str(tempMovieInfo[2])
+            movieNewPopularity = '|'.join(tempMovieInfo)
             break
-        counter += 1       
+        counter += 1 
+          
+    #rewrites the popularTitles file to reflect the viewed movie's new popularity tracker
     allMoviesList[counter] = movieNewPopularity
-    
     transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
 
 
