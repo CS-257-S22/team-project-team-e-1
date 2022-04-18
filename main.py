@@ -59,6 +59,44 @@ def getRandomMovie(**kwargs):
         print(curData[randInt])
         return curData[randInt]
 
+class Parser:
+    def __init__(self, args):
+        
+        self.type = []
+        self.title = []
+        self.director = []
+        self.cast = []
+        self.country = []
+        self.date_added = []
+        self.release_year = []
+        self.rating = []
+        self.duration = []
+        self.listed_in = []
+        self.description = []
+
+        for i in range(2, len(args), 2):
+            curCategory = sys.argv[i]
+            criterion = sys.argv[i+1]
+            if curCategory in ["-t","-type"]:
+                self.type.append(criterion)
+            elif curCategory in ["-t","-type"]:
+                self.type.append(criterion)
+            elif curCategory in ["-g","-genre"]:
+                curData = [row for row in curData if value in row[10]]  
+            elif curCategory in ["-d","-director"]:
+                curData = [row for row in curData if value in row[3]]
+            elif curCategory in ["-c","-cast"]:
+                curData = [row for row in curData if value in row[4]]
+            elif curCategory in ["-y","-year"]:
+                curData = [row for row in curData if value in row[7]]
+            elif curCategory in ["-r","-rating"]:
+                self.rating.append(criterion)
+            else:
+                print("Invalid command line arguments.")
+                sys.exit(kwargs)
+            myKwargs[curCategory] = specifiedCategory
+
+
 
 def main():
     global dataArray 
@@ -78,6 +116,8 @@ def main():
         getRandomMovie(**myKwargs)
     elif functionName == "getMovie":
         getMovie()
+
+#usage should be for without function (specifies functions) and for certain function (gives criterion)
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser
