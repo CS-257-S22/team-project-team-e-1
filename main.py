@@ -16,6 +16,7 @@ def initializeData():
 def getMovie(title):
     increaseMoviePopularity(title)
     print(title)
+    title = title.strip()
     filmRow = dataSearch(title)
     if filmRow == None:
        print("Title not found", file = sys.stderr)
@@ -157,27 +158,41 @@ class Parser:
         self.listed_in = []
         self.description = []
 
-        for i in range(2, len(args), 2):
+        for i in range(2, len(args) + 1, 2):
             curCategory = sys.argv[i]
             criterion = sys.argv[i+1]
-            if curCategory in ["-t","-type"]:
+            if criterion in ["-ty","-type", "-ti",
+             "-title", "-d", "-director", "-c", 
+             "-cast", "-y", "-year", "-r", "-rating"]:
+                print("Please provide an argument following " + criterion)
+                sys.exit(args)
+            elif curCategory in ["-ty","-type"]:
                 self.type.append(criterion)
-            elif curCategory in ["-t","-type"]:
-                self.type.append(criterion)
-            elif curCategory in ["-g","-genre"]:
-                curData = [row for row in curData if value in row[10]]  
+            elif curCategory in ["-ti","-title"]:
+                self.title.append(criterion)  
             elif curCategory in ["-d","-director"]:
-                curData = [row for row in curData if value in row[3]]
-            elif curCategory in ["-c","-cast"]:
-                curData = [row for row in curData if value in row[4]]
+                self.director.append(criterion)
+            elif curCategory in ["-c", "-a", "-cast"]:
+                self.cast.append(criterion)
             elif curCategory in ["-y","-year"]:
-                curData = [row for row in curData if value in row[7]]
+                self.release_year.append(criterion)
             elif curCategory in ["-r","-rating"]:
                 self.rating.append(criterion)
             else:
                 print("Invalid command line arguments.")
-                sys.exit(kwargs)
-            myKwargs[curCategory] = specifiedCategory
+                sys.exit(args)
+    def getType(self):
+        return self.type
+    def getTitle(self):
+        return self.title
+    def getDirector(self):
+        return self.director
+    def getCast(self):
+        return self.cast
+    def getYear(self):
+        return self.release_year
+    def getRating(self):
+        return self.rating
 
 
 
@@ -202,8 +217,11 @@ def main():
         filmInfo = getMovie(title)
     elif functionName == "getPopularMovies":
         getPopularMovies()
-
+    else:
+        print("Function name not recognized-- please choose either getMovie or getRandomMovie", file = sys.stderr)
+    
 #usage should be for without function (specifies functions) and for certain function (gives criterion)
+
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser

@@ -5,7 +5,7 @@ import main
 import os
 
 class TestRandom(unittest.TestCase):
-    """ A GOOD DOCSTRING """
+    """A GOOD DOCSTRING """
     def test_basicRandom(self):
         self.assertIn(main.getRandomMovie(main.Parser([])), main.initializeData, "Ouput is not a valid show/movie in dataset.")
     def test_optionsRandom(self):
@@ -30,6 +30,11 @@ class TestGETMOVIE(unittest.TestCase):
         dataset = main.initializeData()
         result = main.getMovie("Sankofa")
         self.assertEqual(result, dataset[8], "Function return value does not represent correct dataset entries")
+
+class TestPROCESSING(unittest.TestCase):
+    def testDataset(self):
+        result = main.initializeData()
+        self.assertEqual(len(result), 8808, "Dataset not fully processed")
 
 if __name__ == '__main__':
     unittest.main()
