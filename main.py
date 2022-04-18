@@ -13,6 +13,7 @@ def initializeData():
     return dataArray
 
 def getMovie(title):
+    increaseMoviePopularity(title)
     print(title)
     title = title.strip()
     filmRow = dataSearch(title)
@@ -70,6 +71,134 @@ def getRandomMovie(**kwargs):
         return curData[randInt]
 
 
+def getPopularMovies():
+    finalList = []
+    popularTitlesList = open("popularTitles.txt", 'r')
+    for line in popularTitlesList:
+        currline = line.split('|')
+        if currline[0] == "Movie":
+            #ensures that the popular list has only 10 movies 
+            if len(finalList) != 10:
+                finalList.append([currline[1], currline[2]])
+                finalList = bubble_sort(finalList)
+            #checks popularity of current movie with that of the least popular movie currently in the final list
+            #always sorts after a change so the movies are always listed in ascending popularity order
+            else:
+                if finalList[0][1] < currline[2]:
+                    finalList[0] = [currline[1], currline[2]]
+                    finalList = bubble_sort(finalList)
+    popularTitlesList.close()
+
+    printTenMostPopularMovies(finalList)
+
+
+#Helper function for getPopularMovies()
+#reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
+def printTenMostPopularMovies(popularMovieList):    
+    count = 0
+    for title in popularMovieList:
+        popularMovieList[count] = title[0]
+        count += 1
+    print(popularMovieList)
+
+
+#Helper function for getMovie()
+#Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
+def increaseMoviePopularity(movieTitle):
+    allMoviesList = open('popularTitles.txt', 'r').readlines()
+    
+    movieNewPopularity = ""
+    counter = 0
+
+    #finds the movie that was viewed and adds 1 to its popularity tracker
+    for movieInfo in allMoviesList:
+        if movieTitle in movieInfo:
+            tempMovieInfo = movieInfo.split('|')
+            tempMovieInfo[2] = int(tempMovieInfo[2]) + 1
+            tempMovieInfo[2] = str(tempMovieInfo[2])
+            movieNewPopularity = '|'.join(tempMovieInfo)
+            break
+        counter += 1 
+          
+    #rewrites the popularTitles file to reflect the viewed movie's new popularity tracker
+    allMoviesList[counter] = movieNewPopularity
+    transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
+
+
+#This sorting algorithm was made by Santiago Valdarrama 
+#and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
+#Only the indices in the if statement were changed from the original function.
+def bubble_sort(array):
+    n = len(array)
+
+    for i in range(n):
+        # Create a flag that will allow the function to
+        # terminate early if there's nothing left to sort
+        already_sorted = True
+
+        # Start looking at each item of the list one by one,
+        # comparing it with its adjacent value. With each
+        # iteration, the portion of the array that you look at
+        # shrinks because the remaining items have already been
+        # sorted.
+        for j in range(n - i - 1):
+            if array[j][1] > array[j + 1][1]:
+                # If the item you're looking at is greater than its
+                # adjacent value, then swap them
+                array[j], array[j + 1] = array[j + 1], array[j]
+
+                # Since you had to swap two elements,
+                # set the `already_sorted` flag to `False` so the
+                # algorithm doesn't finish prematurely
+                already_sorted = False
+
+        # If there were no swaps during the last iteration,
+        # the array is already sorted, and you can terminate
+        if already_sorted:
+            break
+
+    return array
+
+
+class Parser:
+    def __init__(self, args):
+        
+        self.type = []
+        self.title = []
+        self.director = []
+        self.cast = []
+        self.country = []
+        self.date_added = []
+        self.release_year = []
+        self.rating = []
+        self.duration = []
+        self.listed_in = []
+        self.description = []
+
+        for i in range(2, len(args), 2):
+            curCategory = sys.argv[i]
+            criterion = sys.argv[i+1]
+            if curCategory in ["-t","-type"]:
+                self.type.append(criterion)
+            elif curCategory in ["-t","-type"]:
+                self.type.append(criterion)
+            elif curCategory in ["-g","-genre"]:
+                curData = [row for row in curData if value in row[10]]  
+            elif curCategory in ["-d","-director"]:
+                curData = [row for row in curData if value in row[3]]
+            elif curCategory in ["-c","-cast"]:
+                curData = [row for row in curData if value in row[4]]
+            elif curCategory in ["-y","-year"]:
+                curData = [row for row in curData if value in row[7]]
+            elif curCategory in ["-r","-rating"]:
+                self.rating.append(criterion)
+            else:
+                print("Invalid command line arguments.")
+                sys.exit(kwargs)
+            myKwargs[curCategory] = specifiedCategory
+
+
+
 def main():
     global dataArray 
     dataArray = initializeData()
@@ -89,8 +218,13 @@ def main():
     elif functionName == "getMovie":
         title = sys.argv[2]
         filmInfo = getMovie(title)
+    elif functionName == "getPopularMovies":
+        getPopularMovies()
     else:
         print("Function name not recognized-- please choose either getMovie or getRandomMovie", file = sys.stderr)
+    
+#usage should be for without function (specifies functions) and for certain function (gives criterion)
+
 
 #if we want to implement argparse to make things cleaner
 #  # Create the parser
@@ -106,4 +240,5 @@ def main():
 #     args = parser.parse_args()
 #     # Print "Hello" + the user input argument
 #     print('Hello,', args.name)
+7d894bbe4e34e18ae5cf1d759d7d3ae3e998870a
 main()
