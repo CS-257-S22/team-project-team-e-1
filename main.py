@@ -12,6 +12,11 @@ def initializeData():
             dataArray.append(row)
     return dataArray
 
+def processGetMovie():
+    title = sys.argv[2]
+    filmInfo = getMovie(title)
+    return filmInfo
+
 def getMovie(title):
     dataArray = initializeData()
     increaseMoviePopularity(title)
@@ -26,6 +31,11 @@ def getMovie(title):
 
 def dataSearch(keyword):
     dataArray = initializeData()
+    increaseMoviePopularity(title)
+    return selectedMovieInfo#Definitely clearer, not sure if it's actually less code
+
+def dataSearch(keyword):
+    keyword = keyword.strip()
     curRow = 1
     curMovie = dataArray[curRow][2]
     while curMovie != keyword:
@@ -59,24 +69,32 @@ def getPopularMovies():
     for line in popularTitlesList:
         currline = line.split('|')
         if currline[0] == "Movie":
-            #ensures that the popular list has only 10 movies 
-            if len(finalList) != 10:
-                finalList.append([currline[1], currline[2]])
-                finalList = bubble_sort(finalList)
-            #checks popularity of current movie with that of the least popular movie currently in the final list
-            #always sorts after a change so the movies are always listed in ascending popularity order
-            else:
-                if finalList[0][1] < currline[2]:
-                    finalList[0] = [currline[1], currline[2]]
-                    finalList = bubble_sort(finalList)
+            finalList = updatePopularMoviesList(finalList, currline)
     popularTitlesList.close()
 
-    return printTenMostPopularMovies(finalList)
+    return finishedPopularMoviesList(finalList)
+
+
+#Helper function for getPopularMovies()
+def updatePopularMoviesList(movieList, currentMovie):
+    #ensures that the popular list has only 10 movies 
+    if len(movieList) != 10:
+        movieList.append([currentMovie[1], currentMovie[2]])
+        movieList = bubble_sort(movieList)            
+            
+    #checks popularity of current movie with that of the least popular movie currently in the final list
+    #always sorts after a change so the movies are always listed in ascending popularity order
+    else:
+        if movieList[0][1] < currentMovie[2]:
+            movieList[0] = [currentMovie[1], currentMovie[2]]
+            movieList = bubble_sort(movieList)
+
+    return movieList
 
 
 #Helper function for getPopularMovies()
 #reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
-def printTenMostPopularMovies(popularMovieList):    
+def finishedPopularMoviesList(popularMovieList):    
     count = 0
     for title in popularMovieList:
         popularMovieList[count] = title[0]
@@ -106,10 +124,11 @@ def increaseMoviePopularity(movieTitle):
     allMoviesList[counter] = movieNewPopularity
     transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
 
-
-#This sorting algorithm was made by Santiago Valdarrama 
-#and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
-#Only the indices in the if statement were changed from the original function.
+'''
+This sorting algorithm was made by Santiago Valdarrama 
+and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
+Only the indices in the if statement were changed from the original function.
+'''
 def bubble_sort(array):
     n = len(array)
 
@@ -150,8 +169,8 @@ def isCategory(category):
     return False
 
 class Parser:
-    #takes command line arguments and parses them, will have expanded utility
-    #in later iterations of the program
+    #takes command line arguments and parses them, sorts into categories
+    #of search criteria. will have expanded utility in later iterations of the program
     def __init__(self, args):
         self.noArgs = True
         self.type = []
@@ -193,6 +212,7 @@ class Parser:
             else:
                 print("Incorrect definition of a category.")
                 sys.exit(args[i])
+            
 
     def getType(self):
         return self.type
@@ -257,11 +277,14 @@ def findMatchingMovies(parsedArgs):
 
 
 def main():
-    
-    #pull function and args
-    if len(sys.argv)<1:
+    if(len(sys.argv) < 2):
         print("No function in command line.")
-        sys.exit(sys.argv)
+        printUsage()
+    else:
+        functionName = sys.argv[1]
+        initialDirectoryPath(functionName)
+
+    #pull function and args
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
 
@@ -270,12 +293,12 @@ def main():
     elif functionName=="getRandomMovie":
         print(getRandomMovie(parsedArgs))
     elif functionName == "getMovie":
-        title = sys.argv[2]
-        print(getMovie(title))
+        print(processGetMovie())
     elif functionName == "getPopularMovies":
         print(getPopularMovies())
     else:
         print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
+        printUsage()
 
 
 if __name__ == '__main__':
