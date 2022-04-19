@@ -167,8 +167,9 @@ def isCategory(category):
         return True
     return False
 
-
 class Parser:
+    #takes command line arguments and parses them, will have expanded utility
+    #in later iterations of the program
     def __init__(self, args):
         
         self.type = []
@@ -245,6 +246,8 @@ def findMatchingMovies(parsedArgs):
     criteria[10] = parsedArgs.getListedIn()
     criteria[11] = parsedArgs.getDescription()
  
+    #for each row in the csv, check the content in each column
+    #and see if it matches at least one of the search criteria.
     row = 0 
     while row < len(dataArray):
         isMatch = True
@@ -307,4 +310,6 @@ def main():
 #     args = parser.parse_args()
 #     # Print "Hello" + the user input argument
 #     print('Hello,', args.name)
-main()
+
+if __name__ == '__main__':
+    main()

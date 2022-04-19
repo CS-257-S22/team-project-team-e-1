@@ -35,6 +35,25 @@ class TestPROCESSING(unittest.TestCase):
         result = main.initializeData()
         self.assertEqual(len(result), 8808, "Dataset not fully processed")
 
+class testPARSER(unittest.TestCase):
+    def testParseArgs(self):
+        testString = ["-cast", "Ryan", "Gosling", "-year", "1969", "1984"]
+        result = main.Parser(testString)
+        self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
+        self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
+class testFINDMATCHINGMOVIES(unittest.TestCase):
+    def testSearchOneTerm(self):
+        parsedArgs = main.Parser([])
+        parsedArgs.title = ["bangkok"]
+        result = main.findMatchingMovie(parsedArgs)
+        for movie in result:
+            self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
+    def testParseAndSearch(self):
+        parsedArgs = main.Parser(["-title", "bangkok"])
+        result = main.findMatchingMovie(parsedArgs)
+        for movie in result:
+            self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
+
 if __name__ == '__main__':
     unittest.main()
     print("Everything passed")
