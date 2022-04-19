@@ -163,7 +163,16 @@ def bubble_sort(array):
     return array
 
 
+def isCategory(category):
+    if category in ["-ty","-type", "-ti",
+        "-title", "-d", "-director", "-c", 
+        "-cast", "-y", "-year", "-r", "-rating"]:
+        return True
+    return False
+
 class Parser:
+    #takes command line arguments and parses them, will have expanded utility
+    #in later iterations of the program
     def __init__(self, args):
         
         self.type = []
@@ -178,37 +187,101 @@ class Parser:
         self.listed_in = []
         self.description = []
 
-        for i in range(2, len(args), 2):
-            curCategory = sys.argv[i]
-            criterion = sys.argv[i+1]
-            if curCategory in ["-t","-type"]:
-                self.type.append(criterion)
-            elif curCategory in ["-t","-type"]:
-                self.type.append(criterion)
-            elif curCategory in ["-g","-genre"]:
-                curData = [row for row in curData if value in row[10]]  
-            elif curCategory in ["-d","-director"]:
-                curData = [row for row in curData if value in row[3]]
-            elif curCategory in ["-c","-cast"]:
-                curData = [row for row in curData if value in row[4]]
-            elif curCategory in ["-y","-year"]:
-                curData = [row for row in curData if value in row[7]]
-            elif curCategory in ["-r","-rating"]:
-                self.rating.append(criterion)
-            else:
-                print("Invalid command line arguments.")
-                sys.exit(kwargs)
-            myKwargs[curCategory] = specifiedCategory
-def printUsage():
-    with open("usage_message.txt", 'r') as fin:
-            print(fin.read())
+        i = 0
+        while i < len(args):
+            if isCategory(args[i]):
+                category = args[i]
+                i += 1
+                while (i < len(args)) and not isCategory(args[i]):
+                    if category in ["-ty","-type"]:
+                        self.type.append(args[i])
+                    elif category in ["-ti","-title"]:
+                        self.title.append(args[i])  
+                    elif category in ["-d","-director"]:
+                        self.director.append(args[i])
+                    elif category in ["-c", "-a", "-cast"]:
+                        self.cast.append(args[i])
+                    elif category in ["-y","-year"]:
+                        self.release_year.append(args[i])
+                    elif category in ["-r","-rating"]:
+                        self.rating.append(args[i])
+                    else:
+                        print("Invalid command line arguments.")
+                        sys.exit()
+                    i += 1
+    def getType(self):
+        return self.type
+    def getTitle(self):
+        return self.title
+    def getDirector(self):
+        return self.director
+    def getCast(self):
+        return self.cast
+    def getCountry(self):
+        return self.country
+    def getDateAdded(self):
+        return self.date_added
+    def getYear(self):
+        return self.release_year
+    def getRating(self):
+        return self.rating
+    def getDuration(self):
+        return self.duration
+    def getListedIn(self):
+        return self.listed_in
+    def getDescription(self):
+        return self.description
 
-def initialDirectoryPath(featureName):
-    if featureName == "getPopularMovies":
-        getPopularMovies()
-    elif (len(sys.argv) < 3):
-        printUsage()
-    elif featureName=="getRandomMovie":
+
+
+def findMatchingMovies(parsedArgs):
+    matchingMovies = []
+    criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
+    criteria[1] = parsedArgs.getType()
+    criteria[2] = parsedArgs.getTitle()
+    criteria[3] = parsedArgs.getDirector()
+    criteria[4] = parsedArgs.getCast()
+    criteria[5] = parsedArgs.getCountry()
+    criteria[6] = parsedArgs.getDateAdded()
+    criteria[7] = parsedArgs.getYear()
+    criteria[8] = parsedArgs.getRating()
+    criteria[9] = parsedArgs.getDuration()
+    criteria[10] = parsedArgs.getListedIn()
+    criteria[11] = parsedArgs.getDescription()
+ 
+    #for each row in the csv, check the content in each column
+    #and see if it matches at least one of the search criteria.
+    row = 0 
+    while row < len(dataArray):
+        isMatch = True
+        for column in range(12):
+            item = dataArray[row][column]
+            itemWords = item.split()
+            for word in itemWords:
+                if word.lower() in (criterion.lower() 
+                for criterion in criteria[column]):
+                    title = dataArray[row][2]
+                    matchingMovies.append(title)
+        row += 1
+    print(matchingMovies)
+
+
+
+
+def main():
+    global dataArray 
+    dataArray = initializeData()
+    print(f"Arguments count: {len(sys.argv)}")
+    print(sys.argv)
+    functionName = sys.argv[1]
+    numArgs = len(sys.argv)
+    print("function name: ", functionName)
+
+    parsedArgs = Parser(sys.argv[2:])
+    if functionName == "findMatchingMovies":
+        findMatchingMovies(parsedArgs)
+
+    elif functionName=="getRandomMovie":
         myKwargs = {}
         numArgs = len(sys.argv)
         for i in range(2, numArgs, 2):
@@ -250,5 +323,6 @@ def main():
 #     args = parser.parse_args()
 #     # Print "Hello" + the user input argument
 #     print('Hello,', args.name)
-#7d894bbe4e34e18ae5cf1d759d7d3ae3e998870a
-main()
+
+if __name__ == '__main__':
+    main()

@@ -46,6 +46,25 @@ class TestGENERAL(unittest.TestCase):
             subprocess.run("python3 main.py getMovie 'Je Suis Karl'")
         self.assertIn("popularTitles.txt", "Je Suis Karl", "Searching a movie frequently does not increase popularity")
         
+class testPARSER(unittest.TestCase):
+    def testParseArgs(self):
+        testString = ["-cast", "Ryan", "Gosling", "-year", "1969", "1984"]
+        result = main.Parser(testString)
+        self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
+        self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
+class testFINDMATCHINGMOVIES(unittest.TestCase):
+    def testSearchOneTerm(self):
+        parsedArgs = main.Parser([])
+        parsedArgs.title = ["bangkok"]
+        result = main.findMatchingMovies(parsedArgs)
+        for movie in result:
+            self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
+    def testParseAndSearch(self):
+        parsedArgs = main.Parser(["-title", "bangkok"])
+        result = main.findMatchingMovies(parsedArgs)
+        for movie in result:
+            self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
+
 if __name__ == '__main__':
     unittest.main()
     print("Everything passed")
