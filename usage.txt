@@ -3,19 +3,15 @@ getMovie(title) {
 }
 
 findMatchingMovie(actors, release year, genre) {
-    return a list of movies which matches each actor, year, and genre argument provided, if provided.
-    For each search argument provided, we call a helper search function which searches the database
-    for movies which match only that respective search criterion.
+    return a list of movies which matches criteria arguments given. Currently returns
+    movies with match at least one criteria argument, but will later allow users to find movies
+    which must match several criteria. 
 }
 
 getRandomMovie(actors, release year, genre) {
      a function that provides a random movie given a specified genre, actor, or release year
 }
     
-searchFactory(search criterion) {
-    a factory which generates a search function which searches the database for movies matching
-    some given search criterion
-}
 
 getPopularMovies() {
     return a list of movies that are currently the most popular.
