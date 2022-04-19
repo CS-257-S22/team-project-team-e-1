@@ -1,8 +1,7 @@
 import csv
 import sys
 import random
-import argparse
-from turtle import tiltangle
+#from turtle import tiltangle
 
 
 def initializeData():
@@ -42,14 +41,19 @@ def printList(data):
 
 def getRandomMovie(parsedArgs):
 
-    if parsedArgs.noArgs():
+    #first check if there are no args
+    if parsedArgs.isEmpty():
         randInt = random.randint(0,len(dataArray)-1)
         print(dataArray[randInt])
         #also return it for testing
         return dataArray[randInt]
+    
     else:
+        #filter data using criteria in arguments (if no args, full data is used)
         filteredData = search(parsedArgs)
+        #generate random number for this filter data
         randInt = random.randint(0,len(filteredData)-1)
+        #return/print the random row from the subsetted data
         print(filteredData[randInt])
         return filteredData[randInt]
 
@@ -142,10 +146,11 @@ def bubble_sort(array):
 
     return array
 
-
+# a parser object to keep track of all the options used when searching the datset
 class Parser:
-    def __init__(self, args):
-        
+    #initialize the parser by taking in args and assigning them by 
+    def __init__(self):
+        self.noArgs = True
         self.type = []
         self.title = []
         self.director = []
@@ -158,29 +163,43 @@ class Parser:
         self.listed_in = []
         self.description = []
 
-        for i in range(2, len(args) + 1, 2):
-            curCategory = sys.argv[i]
-            criterion = sys.argv[i+1]
-            if criterion in ["-ty","-type", "-ti",
-             "-title", "-d", "-director", "-c", 
-             "-cast", "-y", "-year", "-r", "-rating"]:
-                print("Please provide an argument following " + criterion)
-                sys.exit(args)
-            elif curCategory in ["-ty","-type"]:
-                self.type.append(criterion)
-            elif curCategory in ["-ti","-title"]:
-                self.title.append(criterion)  
-            elif curCategory in ["-d","-director"]:
-                self.director.append(criterion)
-            elif curCategory in ["-c", "-a", "-cast"]:
-                self.cast.append(criterion)
-            elif curCategory in ["-y","-year"]:
-                self.release_year.append(criterion)
-            elif curCategory in ["-r","-rating"]:
-                self.rating.append(criterion)
-            else:
-                print("Invalid command line arguments.")
-                sys.exit(args)
+        #error checking for length of args
+        if len(sys.argv) < 2:
+            print("Invalid command line arguments: need a command line function.")
+            sys.exit(sys.argv)
+        elif len(sys.argv) == 2:
+            pass
+        else:
+            #signal that we have args
+            self.noArgs = False
+            #pull the arguments in a specified order
+
+            for i in range(2, len(sys.argv), 2):
+                curCategory = sys.argv[i]
+                criterion = sys.argv[i]
+
+                #error checking
+                if criterion in ["-ty","-type", "-ti",
+                "-title", "-d", "-director", "-c", 
+                "-cast", "-y", "-year", "-r", "-rating"]:
+                    print("Please provide an argument following " + criterion)
+                    sys.exit(sys.argv)
+                elif curCategory in ["-ty","-type"]:
+                    self.type.append(criterion)
+                elif curCategory in ["-ti","-title"]:
+                    self.title.append(criterion)  
+                elif curCategory in ["-d","-director"]:
+                    self.director.append(criterion)
+                elif curCategory in ["-c", "-a", "-cast"]:
+                    self.cast.append(criterion)
+                elif curCategory in ["-y","-year"]:
+                    self.release_year.append(criterion)
+                elif curCategory in ["-r","-rating"]:
+                    self.rating.append(criterion)
+                else:
+                    print("Invalid command line arguments.")
+                    sys.exit(sys.argv)
+
     def getType(self):
         return self.type
     def getTitle(self):
@@ -193,48 +212,28 @@ class Parser:
         return self.release_year
     def getRating(self):
         return self.rating
+    def isEmpty(self):
+        return self.noArgs
 
 
 
 def main():
     global dataArray 
     dataArray = initializeData()
-    print(f"Arguments count: {len(sys.argv)}")
-    print(sys.argv)
+    
+    #pull function and args
+    parsedArgs = Parser()
     functionName = sys.argv[1]
-    numArgs = len(sys.argv)
-    print("function name: ", functionName)
    
     if functionName=="getRandomMovie":
-        myKwargs = {}
-        for i in range(2, numArgs, 2):
-            curCategory = sys.argv[i]
-            specifiedCategory = sys.argv[i+1]
-            myKwargs[curCategory] = specifiedCategory
-        getRandomMovie(**myKwargs)
+        getRandomMovie(parsedArgs)
     elif functionName == "getMovie":
         title = sys.argv[2]
         filmInfo = getMovie(title)
     elif functionName == "getPopularMovies":
         getPopularMovies()
     else:
-        print("Function name not recognized-- please choose either getMovie or getRandomMovie", file = sys.stderr)
-    
-#usage should be for without function (specifies functions) and for certain function (gives criterion)
+        print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
 
 
-#if we want to implement argparse to make things cleaner
-#  # Create the parser
-#     parser = argparse.ArgumentParser()
-#     # Add an argument
-#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
-#     help="takes in a str formatted genre")
-#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
-#     help="takes in a str formatted genre")
-#     parser.add_argument('-r', '--rating', type=str, action='store_true', 
-#     help="shows output")
-#     # Parse the argument
-#     args = parser.parse_args()
-#     # Print "Hello" + the user input argument
-#     print('Hello,', args.name)
 main()
