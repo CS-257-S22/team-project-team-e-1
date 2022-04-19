@@ -63,29 +63,37 @@ def getPopularMovies():
     for line in popularTitlesList:
         currline = line.split('|')
         if currline[0] == "Movie":
-            #ensures that the popular list has only 10 movies 
-            if len(finalList) != 10:
-                finalList.append([currline[1], currline[2]])
-                finalList = bubble_sort(finalList)
-            #checks popularity of current movie with that of the least popular movie currently in the final list
-            #always sorts after a change so the movies are always listed in ascending popularity order
-            else:
-                if finalList[0][1] < currline[2]:
-                    finalList[0] = [currline[1], currline[2]]
-                    finalList = bubble_sort(finalList)
+            finalList = updatePopularMoviesList(finalList, currline)
     popularTitlesList.close()
 
-    printTenMostPopularMovies(finalList)
+    return finishedPopularMoviesList(finalList)
+
+
+#Helper function for getPopularMovies()
+def updatePopularMoviesList(movieList, currentMovie):
+    #ensures that the popular list has only 10 movies 
+    if len(movieList) != 10:
+        movieList.append([currentMovie[1], currentMovie[2]])
+        movieList = bubble_sort(movieList)            
+            
+    #checks popularity of current movie with that of the least popular movie currently in the final list
+    #always sorts after a change so the movies are always listed in ascending popularity order
+    else:
+        if movieList[0][1] < currentMovie[2]:
+            movieList[0] = [currentMovie[1], currentMovie[2]]
+            movieList = bubble_sort(movieList)
+
+    return movieList
 
 
 #Helper function for getPopularMovies()
 #reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
-def printTenMostPopularMovies(popularMovieList):    
+def finishedPopularMoviesList(popularMovieList):    
     count = 0
     for title in popularMovieList:
         popularMovieList[count] = title[0]
         count += 1
-    print(popularMovieList)
+    return popularMovieList
 
 
 #Helper function for getMovie()
@@ -110,10 +118,11 @@ def increaseMoviePopularity(movieTitle):
     allMoviesList[counter] = movieNewPopularity
     transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
 
-
-#This sorting algorithm was made by Santiago Valdarrama 
-#and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
-#Only the indices in the if statement were changed from the original function.
+'''
+This sorting algorithm was made by Santiago Valdarrama 
+and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
+Only the indices in the if statement were changed from the original function.
+'''
 def bubble_sort(array):
     n = len(array)
 
@@ -273,7 +282,7 @@ def main():
         title = sys.argv[2]
         filmInfo = getMovie(title)
     elif functionName == "getPopularMovies":
-        getPopularMovies()
+        print(getPopularMovies())
     else:
         print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
 
