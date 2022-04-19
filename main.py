@@ -17,8 +17,8 @@ def processGetMovie():
     return filmInfo
 
 def getMovie(title):
-    increaseMoviePopularity(title)
     title = title.strip()
+    increaseMoviePopularity(title)
     return dataSearch(title) #Definitely clearer, not sure if it's actually less code
 
 def dataSearch(keyword):
