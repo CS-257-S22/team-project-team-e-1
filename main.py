@@ -1,7 +1,7 @@
 import csv
 import sys
 import random
-import argparse
+#from turtle import tiltangle
 
 
 def initializeData():
@@ -39,36 +39,22 @@ def printList(data):
         print(datapoint)
 
 
-def getRandomMovie(**kwargs):
-    curData = dataArray
-    if len(kwargs)==0:
+def getRandomMovie(parsedArgs):
+
+    #first check if there are no args
+    if parsedArgs.isEmpty():
         randInt = random.randint(0,len(dataArray)-1)
         print(dataArray[randInt])
         #also return it for testing
         return dataArray[randInt]
+    
     else:
-        #loop over all the possible options
-        #pull the cases that match those options
-        for key, value in kwargs.items():
-            if key in ["-t","-type"]:
-                curData = [row for row in curData if value in row[1]]
-            elif key in ["-g","-genre"]:
-                curData = [row for row in curData if value in row[10]]  
-            elif key in ["-d","-director"]:
-                curData = [row for row in curData if value in row[3]]
-            elif key in ["-c","-cast"]:
-                curData = [row for row in curData if value in row[4]]
-            elif key in ["-y","-year"]:
-                curData = [row for row in curData if value in row[7]]
-            elif key in ["-r","-rating"]:
-                curData = [row for row in curData if value in row[8]]
-            else:
-                print("Invalid command line arguments.")
-                sys.exit(kwargs)
-        
-        randInt = random.randint(0,len(curData)-1)
-        print(curData[randInt])
-        return curData[randInt]
+        #filter data using criteria in arguments (if no args, full data is used)
+        filteredData = search(parsedArgs)
+        #generate random number for this filter data
+        randInt = random.randint(0,len(filteredData)-1)
+        #return/print the random row from the subsetted data
+        return filteredData[randInt]
 
 
 def getPopularMovies():
@@ -180,7 +166,7 @@ class Parser:
     #takes command line arguments and parses them, will have expanded utility
     #in later iterations of the program
     def __init__(self, args):
-        
+        self.noArgs = True
         self.type = []
         self.title = []
         self.director = []
@@ -193,6 +179,8 @@ class Parser:
         self.listed_in = []
         self.description = []
 
+        if len(args)>0:
+            self.noArgs = False
         i = 0
         while i < len(args):
             if isCategory(args[i]):
@@ -215,6 +203,7 @@ class Parser:
                         print("Invalid command line arguments.")
                         sys.exit()
                     i += 1
+
     def getType(self):
         return self.type
     def getTitle(self):
@@ -237,6 +226,8 @@ class Parser:
         return self.listed_in
     def getDescription(self):
         return self.description
+    def isEmpty(self):
+        return self.noArgs
 
 
 
@@ -269,56 +260,31 @@ def findMatchingMovies(parsedArgs):
                     title = dataArray[row][2]
                     matchingMovies.append(title)
         row += 1
-    print(matchingMovies)
 
-
+    return matchingMovies
 
 
 def main():
     global dataArray 
     dataArray = initializeData()
-    print(f"Arguments count: {len(sys.argv)}")
-    print(sys.argv)
-    functionName = sys.argv[1]
+    
+    #pull function and args
     numArgs = len(sys.argv)
-    print("function name: ", functionName)
-
+    functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
-    if functionName == "findMatchingMovies":
-        findMatchingMovies(parsedArgs)
 
+    if functionName == "findMatchingMovies":
+        print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":
-        myKwargs = {}
-        for i in range(2, numArgs, 2):
-            curCategory = sys.argv[i]
-            specifiedCategory = sys.argv[i+1]
-            myKwargs[curCategory] = specifiedCategory
-        getRandomMovie(**myKwargs)
+        print(getRandomMovie(parsedArgs))
     elif functionName == "getMovie":
         title = sys.argv[2]
         filmInfo = getMovie(title)
     elif functionName == "getPopularMovies":
         print(getPopularMovies())
     else:
-        print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or findMatchingMovies", file = sys.stderr)
-    
-#usage should be for without function (specifies functions) and for certain function (gives criterion)
+        print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
 
-
-#if we want to implement argparse to make things cleaner
-#  # Create the parser
-#     parser = argparse.ArgumentParser()
-#     # Add an argument
-#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
-#     help="takes in a str formatted genre")
-#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
-#     help="takes in a str formatted genre")
-#     parser.add_argument('-r', '--rating', type=str, action='store_true', 
-#     help="shows output")
-#     # Parse the argument
-#     args = parser.parse_args()
-#     # Print "Hello" + the user input argument
-#     print('Hello,', args.name)
 
 if __name__ == '__main__':
     main()
