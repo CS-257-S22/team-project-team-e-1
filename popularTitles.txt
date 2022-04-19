@@ -5,12 +5,12 @@ TV Show|Jailbirds New Orleans|0|
 TV Show|Kota Factory|0|
 TV Show|Midnight Mass|0|
 Movie|My Little Pony: A New Generation|0|
-Movie|Sankofa|1|
+Movie|Sankofa|11|
 TV Show|The Great British Baking Show|0|
 Movie|The Starling|0|
 TV Show|Vendetta: Truth, Lies and The Mafia|0|
 TV Show|Bangkok Breaking|0|
-Movie|Je Suis Karl|1|
+Movie|Je Suis Karl|11|
 Movie|Confessions of an Invisible Girl|0|
 TV Show|Crime Stories: India Detectives|0|
 TV Show|Dear White People|0|

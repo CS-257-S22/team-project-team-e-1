@@ -12,7 +12,13 @@ def initializeData():
             dataArray.append(row)
     return dataArray
 
+def processGetMovie():
+    title = sys.argv[2]
+    filmInfo = getMovie(title)
+    return filmInfo
+
 def getMovie(title):
+    dataArray = initializeData()
     increaseMoviePopularity(title)
     print(title)
     title = title.strip()
@@ -21,10 +27,15 @@ def getMovie(title):
        print("Title not found", file = sys.stderr)
        return
     selectedMovieInfo = dataArray[filmRow]
-    printList(selectedMovieInfo)
+    return selectedMovieInfo #Definitely clearer, not sure if it's actually less code
+
+def dataSearch(keyword):
+    dataArray = initializeData()
+    increaseMoviePopularity(title)
     return selectedMovieInfo#Definitely clearer, not sure if it's actually less code
 
 def dataSearch(keyword):
+    keyword = keyword.strip()
     curRow = 1
     curMovie = dataArray[curRow][2]
     while curMovie != keyword:
@@ -34,23 +45,18 @@ def dataSearch(keyword):
         curMovie = dataArray[curRow][2]
     return curRow
 
-def printList(data):
-    for datapoint in data:
-        print(datapoint)
-
 
 def getRandomMovie(parsedArgs):
-
+    dataArray = initializeData()
     #first check if there are no args
     if parsedArgs.isEmpty():
         randInt = random.randint(0,len(dataArray)-1)
-        print(dataArray[randInt])
         #also return it for testing
         return dataArray[randInt]
     
     else:
         #filter data using criteria in arguments (if no args, full data is used)
-        filteredData = search(parsedArgs)
+        filteredData = findMatchingMovies(parsedArgs)
         #generate random number for this filter data
         randInt = random.randint(0,len(filteredData)-1)
         #return/print the random row from the subsetted data
@@ -163,8 +169,8 @@ def isCategory(category):
     return False
 
 class Parser:
-    #takes command line arguments and parses them, will have expanded utility
-    #in later iterations of the program
+    #takes command line arguments and parses them, sorts into categories
+    #of search criteria. will have expanded utility in later iterations of the program
     def __init__(self, args):
         self.noArgs = True
         self.type = []
@@ -203,6 +209,10 @@ class Parser:
                         print("Invalid command line arguments.")
                         sys.exit()
                     i += 1
+            else:
+                print("Incorrect definition of a category.")
+                sys.exit(args[i])
+            
 
     def getType(self):
         return self.type
@@ -232,6 +242,8 @@ class Parser:
 
 
 def findMatchingMovies(parsedArgs):
+    dataArray = initializeData()
+
     matchingMovies = []
     criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
     criteria[1] = parsedArgs.getType()
@@ -265,11 +277,14 @@ def findMatchingMovies(parsedArgs):
 
 
 def main():
-    global dataArray 
-    dataArray = initializeData()
-    
+    if(len(sys.argv) < 2):
+        print("No function in command line.")
+        printUsage()
+    else:
+        functionName = sys.argv[1]
+        initialDirectoryPath(functionName)
+
     #pull function and args
-    numArgs = len(sys.argv)
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
 
@@ -278,12 +293,12 @@ def main():
     elif functionName=="getRandomMovie":
         print(getRandomMovie(parsedArgs))
     elif functionName == "getMovie":
-        title = sys.argv[2]
-        filmInfo = getMovie(title)
+        print(processGetMovie())
     elif functionName == "getPopularMovies":
         print(getPopularMovies())
     else:
         print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
+        printUsage()
 
 
 if __name__ == '__main__':
