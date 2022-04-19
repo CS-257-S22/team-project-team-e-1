@@ -12,19 +12,22 @@ def initializeData():
             dataArray.append(row)
     return dataArray
 
+def processGetMovie():
+    title = sys.argv[2]
+    filmInfo = getMovie(title)
+    printList(filmInfo)
+
 def getMovie(title):
-    increaseMoviePopularity(title)
-    print(title)
-    title = title.strip()
     filmRow = dataSearch(title)
     if filmRow == None:
        print("Title not found", file = sys.stderr)
        return
     selectedMovieInfo = dataArray[filmRow]
-    printList(selectedMovieInfo)
+    increaseMoviePopularity(title)
     return selectedMovieInfo#Definitely clearer, not sure if it's actually less code
 
 def dataSearch(keyword):
+    keyword = keyword.strip()
     curRow = 1
     curMovie = dataArray[curRow][2]
     while curMovie != keyword:
@@ -277,6 +280,49 @@ def main():
     if functionName == "findMatchingMovies":
         print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":
+<<<<<<< HEAD
+        myKwargs = {}
+        numArgs = len(sys.argv)
+        for i in range(2, numArgs, 2):
+            curCategory = sys.argv[i]
+            specifiedCategory = sys.argv[i+1]
+            myKwargs[curCategory] = specifiedCategory
+        getRandomMovie(**myKwargs)
+    elif featureName == "getMovie":
+        processGetMovie()
+    else:
+        printUsage()
+
+def main():
+    global dataArray 
+    dataArray = initializeData()
+    print(f"Arguments count: {len(sys.argv)}")
+    print(sys.argv)
+    if(len(sys.argv) < 2):
+        printUsage()
+    else:
+        functionName = sys.argv[1]
+        initialDirectoryPath(functionName)
+    
+    
+#usage should be for without function (specifies functions) and for certain function (gives criterion)
+
+
+#if we want to implement argparse to make things cleaner
+#  # Create the parser
+#     parser = argparse.ArgumentParser()
+#     # Add an argument
+#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
+#     help="takes in a str formatted genre")
+#     parser.add_argument('-g', '--genre', type=str, action='store_true', 
+#     help="takes in a str formatted genre")
+#     parser.add_argument('-r', '--rating', type=str, action='store_true', 
+#     help="shows output")
+#     # Parse the argument
+#     args = parser.parse_args()
+#     # Print "Hello" + the user input argument
+#     print('Hello,', args.name)
+=======
         print(getRandomMovie(parsedArgs))
     elif functionName == "getMovie":
         title = sys.argv[2]
@@ -286,6 +332,7 @@ def main():
     else:
         print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
 
+>>>>>>> origin/main
 
 if __name__ == '__main__':
     main()

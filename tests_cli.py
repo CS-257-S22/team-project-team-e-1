@@ -42,11 +42,22 @@ class TestGETMOVIE(unittest.TestCase):
         result = main.getMovie("Sankofa")
         self.assertEqual(result, dataset[8], "Function return value does not represent correct dataset entries")
 
+    def testNoisyData(self):
+        dataset = main.initializeData()
+        result = main.getMovie("Bird Box ")
+        self.assertEqual(result, dataset[350], "Function does not correct for spaces at end of text")
+
 class TestPROCESSING(unittest.TestCase):
     def testDataset(self):
         result = main.initializeData()
         self.assertEqual(len(result), 8808, "Dataset not fully processed")
 
+class TestGENERAL(unittest.TestCase):
+    def testResult(self):
+        for i in range(40):
+            subprocess.run("python3 main.py getMovie 'Je Suis Karl'")
+        self.assertIn("popularTitles.txt", "Je Suis Karl", "Searching a movie frequently does not increase popularity")
+        
 class testPARSER(unittest.TestCase):
     def testParseArgs(self):
         testString = ["-cast", "Ryan", "Gosling", "-year", "1969", "1984"]
