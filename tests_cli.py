@@ -10,14 +10,14 @@ class TestRandom(unittest.TestCase):
     def test_basicRandom(self):
         self.assertIn(main.getRandomMovie(main.Parser([])), data, "Ouput is not a valid show/movie in dataset.")
     def test_certainCriteria(self):
-        self.assertEqual(main.getRandomMovie(main.Parser(["-cast", "Klara Castanho"])),"Confessions of an Invisible Girl","Does not provide correct movie.")
+        self.assertEqual(main.getRandomMovie(main.Parser(["-cast", "Klara Castanho"])),data[14],"Does not provide correct movie.")
     def test_optionsRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-d", "Spielberg"])), data, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-di", "Spielberg"])), data, "Ouput is not a valid documentary movie in dataset.")
     def test_edgeRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-d", "Bruno Garotti", "-c", "Klara Castanho", "-y", "2021"])), data, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-di", "Bruno Garotti", "-ca", "Klara Castanho", "-y", "2021"])), data, "Ouput is not a valid documentary movie in dataset.")
     def test_Randomness(self):
         self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
-
+    
 class TestGettingPopularMovies(unittest.TestCase):
     def test_popularTitlestxtExists(self):
         """Checks if popularTitles.txt is already made"""
@@ -68,6 +68,8 @@ class testPARSER(unittest.TestCase):
         result = main.Parser(testString)
         self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
         self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
+        badInput = ["-c", "Ryan", "Gosling", "-year", "1969", "1984"]
+        #self.assertEqual(main.Parser(badInput),"Incorrect definition of a category. Use \"usage\" function to get help.", "Doesn't throw error for faulty category in command line.")
 
 class testFINDMATCHINGMOVIES(unittest.TestCase):
     def testSearchOneTerm(self):

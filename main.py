@@ -41,7 +41,7 @@ def getRandomMovie(parsedArgs):
     if parsedArgs.isEmpty():
         randInt = random.randint(0,len(dataArray)-1)
         #also return it for testing
-        return dataArray[randInt]
+        return getMovie(dataArray[randInt][2])
     
     else:
         #filter data using criteria in arguments (if no args, full data is used)
@@ -49,7 +49,7 @@ def getRandomMovie(parsedArgs):
         #generate random number for this filter data
         randInt = random.randint(0,len(filteredData)-1)
         #return/print the random row from the subsetted data
-        return filteredData[randInt]
+        return getMovie(filteredData[randInt])
 
 
 def getPopularMovies():
@@ -155,8 +155,8 @@ def bubble_sort(array):
 
 def isCategory(category):
     if category in ["-ty","-type", "-ti",
-        "-title", "-d", "-director", "-c", 
-        "-cast", "-y", "-year", "-r", "-rating"]:
+        "-title", "-di", "-director", "-ca","-a", 
+        "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description"]:
         return True
     return False
 
@@ -188,21 +188,31 @@ class Parser:
                     if category in ["-ty","-type"]:
                         self.type.append(args[i])
                     elif category in ["-ti","-title"]:
-                        self.title.append(args[i])  
-                    elif category in ["-d","-director"]:
+                        self.title.append(args[i])
+                    elif category in ["-di","-director"]:
                         self.director.append(args[i])
-                    elif category in ["-c", "-a", "-cast"]:
+                    elif category in ["-ca", "-a", "-cast"]:
                         self.cast.append(args[i])
+                    elif category in ["-co", "-country"]:
+                        self.country.append(args[i])
+                    elif category in ["-da","-date_added"]:
+                        self.date_added.append(args[i])
                     elif category in ["-y","-year"]:
                         self.release_year.append(args[i])
                     elif category in ["-r","-rating"]:
                         self.rating.append(args[i])
+                    elif category in ["-du","-duration"]:
+                        self.duration.append(args[i])
+                    elif category in ["-g","-genre"]:
+                        self.listed_in.append(args[i])
+                    elif category in ["-de","-description"]:
+                        self.duration.append(args[i])  
                     else:
-                        print("Invalid command line arguments.")
-                        sys.exit()
+                        print("Invalid command line arguments. Use \"usage\" function to get help.")
+                        sys.exit(args[i])
                     i += 1
             else:
-                print("Incorrect definition of a category.")
+                print("Incorrect definition of a category. Use \"usage\" function to get help.")
                 sys.exit(args[i])
             
 
@@ -273,24 +283,24 @@ def printUsage():
 
 def main():
     if(len(sys.argv) < 2):
-        print("No function in command line.")
+        print("No function in command line. Use \"usage\" function to get help.")
+        sys.exit(sys.argv)
+    #pull function and args
+    functionName = sys.argv[1]
+    parsedArgs = Parser(sys.argv[2:])
+    if functionName == "getMovie":
+        print(processGetMovie())
+    elif functionName == "findMatchingMovies":
+        print(findMatchingMovies(parsedArgs))
+    elif functionName=="getRandomMovie":
+        print(getRandomMovie(parsedArgs))
+    elif functionName == "getPopularMovies":
+        print(getPopularMovies())
+    elif functionName in ["usage","-usage","help","-help"]:
         printUsage()
     else:
-         #pull function and args
-        functionName = sys.argv[1]
-        if functionName == "getMovie":
-            print(processGetMovie())
-        else:
-            parsedArgs = Parser(sys.argv[2:])
-            if functionName == "findMatchingMovies":
-                print(findMatchingMovies(parsedArgs))
-            elif functionName=="getRandomMovie":
-                print(getRandomMovie(parsedArgs))
-            elif functionName == "getPopularMovies":
-                print(getPopularMovies())
-            else:
-                print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
-                printUsage()
+        print("Function name not recognized. Use \"usage\" function to get help.", file = sys.stderr)
+        sys.exit(functionName)
 
 
 if __name__ == '__main__':
