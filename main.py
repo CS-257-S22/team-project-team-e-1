@@ -54,7 +54,6 @@ def getRandomMovie(parsedArgs):
         #generate random number for this filter data
         randInt = random.randint(0,len(filteredData)-1)
         #return/print the random row from the subsetted data
-        print(filteredData[randInt])
         return filteredData[randInt]
 
 
@@ -146,10 +145,18 @@ def bubble_sort(array):
 
     return array
 
-# a parser object to keep track of all the options used when searching the datset
+
+def isCategory(category):
+    if category in ["-ty","-type", "-ti",
+        "-title", "-d", "-director", "-c", 
+        "-cast", "-y", "-year", "-r", "-rating"]:
+        return True
+    return False
+
 class Parser:
-    #initialize the parser by taking in args and assigning them by 
-    def __init__(self):
+    #takes command line arguments and parses them, will have expanded utility
+    #in later iterations of the program
+    def __init__(self, args):
         self.noArgs = True
         self.type = []
         self.title = []
@@ -163,42 +170,30 @@ class Parser:
         self.listed_in = []
         self.description = []
 
-        #error checking for length of args
-        if len(sys.argv) < 2:
-            print("Invalid command line arguments: need a command line function.")
-            sys.exit(sys.argv)
-        elif len(sys.argv) == 2:
-            pass
-        else:
-            #signal that we have args
+        if len(args)>0:
             self.noArgs = False
-            #pull the arguments in a specified order
-
-            for i in range(2, len(sys.argv), 2):
-                curCategory = sys.argv[i]
-                criterion = sys.argv[i]
-
-                #error checking
-                if criterion in ["-ty","-type", "-ti",
-                "-title", "-d", "-director", "-c", 
-                "-cast", "-y", "-year", "-r", "-rating"]:
-                    print("Please provide an argument following " + criterion)
-                    sys.exit(sys.argv)
-                elif curCategory in ["-ty","-type"]:
-                    self.type.append(criterion)
-                elif curCategory in ["-ti","-title"]:
-                    self.title.append(criterion)  
-                elif curCategory in ["-d","-director"]:
-                    self.director.append(criterion)
-                elif curCategory in ["-c", "-a", "-cast"]:
-                    self.cast.append(criterion)
-                elif curCategory in ["-y","-year"]:
-                    self.release_year.append(criterion)
-                elif curCategory in ["-r","-rating"]:
-                    self.rating.append(criterion)
-                else:
-                    print("Invalid command line arguments.")
-                    sys.exit(sys.argv)
+        i = 0
+        while i < len(args):
+            if isCategory(args[i]):
+                category = args[i]
+                i += 1
+                while (i < len(args)) and not isCategory(args[i]):
+                    if category in ["-ty","-type"]:
+                        self.type.append(args[i])
+                    elif category in ["-ti","-title"]:
+                        self.title.append(args[i])  
+                    elif category in ["-d","-director"]:
+                        self.director.append(args[i])
+                    elif category in ["-c", "-a", "-cast"]:
+                        self.cast.append(args[i])
+                    elif category in ["-y","-year"]:
+                        self.release_year.append(args[i])
+                    elif category in ["-r","-rating"]:
+                        self.rating.append(args[i])
+                    else:
+                        print("Invalid command line arguments.")
+                        sys.exit()
+                    i += 1
 
     def getType(self):
         return self.type
@@ -208,13 +203,56 @@ class Parser:
         return self.director
     def getCast(self):
         return self.cast
+    def getCountry(self):
+        return self.country
+    def getDateAdded(self):
+        return self.date_added
     def getYear(self):
         return self.release_year
     def getRating(self):
         return self.rating
+    def getDuration(self):
+        return self.duration
+    def getListedIn(self):
+        return self.listed_in
+    def getDescription(self):
+        return self.description
     def isEmpty(self):
         return self.noArgs
 
+
+
+def findMatchingMovies(parsedArgs):
+    matchingMovies = []
+    criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
+    criteria[1] = parsedArgs.getType()
+    criteria[2] = parsedArgs.getTitle()
+    criteria[3] = parsedArgs.getDirector()
+    criteria[4] = parsedArgs.getCast()
+    criteria[5] = parsedArgs.getCountry()
+    criteria[6] = parsedArgs.getDateAdded()
+    criteria[7] = parsedArgs.getYear()
+    criteria[8] = parsedArgs.getRating()
+    criteria[9] = parsedArgs.getDuration()
+    criteria[10] = parsedArgs.getListedIn()
+    criteria[11] = parsedArgs.getDescription()
+ 
+    #for each row in the csv, check the content in each column
+    #and see if it matches at least one of the search criteria.
+    row = 0 
+    while row < len(dataArray):
+        isMatch = True
+        for column in range(12):
+            item = dataArray[row][column]
+            itemWords = item.split()
+            for word in itemWords:
+                if word.lower() in (criterion.lower() 
+                for criterion in criteria[column]):
+                    title = dataArray[row][2]
+                    matchingMovies.append(title)
+        row += 1
+
+    return matchingMovies
 
 
 def main():
@@ -222,11 +260,14 @@ def main():
     dataArray = initializeData()
     
     #pull function and args
-    parsedArgs = Parser()
+    numArgs = len(sys.argv)
     functionName = sys.argv[1]
-   
-    if functionName=="getRandomMovie":
-        getRandomMovie(parsedArgs)
+    parsedArgs = Parser(sys.argv[2:])
+
+    if functionName == "findMatchingMovies":
+        print(findMatchingMovies(parsedArgs))
+    elif functionName=="getRandomMovie":
+        print(getRandomMovie(parsedArgs))
     elif functionName == "getMovie":
         title = sys.argv[2]
         filmInfo = getMovie(title)
@@ -236,4 +277,5 @@ def main():
         print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
 
 
-main()
+if __name__ == '__main__':
+    main()
