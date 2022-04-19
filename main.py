@@ -1,7 +1,6 @@
 import csv
 import sys
 import random
-#from turtle import tiltangle
 
 
 def initializeData():
@@ -18,34 +17,24 @@ def processGetMovie():
     return filmInfo
 
 def getMovie(title):
-    dataArray = initializeData()
     increaseMoviePopularity(title)
-    print(title)
     title = title.strip()
-    filmRow = dataSearch(title)
-    if filmRow == None:
-       print("Title not found", file = sys.stderr)
-       return
-    selectedMovieInfo = dataArray[filmRow]
-    return selectedMovieInfo #Definitely clearer, not sure if it's actually less code
+    return dataSearch(title) #Definitely clearer, not sure if it's actually less code
 
 def dataSearch(keyword):
     dataArray = initializeData()
-    increaseMoviePopularity(title)
-    return selectedMovieInfo#Definitely clearer, not sure if it's actually less code
-
-def dataSearch(keyword):
     keyword = keyword.strip()
     curRow = 1
     curMovie = dataArray[curRow][2]
     while curMovie != keyword:
         if curRow+1 == len(dataArray):
-            return None
+            print("Title not found", file = sys.stderr)
+            return
         curRow += 1
         curMovie = dataArray[curRow][2]
-    return curRow
+    return dataArray[curRow]
 
-
+#provides a random movie given certain criteria
 def getRandomMovie(parsedArgs):
     dataArray = initializeData()
     #first check if there are no args
@@ -105,7 +94,8 @@ def finishedPopularMoviesList(popularMovieList):
 #Helper function for getMovie()
 #Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
 def increaseMoviePopularity(movieTitle):
-    allMoviesList = open('popularTitles.txt', 'r').readlines()
+    file = open('popularTitles.txt', 'r')
+    allMoviesList = file.readlines()
     
     movieNewPopularity = ""
     counter = 0
@@ -122,7 +112,9 @@ def increaseMoviePopularity(movieTitle):
           
     #rewrites the popularTitles file to reflect the viewed movie's new popularity tracker
     allMoviesList[counter] = movieNewPopularity
-    transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
+    file = open('popularTitles.txt', 'w')
+    file.writelines(allMoviesList)  
+    file.close()        
 
 '''
 This sorting algorithm was made by Santiago Valdarrama 
@@ -265,28 +257,26 @@ def findMatchingMovies(parsedArgs):
         isMatch = True
         for column in range(12):
             item = dataArray[row][column]
-            itemWords = item.split()
+            itemWords = item.split(",")
             for word in itemWords:
-                if word.lower() in (criterion.lower() 
-                for criterion in criteria[column]):
-                    title = dataArray[row][2]
-                    matchingMovies.append(title)
+                for criterion in criteria[column]:
+                    if criterion.lower() in word.lower(): 
+                        title = dataArray[row][2]
+                        matchingMovies.append(title)
         row += 1
 
     return matchingMovies
-
 
 def main():
     if(len(sys.argv) < 2):
         print("No function in command line.")
         printUsage()
     else:
+         #pull function and args
         functionName = sys.argv[1]
-        initialDirectoryPath(functionName)
+        parsedArgs = Parser(sys.argv[2:])
+        #initialDirectoryPath(functionName)
 
-    #pull function and args
-    functionName = sys.argv[1]
-    parsedArgs = Parser(sys.argv[2:])
 
     if functionName == "findMatchingMovies":
         print(findMatchingMovies(parsedArgs))

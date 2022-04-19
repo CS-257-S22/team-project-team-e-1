@@ -2,14 +2,19 @@ import os.path
 import unittest
 import main
 
+
+data = main.initializeData()
+ 
 class TestRandom(unittest.TestCase):
     """A GOOD DOCSTRING """
     def test_basicRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser([])), main.initializeData(), "Ouput is not a valid show/movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser([])), data, "Ouput is not a valid show/movie in dataset.")
+    def test_certainCriteria(self):
+        self.assertEqual(main.getRandomMovie(main.Parser(["-cast", "Klara Castanho"])),"Confessions of an Invisible Girl","Does not provide correct movie.")
     def test_optionsRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-d", "Spielberg"])), main.initializeData(), "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-d", "Spielberg"])), data, "Ouput is not a valid documentary movie in dataset.")
     def test_edgeRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-d", "Bruno Garotti", "-c", "Klara Castanho", "-y", "2021"])), main.initializeData(), "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-d", "Bruno Garotti", "-c", "Klara Castanho", "-y", "2021"])), data, "Ouput is not a valid documentary movie in dataset.")
     def test_Randomness(self):
         self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
 
@@ -42,19 +47,16 @@ class TestGETMOVIE(unittest.TestCase):
         self.assertIsInstance(result, list, "Function does not return a list of datapoints")
 
     def testMovieContents(self):
-        dataset = main.initializeData()
         result = main.getMovie("Sankofa")
-        self.assertEqual(result, dataset[8], "Function return value does not represent correct dataset entries")
+        self.assertEqual(result, data[8], "Function return value does not represent correct dataset entries")
 
     def testNoisyData(self):
-        dataset = main.initializeData()
-        result = main.getMovie("Bird Box ")
-        self.assertEqual(result, dataset[350], "Function does not correct for spaces at end of text")
+        result = main.getMovie("Bird Box")
+        self.assertEqual(result, data[350], "Function does not correct for spaces at end of text")
 
 class TestPROCESSING(unittest.TestCase):
     def testDataset(self):
-        result = main.initializeData()
-        self.assertEqual(len(result), 8808, "Dataset not fully processed")
+        self.assertEqual(len(data), 8808, "Dataset not fully processed")
 
 class TestGENERAL(unittest.TestCase):
     def testResult(self):
@@ -66,18 +68,19 @@ class testPARSER(unittest.TestCase):
         result = main.Parser(testString)
         self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
         self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
+
 class testFINDMATCHINGMOVIES(unittest.TestCase):
     def testSearchOneTerm(self):
         parsedArgs = main.Parser([])
-        parsedArgs.title = ["bangkok"]
+        parsedArgs.title = ["Bangkok"]
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
-            self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
+            self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
     def testParseAndSearch(self):
-        parsedArgs = main.Parser(["-title", "bangkok"])
+        parsedArgs = main.Parser(["-title", "Bangkok"])
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
-            self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
+            self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
 
 if __name__ == '__main__':
     unittest.main()
