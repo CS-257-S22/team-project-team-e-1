@@ -1,7 +1,7 @@
 import csv
 import sys
 import random
-import argparse
+#from turtle import tiltangle
 
 
 def initializeData():
@@ -42,36 +42,22 @@ def printList(data):
         print(datapoint)
 
 
-def getRandomMovie(**kwargs):
-    curData = dataArray
-    if len(kwargs)==0:
+def getRandomMovie(parsedArgs):
+
+    #first check if there are no args
+    if parsedArgs.isEmpty():
         randInt = random.randint(0,len(dataArray)-1)
         print(dataArray[randInt])
         #also return it for testing
         return dataArray[randInt]
+    
     else:
-        #loop over all the possible options
-        #pull the cases that match those options
-        for key, value in kwargs.items():
-            if key in ["-t","-type"]:
-                curData = [row for row in curData if value in row[1]]
-            elif key in ["-g","-genre"]:
-                curData = [row for row in curData if value in row[10]]  
-            elif key in ["-d","-director"]:
-                curData = [row for row in curData if value in row[3]]
-            elif key in ["-c","-cast"]:
-                curData = [row for row in curData if value in row[4]]
-            elif key in ["-y","-year"]:
-                curData = [row for row in curData if value in row[7]]
-            elif key in ["-r","-rating"]:
-                curData = [row for row in curData if value in row[8]]
-            else:
-                print("Invalid command line arguments.")
-                sys.exit(kwargs)
-        
-        randInt = random.randint(0,len(curData)-1)
-        print(curData[randInt])
-        return curData[randInt]
+        #filter data using criteria in arguments (if no args, full data is used)
+        filteredData = search(parsedArgs)
+        #generate random number for this filter data
+        randInt = random.randint(0,len(filteredData)-1)
+        #return/print the random row from the subsetted data
+        return filteredData[randInt]
 
 
 def getPopularMovies():
@@ -80,29 +66,37 @@ def getPopularMovies():
     for line in popularTitlesList:
         currline = line.split('|')
         if currline[0] == "Movie":
-            #ensures that the popular list has only 10 movies 
-            if len(finalList) != 10:
-                finalList.append([currline[1], currline[2]])
-                finalList = bubble_sort(finalList)
-            #checks popularity of current movie with that of the least popular movie currently in the final list
-            #always sorts after a change so the movies are always listed in ascending popularity order
-            else:
-                if finalList[0][1] < currline[2]:
-                    finalList[0] = [currline[1], currline[2]]
-                    finalList = bubble_sort(finalList)
+            finalList = updatePopularMoviesList(finalList, currline)
     popularTitlesList.close()
 
-    printTenMostPopularMovies(finalList)
+    return finishedPopularMoviesList(finalList)
+
+
+#Helper function for getPopularMovies()
+def updatePopularMoviesList(movieList, currentMovie):
+    #ensures that the popular list has only 10 movies 
+    if len(movieList) != 10:
+        movieList.append([currentMovie[1], currentMovie[2]])
+        movieList = bubble_sort(movieList)            
+            
+    #checks popularity of current movie with that of the least popular movie currently in the final list
+    #always sorts after a change so the movies are always listed in ascending popularity order
+    else:
+        if movieList[0][1] < currentMovie[2]:
+            movieList[0] = [currentMovie[1], currentMovie[2]]
+            movieList = bubble_sort(movieList)
+
+    return movieList
 
 
 #Helper function for getPopularMovies()
 #reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
-def printTenMostPopularMovies(popularMovieList):    
+def finishedPopularMoviesList(popularMovieList):    
     count = 0
     for title in popularMovieList:
         popularMovieList[count] = title[0]
         count += 1
-    print(popularMovieList)
+    return popularMovieList
 
 
 #Helper function for getMovie()
@@ -127,10 +121,11 @@ def increaseMoviePopularity(movieTitle):
     allMoviesList[counter] = movieNewPopularity
     transferNewMoviesList = open('popularTitles.txt', 'w').writelines(allMoviesList)          
 
-
-#This sorting algorithm was made by Santiago Valdarrama 
-#and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
-#Only the indices in the if statement were changed from the original function.
+'''
+This sorting algorithm was made by Santiago Valdarrama 
+and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
+Only the indices in the if statement were changed from the original function.
+'''
 def bubble_sort(array):
     n = len(array)
 
@@ -174,7 +169,7 @@ class Parser:
     #takes command line arguments and parses them, will have expanded utility
     #in later iterations of the program
     def __init__(self, args):
-        
+        self.noArgs = True
         self.type = []
         self.title = []
         self.director = []
@@ -187,6 +182,8 @@ class Parser:
         self.listed_in = []
         self.description = []
 
+        if len(args)>0:
+            self.noArgs = False
         i = 0
         while i < len(args):
             if isCategory(args[i]):
@@ -209,6 +206,7 @@ class Parser:
                         print("Invalid command line arguments.")
                         sys.exit()
                     i += 1
+
     def getType(self):
         return self.type
     def getTitle(self):
@@ -231,6 +229,8 @@ class Parser:
         return self.listed_in
     def getDescription(self):
         return self.description
+    def isEmpty(self):
+        return self.noArgs
 
 
 
@@ -263,25 +263,23 @@ def findMatchingMovies(parsedArgs):
                     title = dataArray[row][2]
                     matchingMovies.append(title)
         row += 1
-    print(matchingMovies)
 
-
+    return matchingMovies
 
 
 def main():
     global dataArray 
     dataArray = initializeData()
-    print(f"Arguments count: {len(sys.argv)}")
-    print(sys.argv)
-    functionName = sys.argv[1]
+    
+    #pull function and args
     numArgs = len(sys.argv)
-    print("function name: ", functionName)
-
+    functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
-    if functionName == "findMatchingMovies":
-        findMatchingMovies(parsedArgs)
 
+    if functionName == "findMatchingMovies":
+        print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":
+<<<<<<< HEAD
         myKwargs = {}
         numArgs = len(sys.argv)
         for i in range(2, numArgs, 2):
@@ -323,6 +321,17 @@ def main():
 #     args = parser.parse_args()
 #     # Print "Hello" + the user input argument
 #     print('Hello,', args.name)
+=======
+        print(getRandomMovie(parsedArgs))
+    elif functionName == "getMovie":
+        title = sys.argv[2]
+        filmInfo = getMovie(title)
+    elif functionName == "getPopularMovies":
+        print(getPopularMovies())
+    else:
+        print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
+
+>>>>>>> origin/main
 
 if __name__ == '__main__':
     main()

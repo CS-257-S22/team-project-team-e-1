@@ -7,18 +7,30 @@ import os
 class TestRandom(unittest.TestCase):
     """A GOOD DOCSTRING """
     def test_basicRandom(self):
-        self.assertIn(subprocess.run("python3 main.py getRandomMovie"), main.initializeData, "Ouput is not a valid show/movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser([])), main.initializeData, "Ouput is not a valid show/movie in dataset.")
     def test_optionsRandom(self):
-        self.assertIn(subprocess.run("python3 main.py getRandomMovie -t Movie -g Documentaries"), main.initializeData, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-t", "Movie", "-g", "Documentaries"])), main.initializeData, "Ouput is not a valid documentary movie in dataset.")
     def test_edgeRandom(self):
-        self.assertIn(subprocess.run("python3 main.py getRandomMovie -t Movie -g Documentaries -d Bruno Garotti -c Klara Castanho -y 2021"), main.initializeData[14], "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-t", "Movie", "-g", "Comedies","-d", "Bruno Garotti", "-c", "Klara Castanho", "-y", "2021"])), main.initializeData[14], "Ouput is not a valid documentary movie in dataset.")
+    def test_Randomness(self):
+        self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
+
+class TestGettingPopularMovies(unittest.TestCase):
+    def test_popularTitlestxtExists(self):
+        """Checks if popularTitles.txt is already made"""
+        import os.path
+        popularTitlesTextExists = os.path.exists('popularTitles.txt')
+        self.assertTrue(popularTitlesTextExists, "The text file popularTitles.txt does not exist")
+
+    def test_sortingAlgorithmHelper(self):
+        testList = [['MovieTitle1',1], ["MovieTitle2",4], ["MovieTitle3",3], ["MovieTitle4",5], ["MovieTitle5",2]]
+        sortedtestList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5]]
+        self.assertEqual(bubble_sort(testList), sortedtestList, "Sorting algorithm does not return sorted list")
     
-
-"""class TestGettingPopularMovies(unittest.TestCase):
-    def test_Opening_Popular_Titles_File(self):
-        Checks if popularTitles.txt is opened and copied into iterable list
-        self.assertIn("Blood & Water", )"""
-
+    def test_movieListUpdateHelper(self):
+        currentMovie = ["Movie", "newTitle", 11]
+        movieList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5], ["MovieTitle7",6], ["MovieTitle8",7], ["MovieTitle10",8], ["MovieTitle6",9], ["MovieTitle9",10]]
+        self.assertIn(["newTitle", 11], updatePopularMoviesList(movieList, currentMovie), "updatePopularMoviesList function does not replace less popular movie in list with more popular movie when list is full")
 
 class TestGETMOVIE(unittest.TestCase):
     def testReturnValue(self):

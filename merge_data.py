@@ -10,8 +10,12 @@ for i,file in enumerate(datasetsLoc):
         for j,row in enumerate(streamingData):
             if i==0 and j==0:
                 row.append("Streaming Service")
-            elif i==0 and j!=0:
+            elif i==0 and j>0:
                 row.append("Netflix")
-            elif i==1 and j==0:
-                row.append("Netflix")
+            elif i==1 and j>0:
+                row.append("Hulu")
+            elif i==2 and j>0:
+                row.append("Disney Plus")
+            elif i==3 and j>0:
+                row.append("Amazon Prime")
             fullData.append(row)
