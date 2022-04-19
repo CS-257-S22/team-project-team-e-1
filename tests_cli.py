@@ -51,7 +51,7 @@ class TestGETMOVIE(unittest.TestCase):
         self.assertEqual(result, data[8], "Function return value does not represent correct dataset entries")
 
     def testNoisyData(self):
-        result = main.getMovie("Bird Box")
+        result = main.getMovie("Seabiscuit ")
         self.assertEqual(result, data[350], "Function does not correct for spaces at end of text")
 
 class TestPROCESSING(unittest.TestCase):

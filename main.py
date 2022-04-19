@@ -198,11 +198,11 @@ class Parser:
                     elif category in ["-r","-rating"]:
                         self.rating.append(args[i])
                     else:
-                        #print("Invalid command line arguments.")
+                        print("Invalid command line arguments.")
                         sys.exit()
                     i += 1
             else:
-                #print("Incorrect definition of a category.")
+                print("Incorrect definition of a category.")
                 sys.exit(args[i])
             
 
@@ -278,21 +278,19 @@ def main():
     else:
          #pull function and args
         functionName = sys.argv[1]
-        parsedArgs = Parser(sys.argv[2:])
-        #initialDirectoryPath(functionName)
-
-
-    if functionName == "findMatchingMovies":
-        findMatchingMovies(parsedArgs)
-    elif functionName=="getRandomMovie":
-        getRandomMovie(parsedArgs)
-    elif functionName == "getMovie":
-        processGetMovie()
-    elif functionName == "getPopularMovies":
-        getPopularMovies()
-    else:
-        print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
-        printUsage()
+        if functionName == "getMovie":
+            print(processGetMovie())
+        else:
+            parsedArgs = Parser(sys.argv[2:])
+            if functionName == "findMatchingMovies":
+                print(findMatchingMovies(parsedArgs))
+            elif functionName=="getRandomMovie":
+                print(getRandomMovie(parsedArgs))
+            elif functionName == "getPopularMovies":
+                print(getPopularMovies())
+            else:
+                print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
+                printUsage()
 
 
 if __name__ == '__main__':
