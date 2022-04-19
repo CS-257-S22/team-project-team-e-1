@@ -154,8 +154,8 @@ def isCategory(category):
     return False
 
 class Parser:
-    #takes command line arguments and parses them, will have expanded utility
-    #in later iterations of the program
+    #takes command line arguments and parses them, sorts into categories
+    #of search criteria. will have expanded utility in later iterations of the program
     def __init__(self, args):
         self.noArgs = True
         self.type = []
@@ -194,6 +194,7 @@ class Parser:
                         print("Invalid command line arguments.")
                         sys.exit()
                     i += 1
+            
 
     def getType(self):
         return self.type
