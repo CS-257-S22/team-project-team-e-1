@@ -22,7 +22,6 @@ class TestGettingPopularMovies(unittest.TestCase):
         popularTitlesTextExists = os.path.exists('popularTitles.txt')
         self.assertTrue(popularTitlesTextExists, "The text file popularTitles.txt does not exist")
 
-
     def test_sortingAlgorithmHelper(self):
         testList = [['MovieTitle1',1], ["MovieTitle2",4], ["MovieTitle3",3], ["MovieTitle4",5], ["MovieTitle5",2]]
         sortedtestList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5]]
