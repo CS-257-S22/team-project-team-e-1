@@ -45,12 +45,12 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
     def testSearchOneTerm(self):
         parsedArgs = main.Parser([])
         parsedArgs.title = ["bangkok"]
-        result = main.findMatchingMovie(parsedArgs)
+        result = main.findMatchingMovies(parsedArgs)
         for movie in result:
             self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
     def testParseAndSearch(self):
         parsedArgs = main.Parser(["-title", "bangkok"])
-        result = main.findMatchingMovie(parsedArgs)
+        result = main.findMatchingMovies(parsedArgs)
         for movie in result:
             self.assertIn("bangkok", movie, "Returns movie which don't match the criterion")
 
