@@ -198,11 +198,11 @@ class Parser:
                     elif category in ["-r","-rating"]:
                         self.rating.append(args[i])
                     else:
-                        print("Invalid command line arguments.")
+                        #print("Invalid command line arguments.")
                         sys.exit()
                     i += 1
             else:
-                print("Incorrect definition of a category.")
+                #print("Incorrect definition of a category.")
                 sys.exit(args[i])
             
 
@@ -267,6 +267,10 @@ def findMatchingMovies(parsedArgs):
 
     return matchingMovies
 
+def printUsage():
+    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
+        print(f.read())
+
 def main():
     if(len(sys.argv) < 2):
         print("No function in command line.")
@@ -279,13 +283,13 @@ def main():
 
 
     if functionName == "findMatchingMovies":
-        print(findMatchingMovies(parsedArgs))
+        findMatchingMovies(parsedArgs)
     elif functionName=="getRandomMovie":
-        print(getRandomMovie(parsedArgs))
+        getRandomMovie(parsedArgs)
     elif functionName == "getMovie":
-        print(processGetMovie())
+        processGetMovie()
     elif functionName == "getPopularMovies":
-        print(getPopularMovies())
+        getPopularMovies()
     else:
         print("Function name not recognized-- please choose either getMovie, getRandomMovie, getPopularMovies, or search", file = sys.stderr)
         printUsage()
