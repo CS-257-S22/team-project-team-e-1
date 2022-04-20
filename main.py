@@ -103,12 +103,13 @@ def dataSearch(keyword):
     return movieArray[index].getMovieInfo()
 
 """
+                    getRandomMovie
+
     @description: gives a random movie suggestion based off given criteria using getMovie and findMatchingMovies
     @params: parsedArgs - a Parser object containing the search criteria
-    @returns:  getMovie - the movie info coming from getMovie
+    @returns:  getMovie (eventually a list) - the movie info coming from getMovie
 """
 
-#provides a random movie given certain criteria
 def getRandomMovie(parsedArgs):
     movieArray = initializeData()
     #first check if there are no args
@@ -125,6 +126,14 @@ def getRandomMovie(parsedArgs):
         #return/print the random movie from the subsetted data
         return getMovie(filteredMovies[randInt])
 
+"""
+
+                    getPopularMovie
+
+    @description: gives the most popular movies suggestion based off how often they have been searched for using getMovie and getRandomMovie
+    @params: None
+    @returns: finishedPopularMoviesList (eventually a list) - helper function
+"""
 
 def getPopularMovies():
     finalList = []
@@ -137,8 +146,12 @@ def getPopularMovies():
 
     return finishedPopularMoviesList(finalList)
 
+"""
+    @description: helper method for popular movies
+    @params: movieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
+    @returns: movieList (list) - updated movieList
+"""
 
-#Helper function for getPopularMovies()
 def updatePopularMoviesList(movieList, currentMovie):
     #ensures that the popular list has only 10 movies 
     if len(movieList) != 10:
@@ -154,9 +167,12 @@ def updatePopularMoviesList(movieList, currentMovie):
 
     return movieList
 
+"""
+    @description: Helper function for getPopularMovies() - reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
+    @params: popularMovieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
+    @returns: popularMovieList (list) - the final list to be displayed
+"""
 
-#Helper function for getPopularMovies()
-#reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
 def finishedPopularMoviesList(popularMovieList):    
     count = 0
     for title in popularMovieList:
@@ -164,9 +180,12 @@ def finishedPopularMoviesList(popularMovieList):
         count += 1
     return popularMovieList
 
+"""
+    @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
+    @params: movieTitle - the movie that was just searched for
+    @returns: None
+"""
 
-#Helper function for getMovie()
-#Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
 def increaseMoviePopularity(movieTitle):
     file = open('popularTitles.txt', 'r')
     allMoviesList = file.readlines()
@@ -226,6 +245,13 @@ def bubble_sort(array):
 
     return array
 
+"""
+                Parser
+
+    @description: Helper function for Parser object - helps determine if a category is valid
+    @params: category - given category shorthand we are testing
+    @returns: Boolean
+"""
 
 def isCategory(category):
     if category in ["-ty","-type", "-ti",
@@ -233,6 +259,8 @@ def isCategory(category):
         "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description"]:
         return True
     return False
+
+#a class that takes command-line arguments, tests them for correct format, and stores them to use in functions
 
 class Parser:
     #takes command line arguments and parses them, sorts into categories
@@ -291,7 +319,7 @@ class Parser:
                 printUsage()
                 sys.exit(args[i])
             
-
+    #to access all the instance variables
     def getType(self):
         return self.type
     def getTitle(self):
@@ -317,7 +345,14 @@ class Parser:
     def isEmpty(self):
         return self.noArgs
 
+"""
 
+                findMatchingMovies
+
+    @description: gives a list of all movies matching the given criteria (uses OR for multiple crtieria)
+    @params: parsedArgs - the criteria we are searching for
+    @returns: matchingMovies - a list of movies
+"""
 
 def findMatchingMovies(parsedArgs):
     movieArray = initializeData()
@@ -352,9 +387,21 @@ def findMatchingMovies(parsedArgs):
 
     return matchingMovies
 
+"""
+    @description: provides the usage statement
+    @params: None
+    @returns: None
+"""
+
 def printUsage():
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
         print(f.read())
+
+"""
+    @description: our main method that runs when main.py is called and sorts the args
+    @params: None
+    @returns: None
+"""
 
 def main():
     if(len(sys.argv) < 2):
