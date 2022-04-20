@@ -14,7 +14,8 @@ def initializeData():
 def processGetMovie(parsedArgs):
     title = parsedArgs.getTitle()
     if len(title)==0:
-        print("Function getMovie needs a title argument (-ti \"title\"). See \"usage\" function to get help.")
+        print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
+        printUsage()
         sys.exit(title)
     title = title[0]
     print(title)
@@ -34,7 +35,8 @@ def dataSearch(keyword):
     curMovie = dataArray[curRow][2]
     while curMovie != keyword:
         if curRow+1 == len(dataArray):
-            print("Title not found. See \"usage\" function to get help or find movies with finMatchingMovies.", file = sys.stderr)
+            print("ERROR:Title not found.", file = sys.stderr)
+            printUsage()
             sys.exit(keyword)
         curRow += 1
         curMovie = dataArray[curRow][2]
@@ -214,11 +216,13 @@ class Parser:
                     elif category in ["-de","-description"]:
                         self.duration.append(args[i])  
                     else:
-                        print("Invalid command line arguments. See \"usage\" function to get help.")
+                        print("ERROR:Invalid command line arguments.")
+                        printUsage()
                         sys.exit(args[i])
                     i += 1
             else:
-                print("Incorrect definition of a category. See \"usage\" function to get help.")
+                print("ERROR:Incorrect definition of a category.")
+                printUsage()
                 sys.exit(args[i])
             
 
@@ -288,8 +292,10 @@ def printUsage():
         print(f.read())
 
 def main():
-    if(len(sys.argv) < 2):
-        print("No function in command line. See \"usage\" function to get help.")
+    potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
+    if(len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
+        print("ERROR:No function in command line.")
+        printUsage()
         sys.exit(sys.argv)
     #pull function and args
     functionName = sys.argv[1]
@@ -302,10 +308,9 @@ def main():
         print(getRandomMovie(parsedArgs))
     elif functionName == "getPopularMovies":
         print(getPopularMovies())
-    elif functionName in ["usage","-usage","help","-help"]:
-        printUsage()
     else:
-        print("Function name not recognized. See \"usage\" function to get help.", file = sys.stderr)
+        print("Function name not recognized.", file = sys.stderr)
+        printUsage()
         sys.exit(functionName)
 
 

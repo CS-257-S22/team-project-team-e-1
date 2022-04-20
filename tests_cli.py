@@ -58,9 +58,6 @@ class TestPROCESSING(unittest.TestCase):
     def testDataset(self):
         self.assertEqual(len(data), 8808, "Dataset not fully processed")
 
-class TestGENERAL(unittest.TestCase):
-    def testResult(self):
-        pass
         
 class testPARSER(unittest.TestCase):
     def testParseArgs(self):
