@@ -4,17 +4,18 @@ import main
 
 
 data = main.initializeData()
+rawData = [movie.getMovieInfo() for movie in data]
  
 class TestRandom(unittest.TestCase):
     """A GOOD DOCSTRING """
     def test_basicRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser([])), data, "Ouput is not a valid show/movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser([])), rawData, "Ouput is not a valid show/movie in dataset.")
     def test_certainCriteria(self):
-        self.assertEqual(main.getRandomMovie(main.Parser(["-cast", "Klara Castanho"])),data[14],"Does not provide correct movie.")
+        self.assertEqual(main.getRandomMovie(main.Parser(["-cast", "Klara Castanho"])),data[13].getMovieInfo(),"Does not provide correct movie.")
     def test_optionsRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-di", "Spielberg"])), data, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-di", "Spielberg"])), rawData, "Ouput is not a valid documentary movie in dataset.")
     def test_edgeRandom(self):
-        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-di", "Bruno Garotti", "-ca", "Klara Castanho", "-y", "2021"])), data, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-di", "Bruno Garotti", "-ca", "Klara Castanho", "-y", "2021"])), rawData, "Ouput is not a valid documentary movie in dataset.")
     def test_Randomness(self):
         self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
     
@@ -48,15 +49,15 @@ class TestGETMOVIE(unittest.TestCase):
 
     def testMovieContents(self):
         result = main.getMovie("Sankofa")
-        self.assertEqual(result, data[8], "Function return value does not represent correct dataset entries")
+        self.assertEqual(result, data[7].getMovieInfo(), "Function return value does not represent correct dataset entries")
 
     def testNoisyData(self):
         result = main.getMovie("Seabiscuit ")
-        self.assertEqual(result, data[350], "Function does not correct for spaces at end of text")
+        self.assertEqual(result, data[349].getMovieInfo(), "Function does not correct for spaces at end of text")
 
 class TestPROCESSING(unittest.TestCase):
     def testDataset(self):
-        self.assertEqual(len(data), 8808, "Dataset not fully processed")
+        self.assertEqual(len(data), 8807, "Dataset not fully processed")
 
         
 class testPARSER(unittest.TestCase):

@@ -3,61 +3,127 @@ import sys
 import random
 
 
-def initializeData():
-    with open('Data (CS257)/netflix_titles.csv', newline='') as csvfile:
-        data = csv.reader(csvfile)
-        dataArray = []
-        for row in data:
-            dataArray.append(row)
-    return dataArray
+# a class to store movie information in a neat organized fashion
+class Movie:
 
-def processGetMovie(parsedArgs):
-    title = parsedArgs.getTitle()
+    def __init__(self, movieInfo):
+        self.movieInfo = movieInfo
+        self.type = movieInfo[1]
+        self.title = movieInfo[2]
+        self.director = movieInfo[3]
+        self.cast = movieInfo[4]
+        self.country = movieInfo[5]
+        self.date_added = movieInfo[6]
+        self.release_year = movieInfo[7]
+        self.rating = movieInfo[8]
+        self.duration = movieInfo[9]
+        self.listed_in = movieInfo[10]
+        self.description = movieInfo[11]
+
+    def getMovieInfo(self):
+        return self.movieInfo
+    def getType(self):
+        return self.type
+    def getTitle(self):
+        return self.title
+    def getDirector(self):
+        return self.director
+    def getCast(self):
+        return self.cast
+    def getCountry(self):
+        return self.country
+    def getDateAdded(self):
+        return self.date_added
+    def getYear(self):
+        return self.release_year
+    def getRating(self):
+        return self.rating
+    def getDuration(self):
+        return self.duration
+    def getListedIn(self):
+        return self.listed_in
+    def getDescription(self):
+        return self.description
+
+    
+"""
+                getMovie
+
+    @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array.
+    **THIS DOES NOT INCLUDE HEADER**
+    @params: None
+    @returns: None
+"""
+def initializeData():
+    with open('Data/netflix_titles.csv', newline='') as csvfile:
+        data = csv.reader(csvfile)
+        movieArray = []
+        next(data)
+        for movie in data:
+            movieObject = Movie(movie)
+            movieArray.append(movieObject)
+
+    return movieArray
+
+"""
+    @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array 
+    @params: parsedArgs - a Parser object that has the requested filter paramters from the user input
+    @returns: movieInfo - a list that has the information of a movie
+"""
+def getMovie(parsedArgs):
+    title = parsedArgs.getTitle()[0]
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
         printUsage()
         sys.exit(title)
-    title = title[0]
-    print(title)
-    filmInfo = getMovie(title)
-    return filmInfo
 
-def getMovie(title):
-    title = title.strip()
-    movieInfo = dataSearch(title)
+    movieInfo = dataSearch(title) #need to call dataSearch before increaseMoviePopularity
     increaseMoviePopularity(title)
     return movieInfo #Definitely clearer, not sure if it's actually less code
 
+
+"""
+    @description: helper function for the method getMovie: actually finds the movie
+    @params: keyword - a str giving the title of the film we are interested in finding
+    @returns: MovieArray[index].getMovieInfo() - a list that has the information of a movie
+"""
+
 def dataSearch(keyword):
-    dataArray = initializeData()
+    movieArray = initializeData()
     keyword = keyword.strip()
-    curRow = 1
-    curMovie = dataArray[curRow][2]
+    index = 0
+    curMovie = movieArray[index].getTitle()
     while curMovie != keyword:
-        if curRow+1 == len(dataArray):
+        if index+1 == len(movieArray):
             print("ERROR:Title not found.", file = sys.stderr)
             printUsage()
             sys.exit(keyword)
-        curRow += 1
-        curMovie = dataArray[curRow][2]
-    return dataArray[curRow]
+        index += 1
+        curMovie = movieArray[index].getTitle()
+    return movieArray[index].getMovieInfo()
+
+"""
+    @description: gives a random movie suggestion based off given criteria using getMovie and findMatchingMovies
+    @params: parsedArgs - a Parser object containing the search criteria
+    @returns:  getMovie - the movie info coming from getMovie
+"""
 
 #provides a random movie given certain criteria
 def getRandomMovie(parsedArgs):
-    dataArray = initializeData()
+    movieArray = initializeData()
     #first check if there are no args
     if parsedArgs.isEmpty():
-        randInt = random.randint(0,len(dataArray)-1)
+        randInt = random.randint(0,len(movieArray)-1)
         #also return it for testing
-        return getMovie(dataArray[randInt][2])
+        return getMovie(movieArray[randInt].getTitle())
     
     else:
         #filter data using criteria in arguments (if no args, full data is used)
-        filteredData = findMatchingMovies(parsedArgs)
+        filteredMovies = findMatchingMovies(parsedArgs)
         #generate random number for this filter data
-        randInt = random.randint(0,len(filteredData)-1)
-        #return/print the random row from the subsetted data
-        return getMovie(filteredData[randInt])
+        randInt = random.randint(0,len(filteredMovies)-1)
+        #return/print the random movie from the subsetted data
+        return getMovie(filteredMovies[randInt])
 
 
 def getPopularMovies():
@@ -254,7 +320,7 @@ class Parser:
 
 
 def findMatchingMovies(parsedArgs):
-    dataArray = initializeData()
+    movieArray = initializeData()
 
     matchingMovies = []
     criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
@@ -270,20 +336,19 @@ def findMatchingMovies(parsedArgs):
     criteria[10] = parsedArgs.getListedIn()
     criteria[11] = parsedArgs.getDescription()
  
-    #for each row in the csv, check the content in each column
+    #for each movie in the csv, check the content in each column
     #and see if it matches at least one of the search criteria.
-    row = 0 
-    while row < len(dataArray):
-        isMatch = True
+    index = 0 
+    while index < len(movieArray):
         for column in range(12):
-            item = dataArray[row][column]
+            item = movieArray[index].getMovieInfo()[column]
             itemWords = item.split(",")
             for word in itemWords:
                 for criterion in criteria[column]:
                     if criterion.lower() in word.lower(): 
-                        title = dataArray[row][2]
+                        title = movieArray[index].getTitle()
                         matchingMovies.append(title)
-        row += 1
+        index += 1
 
     return matchingMovies
 
@@ -292,16 +357,15 @@ def printUsage():
         print(f.read())
 
 def main():
-    potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
-    if(len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
-        print("ERROR:No function in command line.")
+    if(len(sys.argv) < 2):
+        print("ERROR: No function in command line.")
         printUsage()
         sys.exit(sys.argv)
     #pull function and args
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
     if functionName == "getMovie":
-        print(processGetMovie(parsedArgs))
+        print(getMovie(parsedArgs))
     elif functionName == "findMatchingMovies":
         print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":
