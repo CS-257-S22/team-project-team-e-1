@@ -443,7 +443,7 @@ Movie|Fear Street Part 3: 1666|0|
 TV Show|Johnny Test|0|
 Movie|La ley de Herodes|0|
 TV Show|Naomi Osaka|0|
-Movie|The Beguiled|0|
+Movie|The Beguiled|1|
 Movie|The Book of Henry|0|
 Movie|The Twilight Saga: Breaking Dawn: Part 1|0|
 Movie|The Twilight Saga: Breaking Dawn: Part 2|0|
@@ -4101,7 +4101,7 @@ Movie|Behind the Curve|0|
 Movie|Buddies|0|
 Movie|Candyflip|0|
 Movie|Chameli|0|
-Movie|Fatso|0|
+Movie|Fatso|1|
 TV Show|Hjørdis|0|
 TV Show|Larry Charles' Dangerous World of Comedy|0|
 Movie|Neevevaro|0|
@@ -6292,7 +6292,7 @@ Movie|Bewildered Bolbol|0|
 TV Show|Beyblade: Metal Fusion|0|
 Movie|Beyond All Boundaries|0|
 Movie|Beyond the Clouds|0|
-TV Show|Bh Se Bhade|0|
+TV Show|Bh Se Bhade|1|
 TV Show|Bhaage Re Mann|0|
 Movie|Bhagam Bhag|0|
 Movie|Bheemayan|0|
@@ -8182,7 +8182,7 @@ TV Show|The Adjusters|0|
 Movie|The Adventure Club|0|
 TV Show|The Adventures of Figaro Pho|0|
 Movie|The Adventures of Sharkboy and Lavagirl|0|
-Movie|The Adventures of Tintin|1|
+Movie|The Adventures of Tintin|3|
 Movie|The Aerial|0|
 Movie|The Age of Shadows|0|
 Movie|The American President|0|

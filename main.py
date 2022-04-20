@@ -11,15 +11,21 @@ def initializeData():
             dataArray.append(row)
     return dataArray
 
-def processGetMovie():
-    title = sys.argv[2]
+def processGetMovie(parsedArgs):
+    title = parsedArgs.getTitle()
+    if len(title)==0:
+        print("Function getMovie needs a title argument (-ti \"title\"). See \"usage\" function to get help.")
+        sys.exit(title)
+    title = title[0]
+    print(title)
     filmInfo = getMovie(title)
     return filmInfo
 
 def getMovie(title):
     title = title.strip()
+    movieInfo = dataSearch(title)
     increaseMoviePopularity(title)
-    return dataSearch(title) #Definitely clearer, not sure if it's actually less code
+    return movieInfo #Definitely clearer, not sure if it's actually less code
 
 def dataSearch(keyword):
     dataArray = initializeData()
@@ -28,8 +34,8 @@ def dataSearch(keyword):
     curMovie = dataArray[curRow][2]
     while curMovie != keyword:
         if curRow+1 == len(dataArray):
-            print("Title not found", file = sys.stderr)
-            return
+            print("Title not found. See \"usage\" function to get help or find movies with finMatchingMovies.", file = sys.stderr)
+            sys.exit(keyword)
         curRow += 1
         curMovie = dataArray[curRow][2]
     return dataArray[curRow]
@@ -208,11 +214,11 @@ class Parser:
                     elif category in ["-de","-description"]:
                         self.duration.append(args[i])  
                     else:
-                        print("Invalid command line arguments. Use \"usage\" function to get help.")
+                        print("Invalid command line arguments. See \"usage\" function to get help.")
                         sys.exit(args[i])
                     i += 1
             else:
-                print("Incorrect definition of a category. Use \"usage\" function to get help.")
+                print("Incorrect definition of a category. See \"usage\" function to get help.")
                 sys.exit(args[i])
             
 
@@ -283,13 +289,13 @@ def printUsage():
 
 def main():
     if(len(sys.argv) < 2):
-        print("No function in command line. Use \"usage\" function to get help.")
+        print("No function in command line. See \"usage\" function to get help.")
         sys.exit(sys.argv)
     #pull function and args
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
     if functionName == "getMovie":
-        print(processGetMovie())
+        print(processGetMovie(parsedArgs))
     elif functionName == "findMatchingMovies":
         print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":
@@ -299,7 +305,7 @@ def main():
     elif functionName in ["usage","-usage","help","-help"]:
         printUsage()
     else:
-        print("Function name not recognized. Use \"usage\" function to get help.", file = sys.stderr)
+        print("Function name not recognized. See \"usage\" function to get help.", file = sys.stderr)
         sys.exit(functionName)
 
 
