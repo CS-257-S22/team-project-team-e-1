@@ -67,7 +67,7 @@ def initializeData():
 
 """
     @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array 
-    @params: parsedArgs - a Parser object that has the requested filter paramters from the user input
+    @params: title - a str that provides the title of the movie
     @returns: movieInfo - a list that has the information of a movie
 """
 def getMovie(title):
