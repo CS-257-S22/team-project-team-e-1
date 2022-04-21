@@ -70,8 +70,8 @@ def initializeData():
     @params: parsedArgs - a Parser object that has the requested filter paramters from the user input
     @returns: movieInfo - a list that has the information of a movie
 """
-def getMovie(parsedArgs):
-    title = parsedArgs.getTitle()[0]
+def getMovie(title):
+    title = title.strip()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
         printUsage()
@@ -412,7 +412,7 @@ def main():
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
     if functionName == "getMovie":
-        print(getMovie(parsedArgs))
+        print(getMovie(parsedArgs.getTitle()[0]))
     elif functionName == "findMatchingMovies":
         print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":

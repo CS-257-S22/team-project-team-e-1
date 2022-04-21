@@ -1,5 +1,6 @@
-
-USAGE
+---------------------
+|       USAGE       |
+---------------------
 
 Generic usage: 
 
@@ -14,15 +15,15 @@ Feature: to pull up the usage statement, or any of the main functions, getMovie,
 
 Filter1--N: used to filter the results for the different functions. Look at the function descriptions below
 to understand how filters work for each function.
-
+__________________________
 getMovie usage: 
 
-main.py getMovie title
+main.py getMovie -ti title
 
 -- After typing getMovie as the Feature, there's one command line argument representing the title of the desired movie, which should be entered with quotes--
 for example, Bird Box would be searched as python3 main.py getMovie "Bird Box". 
 The function returns a list of all the relevant film information stored by the dataset.
-
+__________________________
 getRandomMovie() usage: 
 
 main.py getRandomMovie category1 descriptor1 category2 descriptor2 ... category12 descriptor12
@@ -36,7 +37,7 @@ main.py getRandomMovie -di "Spielberg"
 
 returns random movie directed by Spielberg
 
-
+___________________________
 findMatchingMovies() usage:
 
 main.py getRandomMovie category1 descriptor1 category2 descriptor2 ... category12 descriptor12
@@ -46,8 +47,14 @@ main.py getRandomMovie category1 descriptor1 category2 descriptor2 ... category1
 Example:
 
 main.py findMatchingMovies -di "Spielberg"
+___________________________
+getPopularMovie usage: 
 
-The arguments for getRandomMovie and findMatchingMovies are structured in pairs, with the first one representing a category of the dataset: 
+main.py getPopularMovie
+
+-- getPopularMovie has no command line arguments because it simply returns a list of the ten most popular movies, based on how frequently they've been searched on getMovie.
+____________________________
+The arguments for getMovie (only title), getRandomMovie, and findMatchingMovies are structured in pairs, with the first one representing a category of the dataset: 
 
 -ti or -title for title
 -ty or -type for type(Movie or TV show)
@@ -66,10 +73,3 @@ The second argument represents a value in the specified category.
 Example:
 -ty "Movie"
 -g "Comedies" 
-
-
-getPopularMovie usage: 
-
-main.py getPopularMovie
-
--- getPopularMovie has no command line arguments because it simply returns a list of the ten most popular movies, based on how frequently they've been searched on getMovie.
