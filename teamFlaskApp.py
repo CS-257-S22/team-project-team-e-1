@@ -1,7 +1,7 @@
 import csv
 from flask import Flask
 import main
-
+ 
 
 
 app = Flask(__name__)
@@ -26,12 +26,6 @@ homepage_message = "Welcome to the homepage. Please type in /getMovie/<some_titl
 def homepage():
     return homepage_message
 
-""" @description: Loads movie data for processing
-    @params: None
-    @returns: None"""
-def load_data():
-    data = main.initializeData()
-    rawData = [movie.getMovieInfo() for movie in data]
 
 """ @description: Starts up the getMovie function-- uses parameters in the browser to specify the title of the movie
     @params: /getMovie/<title>, with <title> replaced with user input
@@ -42,6 +36,27 @@ def getFilm(title):
     print(parsedTitle)
     return str(main.getMovie(parsedTitle))
 
+"""
+    @description: assigns the getRandomMovie function from main.py to a url.
+    @params: args - a user input for what to randomized 
+    @return: the string to be displayed on the webpage for random movie/show
+"""
+@app.route('/getRandomMovie/<category>/<args>/', strict_slashes=False)
+def getRandomMovie(category,args) -> str:
+    fullArgs = [category] + args.split("_")
+    parsedArgs = main.Parser(fullArgs)
+    return str(main.getRandomMovie(parsedArgs))
+
+"""
+    @description: displays the usage text as given by the usage_message.txt file
+    @params: None - the file is predetermined
+    @return: the string to be displayed on the webpage for usage
+"""
+@app.route('/usage/', strict_slashes=False)
+def usage() -> str:
+    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
+        return f.read()
+
 @app.errorhandler(404)
 def page_not_found(e):
      return "sorry, wrong format. To get info from the dataset, enter URL/row/column, where URL is the URL provided by the program, row is the desired row, and column is the desired column"
@@ -51,5 +66,4 @@ def python_bug(e):
     return "Something went wrong with the program-- hopefully this bug will be fixed shortly."
 
 if __name__ == '__main__':
-    load_data()
     app.run()
