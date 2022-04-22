@@ -1,0 +1,13 @@
+<html>
+        <head>
+        <title> Search For: {{keyword}}</title>
+        </head>
+        <body>
+            <h1>Your search for "{{keyword}}" returned:</h1>
+            <ul>
+                {% for movie in movies: %}
+                <li>{{  movie  }}</li>
+                {% endfor %}
+            </ul>
+        </body>
+</html>

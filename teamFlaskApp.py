@@ -1,5 +1,5 @@
 import csv
-from flask import Flask
+from flask import Flask, render_template
 import main
  
 
@@ -70,6 +70,21 @@ def getUsage():
     @params: None - the file is predetermined
     @return: the string to be displayed on the webpage for usage
 """
+
+@app.route('/findMatchingMovies/<category>/<criterion>', strict_slashes=False)
+def matchingMovies(category, criterion):
+    '''
+    @description: By going to a page /<category>/<criterion>, the category and search criterion
+    are parsed into main.findMatchingMovies, and a list of movies matching the given
+    search criterion is returned.
+    @params: None
+    @return: list of movies
+    '''
+    args = [str(category), str(criterion)]
+    parsedArgs = main.Parser(args)
+    movies = main.findMatchingMovies(parsedArgs)
+    return render_template('matchingMovie.html', keyword = criterion, movies = movies)
+
 @app.route('/usage/', strict_slashes=False)
 def usage() -> str:
     return getUsage()
