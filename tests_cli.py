@@ -32,12 +32,7 @@ class TestGettingPopularMovies(unittest.TestCase):
         self.assertEqual(main.bubble_sort(testList), sortedtestList, "Sorting algorithm does not return sorted list")
     
     def test_movieListUpdateHelper(self):
-        """Checks if the list of popular movies is updated when a more popular movie is found.
-
-        Keyword arguments:
-        currentMovie -- a movie that is more popular than the least popular movie currently in the popular movies list
-        movieList -- the popular movies list
-        """
+        """Checks if the list of popular movies is updated when a more popular movie is found."""
         currentMovie = ["Movie", "newTitle", 11]
         movieList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5], ["MovieTitle7",6], ["MovieTitle8",7], ["MovieTitle10",8], ["MovieTitle6",9], ["MovieTitle9",10]]
         self.assertIn(["newTitle", 11], main.updatePopularMoviesList(movieList, currentMovie), "updatePopularMoviesList function does not replace less popular movie in list with more popular movie when list is full")

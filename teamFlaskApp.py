@@ -62,6 +62,15 @@ def getRandomMovie(category,args) -> str:
     parsedArgs = main.Parser(fullArgs)
     return str(main.getRandomMovie(parsedArgs))
 
+@app.route('/popularmovies', strict_slashes=False)
+def get_popular_movies():
+    """
+        @description: Returns a list of the most viewed movies as determined by popularMovies.txt 
+        by running getPopularMovies() from main.py. 
+        @return: getPopularMovies() - the list of popular movies, which here is casted to a string type. 
+    """
+    return str(main.getPopularMovies())
+
 def getUsage():
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
         return f.read()
