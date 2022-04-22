@@ -404,8 +404,9 @@ def printUsage():
 """
 
 def main():
-    if(len(sys.argv) < 2):
-        print("ERROR: No function in command line.")
+    potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
+    if(len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
+        print("ERROR:No function in command line.")
         printUsage()
         sys.exit(sys.argv)
     #pull function and args
@@ -420,7 +421,7 @@ def main():
     elif functionName == "getPopularMovies":
         print(getPopularMovies())
     else:
-        print("Function name not recognized.", file = sys.stderr)
+        print("You should not be here... it is not possible. You have broken logic.", file = sys.stderr)
         printUsage()
         sys.exit(functionName)
 
