@@ -36,6 +36,20 @@ def getFilm(title):
     print(parsedTitle)
     return str(main.getMovie(parsedTitle))
 
+def formatParser(category,args):
+    category = category.split("_")
+
+    newArgs = []
+    for arg in args.split("_"):
+        print(arg)
+        newArgs.append(arg.split("-"))
+
+    fullArgs = []
+    for i,criteria in enumerate(category):
+        fullArgs.append(criteria)
+        for eachArg in newArgs[i]:
+            fullArgs.append(eachArg)
+    return fullArgs
 """
     @description: assigns the getRandomMovie function from main.py to a url.
     @params: args - a user input for what to randomized 
@@ -43,10 +57,14 @@ def getFilm(title):
 """
 @app.route('/getRandomMovie/<category>/<args>/', strict_slashes=False)
 def getRandomMovie(category,args) -> str:
-    fullArgs = [category] + args.split("_")
+    fullArgs = formatParser(category,args)
+    print(fullArgs)
     parsedArgs = main.Parser(fullArgs)
     return str(main.getRandomMovie(parsedArgs))
 
+def getUsage():
+    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
+        return f.read()
 """
     @description: displays the usage text as given by the usage_message.txt file
     @params: None - the file is predetermined
@@ -54,8 +72,7 @@ def getRandomMovie(category,args) -> str:
 """
 @app.route('/usage/', strict_slashes=False)
 def usage() -> str:
-    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
-        return f.read()
+    return getUsage()
 
 @app.errorhandler(404)
 def page_not_found(e):
