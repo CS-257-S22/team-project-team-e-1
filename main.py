@@ -65,12 +65,13 @@ def initializeData():
 
     return movieArray
 
-"""
-    @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array 
-    @params: title - a str that provides the title of the movie
-    @returns: movieInfo - a list that has the information of a movie
-"""
+
 def getMovie(title):
+    """
+        @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array 
+        @params: title - a str that provides the title of the movie
+        @returns: movieInfo - a list that has the information of a movie
+    """
     title = title.strip()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
@@ -82,13 +83,12 @@ def getMovie(title):
     return movieInfo #Definitely clearer, not sure if it's actually less code
 
 
-"""
-    @description: helper function for the method getMovie: actually finds the movie
-    @params: keyword - a str giving the title of the film we are interested in finding
-    @returns: MovieArray[index].getMovieInfo() - a list that has the information of a movie
-"""
-
 def dataSearch(keyword):
+    """
+        @description: helper function for the method getMovie: actually finds the movie
+        @params: keyword - a str giving the title of the film we are interested in finding
+        @returns: MovieArray[index].getMovieInfo() - a list that has the information of a movie
+    """
     movieArray = initializeData()
     keyword = keyword.strip()
     index = 0
@@ -102,15 +102,13 @@ def dataSearch(keyword):
         curMovie = movieArray[index].getTitle()
     return movieArray[index].getMovieInfo()
 
-"""
-                    getRandomMovie
-
-    @description: gives a random movie suggestion based off given criteria using getMovie and findMatchingMovies
-    @params: parsedArgs - a Parser object containing the search criteria
-    @returns:  getMovie (eventually a list) - the movie info coming from getMovie
-"""
 
 def getRandomMovie(parsedArgs):
+    """
+        @description: gives a random movie suggestion based off given criteria using getMovie and findMatchingMovies
+        @params: parsedArgs - a Parser object containing the search criteria
+        @returns:  getMovie (eventually a list) - the movie info coming from getMovie
+    """
     movieArray = initializeData()
     #first check if there are no args
     if parsedArgs.isEmpty():
@@ -126,16 +124,13 @@ def getRandomMovie(parsedArgs):
         #return/print the random movie from the subsetted data
         return getMovie(filteredMovies[randInt])
 
-"""
-
-                    getPopularMovie
-
-    @description: gives the most popular movies suggestion based off how often they have been searched for using getMovie and getRandomMovie
-    @params: None
-    @returns: finishedPopularMoviesList (eventually a list) - helper function
-"""
 
 def getPopularMovies():
+    """
+        @description: gives the most popular movies suggestion based off how often they have been searched for using getMovie and getRandomMovie
+        @params: None
+        @returns: finishedPopularMoviesList (eventually a list) - helper function
+    """
     finalList = []
     popularTitlesList = open("popularTitles.txt", 'r')
     for line in popularTitlesList:
@@ -146,13 +141,13 @@ def getPopularMovies():
 
     return finishedPopularMoviesList(finalList)
 
-"""
-    @description: helper method for popular movies
-    @params: movieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
-    @returns: movieList (list) - updated movieList
-"""
 
 def updatePopularMoviesList(movieList, currentMovie):
+    """
+        @description: helper method for popular movies
+        @params: movieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
+        @returns: movieList (list) - updated movieList
+    """
     #ensures that the popular list has only 10 movies 
     if len(movieList) != 10:
         movieList.append([currentMovie[1], currentMovie[2]])
@@ -167,26 +162,26 @@ def updatePopularMoviesList(movieList, currentMovie):
 
     return movieList
 
-"""
-    @description: Helper function for getPopularMovies() - reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
-    @params: popularMovieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
-    @returns: popularMovieList (list) - the final list to be displayed
-"""
 
 def finishedPopularMoviesList(popularMovieList):    
+    """
+        @description: Helper function for getPopularMovies() - reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
+        @params: popularMovieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
+        @returns: popularMovieList (list) - the final list to be displayed
+    """
     count = 0
     for title in popularMovieList:
         popularMovieList[count] = title[0]
         count += 1
     return popularMovieList
 
-"""
-    @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
-    @params: movieTitle - the movie that was just searched for
-    @returns: None
-"""
 
 def increaseMoviePopularity(movieTitle):
+    """
+        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
+        @params: movieTitle - the movie that was just searched for
+        @returns: None
+    """
     file = open('popularTitles.txt', 'r')
     allMoviesList = file.readlines()
     
@@ -245,15 +240,13 @@ def bubble_sort(array):
 
     return array
 
-"""
-                Parser
-
-    @description: Helper function for Parser object - helps determine if a category is valid
-    @params: category - given category shorthand we are testing
-    @returns: Boolean
-"""
 
 def isCategory(category):
+    """
+        @description: Helper function for Parser object - helps determine if a category is valid
+        @params: category - given category shorthand we are testing
+        @returns: Boolean
+    """
     if category in ["-ty","-type", "-ti",
         "-title", "-di", "-director", "-ca","-a", 
         "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description"]:
@@ -345,16 +338,13 @@ class Parser:
     def isEmpty(self):
         return self.noArgs
 
-"""
-
-                findMatchingMovies
-
-    @description: gives a list of all movies matching the given criteria (uses OR for multiple crtieria)
-    @params: parsedArgs - the criteria we are searching for
-    @returns: matchingMovies - a list of movies
-"""
 
 def findMatchingMovies(parsedArgs):
+    """
+        @description: gives a list of all movies matching the given criteria (uses OR for multiple crtieria)
+        @params: parsedArgs - the criteria we are searching for
+        @returns: matchingMovies - a list of movies
+    """
     movieArray = initializeData()
 
     matchingMovies = []
@@ -387,23 +377,23 @@ def findMatchingMovies(parsedArgs):
 
     return matchingMovies
 
-"""
-    @description: provides the usage statement
-    @params: None
-    @returns: None
-"""
 
 def printUsage():
+    """
+        @description: provides the usage statement
+        @params: None
+        @returns: None
+    """
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
         print(f.read())
 
-"""
-    @description: our main method that runs when main.py is called and sorts the args
-    @params: None
-    @returns: None
-"""
 
 def main():
+    """
+        @description: our main method that runs when main.py is called and sorts the args
+        @params: None
+        @returns: None
+    """
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
     if(len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
         print("ERROR:No function in command line.")
