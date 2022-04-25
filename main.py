@@ -75,11 +75,8 @@ def getMovie(title):
     title = title.strip()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
-        printUsage()
-        sys.exit(title)
-
+        return(Usage())
     movieInfo = dataSearch(title) #need to call dataSearch before increaseMoviePopularity
-    increaseMoviePopularity(title)
     return movieInfo #Definitely clearer, not sure if it's actually less code
 
 
@@ -96,10 +93,10 @@ def dataSearch(keyword):
     while curMovie != keyword:
         if index+1 == len(movieArray):
             print("ERROR:Title not found.", file = sys.stderr)
-            printUsage()
-            sys.exit(keyword)
+            return(Usage())
         index += 1
         curMovie = movieArray[index].getTitle()
+    increaseMoviePopularity(keyword)
     return movieArray[index].getMovieInfo()
 
 
@@ -304,12 +301,12 @@ class Parser:
                         self.duration.append(args[i])  
                     else:
                         print("ERROR:Invalid command line arguments.")
-                        printUsage()
+                        print(Usage())
                         sys.exit(args[i])
                     i += 1
             else:
                 print("ERROR:Incorrect definition of a category.")
-                printUsage()
+                print(Usage())
                 sys.exit(args[i])
             
     #to access all the instance variables
@@ -378,14 +375,14 @@ def findMatchingMovies(parsedArgs):
     return matchingMovies
 
 
-def printUsage():
+def Usage():
     """
-        @description: provides the usage statement
+        @description: displays the usage text as given by the usage_message.txt file
         @params: None
-        @returns: None
+        @return: the string to be displayed in the command line
     """
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
-        print(f.read())
+        return str(f.read())
 
 
 def main():
@@ -397,7 +394,7 @@ def main():
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
     if(len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
         print("ERROR:No function in command line.")
-        printUsage()
+        print(Usage())
         sys.exit(sys.argv)
     #pull function and args
     functionName = sys.argv[1]
@@ -412,7 +409,7 @@ def main():
         print(getPopularMovies())
     else:
         print("You should not be here... it is not possible. You have broken logic.", file = sys.stderr)
-        printUsage()
+        print(Usage())
         sys.exit(functionName)
 
 
