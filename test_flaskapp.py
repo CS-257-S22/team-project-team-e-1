@@ -23,6 +23,19 @@ class TestPopularMoviespage(unittest.TestCase):
         popMovieString = b"['Naruto the Movie 3: Guardians of the Crescent Moon Kingdom', 'InuYasha the Movie 4: Fire on the Mystic Island', 'Bird Box', 'Confessions of an Invisible Girl', 'Total Frat Movie', 'Bobbleheads The Movie', 'Seabiscuit', 'The Adventures of Tintin', 'Je Suis Karl', 'Sankofa']"
         self.assertEqual(popMovieString, response.data)
 
+class TestHELPERS(unittest.TestCase):
+    def testParserHelper(self):
+        testTitle = helperParser("Catch_Me_If_You_Can")
+        self.assertEqual(testTitle, "Catch Me If You Can", "Helper function does not convert underscores into spaces.")
+
+
+class TestFunction(unittest.TestCase):
+    def test_route(self):
+        self.app = app.test_client()
+        response = self.app.get('/getMovie/Bird_Box', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+
 
 if __name__ == '__main__':
     unittest.main()
