@@ -36,9 +36,9 @@ class TestPopularMoviespage(unittest.TestCase):
         self.app = app.test_client()
         response = self.app.get('/popularmovies', follow_redirects=True)
 
-        #popMovieString may need to be updated occasionally as the popular movies are subject to change
-        popMovieString = b"['Naruto the Movie 3: Guardians of the Crescent Moon Kingdom', 'InuYasha the Movie 4: Fire on the Mystic Island', 'Bird Box', 'Confessions of an Invisible Girl', 'Total Frat Movie', 'Bobbleheads The Movie', 'Seabiscuit', 'The Adventures of Tintin', 'Je Suis Karl', 'Sankofa']"
-        self.assertEqual(popMovieString, response.data)
+        #popMovie may need to be updated occasionally as the popular movies are subject to change
+        popMovie = b"Sankofa"
+        self.assertIn(popMovie, response.data)
 
 class TestHELPERS(unittest.TestCase):
     def testParserHelper(self):
