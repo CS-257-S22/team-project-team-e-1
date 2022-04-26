@@ -79,7 +79,6 @@ class testPARSER(unittest.TestCase):
         result = main.Parser(testString)
         self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
         self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
-        badInput = ["-c", "Ryan", "Gosling", "-year", "1969", "1984"]
 
 
 class testFINDMATCHINGMOVIES(unittest.TestCase):
