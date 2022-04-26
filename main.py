@@ -3,9 +3,11 @@ import sys
 import random
 
 
-# a class to store movie information in a neat organized fashion
 class Movie:
 
+    '''a class to store movie information in a neat organized fashion '''
+
+    #creates a movie object
     def __init__(self, movieInfo):
         self.movieInfo = movieInfo
         self.type = movieInfo[1]
@@ -20,6 +22,7 @@ class Movie:
         self.listed_in = movieInfo[10]
         self.description = movieInfo[11]
 
+    #methods to get info about a particular movie
     def getMovieInfo(self):
         return self.movieInfo
     def getType(self):
@@ -46,15 +49,14 @@ class Movie:
         return self.description
 
     
-"""
-                getMovie
 
+def initializeData():
+    """
     @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array.
     **THIS DOES NOT INCLUDE HEADER**
     @params: None
     @returns: None
-"""
-def initializeData():
+    """
     with open('Data/netflix_titles.csv', newline='') as csvfile:
         data = csv.reader(csvfile)
         movieArray = []
@@ -68,7 +70,10 @@ def initializeData():
 
 def getMovie(title):
     """
-        @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array 
+                  getMovie
+
+        @description: takes in a movie title, initializes the data, and searches for and returns a list containing all the info 
+        pertaining to that movie
         @params: title - a str that provides the title of the movie
         @returns: movieInfo - a list that has the information of a movie
     """
@@ -82,9 +87,9 @@ def getMovie(title):
 
 def dataSearch(keyword):
     """
-        @description: helper function for the method getMovie: actually finds the movie
+        @description: helper function for the method getMovie: actually finds the movie in our list of movie objects
         @params: keyword - a str giving the title of the film we are interested in finding
-        @returns: MovieArray[index].getMovieInfo() - a list that has the information of a movie
+        @returns: a list that has the information of a movie
     """
     movieArray = initializeData()
     keyword = keyword.strip()
@@ -102,9 +107,9 @@ def dataSearch(keyword):
 
 def getRandomMovie(parsedArgs):
     """
-        @description: gives a random movie suggestion based off given criteria using getMovie and findMatchingMovies
-        @params: parsedArgs - a Parser object containing the search criteria
-        @returns:  getMovie (eventually a list) - the movie info coming from getMovie
+        @description: gives a random movie suggestion based off given criteria (uses getMovie and findMatchingMovies)
+        @params: parsedArgs - a Parser object containing the search criteria as specified in the command line
+        @returns:  getMovie - a list of the movie info using the function getMovie() as a helper
     """
     movieArray = initializeData()
     #first check if there are no args
@@ -124,9 +129,10 @@ def getRandomMovie(parsedArgs):
 
 def getPopularMovies():
     """
-        @description: gives the most popular movies suggestion based off how often they have been searched for using getMovie and getRandomMovie
+        @description: gives the most popular movie suggestions based off how often they have been searched for using getMovie and getRandomMovie
         @params: None
-        @returns: finishedPopularMoviesList (eventually a list) - helper function
+        @returns: finishedPopularMoviesList - a list of the top 10 most popular movies as recorded in the popularTitles.txt 
+        using the helper function finishedPopularMoviesList
     """
     finalList = []
     popularTitlesList = open("popularTitles.txt", 'r')
@@ -141,9 +147,9 @@ def getPopularMovies():
 
 def updatePopularMoviesList(movieList, currentMovie):
     """
-        @description: helper method for popular movies
+        @description: helper method for popular movies that updates the current list of the 10 most frequently searched movies 
         @params: movieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
-        @returns: movieList (list) - updated movieList
+        @returns: movieList - a list of the updated top 10 movies
     """
     #ensures that the popular list has only 10 movies 
     if len(movieList) != 10:
@@ -164,7 +170,7 @@ def finishedPopularMoviesList(popularMovieList):
     """
         @description: Helper function for getPopularMovies() - reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
         @params: popularMovieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
-        @returns: popularMovieList (list) - the final list to be displayed
+        @returns: popularMovieList (list) - the final list to be displayed in the command line
     """
     count = 0
     for title in popularMovieList:
@@ -175,8 +181,8 @@ def finishedPopularMoviesList(popularMovieList):
 
 def increaseMoviePopularity(movieTitle):
     """
-        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity)
-        @params: movieTitle - the movie that was just searched for
+        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity by 1)
+        @params: movieTitle - the movie that was just searched for in getMovie()
         @returns: None
     """
     file = open('popularTitles.txt', 'r')
@@ -201,12 +207,13 @@ def increaseMoviePopularity(movieTitle):
     file.writelines(allMoviesList)  
     file.close()        
 
-'''
+
+def bubble_sort(array):
+    '''
 This sorting algorithm was made by Santiago Valdarrama 
 and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
 Only the indices in the if statement were changed from the original function.
 '''
-def bubble_sort(array):
     n = len(array)
 
     for i in range(n):
@@ -240,9 +247,9 @@ def bubble_sort(array):
 
 def isCategory(category):
     """
-        @description: Helper function for Parser object - helps determine if a category is valid
+        @description: Helper function for Parser class - helps determine if a category is one of the listed headings in the dataset
         @params: category - given category shorthand we are testing
-        @returns: Boolean
+        @returns: Boolean representing if the category was valid or not
     """
     if category in ["-ty","-type", "-ti",
         "-title", "-di", "-director", "-ca","-a", 
@@ -250,11 +257,12 @@ def isCategory(category):
         return True
     return False
 
-#a class that takes command-line arguments, tests them for correct format, and stores them to use in functions
+
 
 class Parser:
-    #takes command line arguments and parses them, sorts into categories
-    #of search criteria. will have expanded utility in later iterations of the program
+    '''@description: a class that takes command-line arguments from the user, tests them for correct format, and stores them to use in functions
+       @args: command line filters inputted by the user at runtime
+       @returns: None: creates object containing the inputted category and criterion'''
     def __init__(self, args):
         self.noArgs = True
         self.type = []
@@ -338,9 +346,10 @@ class Parser:
 
 def findMatchingMovies(parsedArgs):
     """
-        @description: gives a list of all movies matching the given criteria (uses OR for multiple crtieria)
-        @params: parsedArgs - the criteria we are searching for
-        @returns: matchingMovies - a list of movies
+        @description: gives a list of all movies matching the given filters; does an OR search, so any title that 
+        fits one of the entered criteria gets returned
+        @params: parsedArgs - the filters we are searching for
+        @returns: matchingMovies - a list of movies matching the criteria
     """
     movieArray = initializeData()
 
@@ -387,7 +396,8 @@ def Usage():
 
 def main():
     """
-        @description: our main method that runs when main.py is called and sorts the args
+        @description: our main method that runs when main.py is called; checks if user input is incomplete and calls an error, 
+        if not puts arguments into the Parser class and calls the correct function
         @params: None
         @returns: None
     """
