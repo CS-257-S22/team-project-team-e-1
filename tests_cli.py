@@ -24,11 +24,13 @@ class TestGettingPopularMovies(unittest.TestCase):
         """Checks if popularTitles.txt is already made"""
         popularTitlesTextExists = os.path.exists('popularTitles.txt')
         self.assertTrue(popularTitlesTextExists, "The text file popularTitles.txt does not exist")
-        
+
     def test_popularTitlesFunction(self):
         """Checks if getPopularTitles returns the correct list of movies"""
-        popularMovieslist = ['Naruto the Movie 3: Guardians of the Crescent Moon Kingdom', 'InuYasha the Movie 4: Fire on the Mystic Island', 'Bird Box', 'Confessions of an Invisible Girl', 'Total Frat Movie', 'Bobbleheads The Movie', 'Seabiscuit', 'The Adventures of Tintin', 'Je Suis Karl', 'Sankofa']
-        self.assertEqual(popularMovieslist, main.getPopularMovies())
+        #entire popular movies list cannot be tested because it is subject to change
+        #the popular movie tested here may need to be changed, especially if it is no longer popular
+        popularMovie = 'Sankofa'
+        self.assertIn(popularMovie, main.getPopularMovies())
 
     def test_sortingAlgorithmHelper(self):
         """checks if the bubble sort algorithm works correctly on the list it's given"""
