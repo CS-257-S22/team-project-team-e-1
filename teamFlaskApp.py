@@ -101,7 +101,7 @@ def matchingMovies(category, criterion):
         @params: None
         @return: list of movies
     """
-    args = [str(category), str(criterion)]
+    args = formatParser(category,criterion)
     parsedArgs = main.Parser(args)
     movies = main.findMatchingMovies(parsedArgs)
     return render_template('matchingMovie.html', keyword = criterion, movies = movies)
@@ -125,7 +125,7 @@ def usage() -> str:
 
 @app.errorhandler(404)
 def page_not_found(e):
-     return "sorry, wrong format. To get info from the dataset, enter URL/row/column, where URL is the URL provided by the program, row is the desired row, and column is the desired column"
+     return 'sorry, wrong format. To get info from the dataset, your URL should be formatted as URL/function_name, or as URL/function_name/category/keyword if that function takes search criteria. The home page provides examples of how you may search for movie information using each function.'
 
 
 @app.errorhandler(500)
