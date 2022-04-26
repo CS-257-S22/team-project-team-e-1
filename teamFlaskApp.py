@@ -21,8 +21,16 @@ def helperParser(title):
             parsedTitle = parsedTitle + title[i]
     return parsedTitle
 
+def getHomepage():
+    """
+        @description: displays the homepage text as given by the usage_message.txt file
+        @params: None - the file is predetermined
+        @return: the string to be displayed on the webpage for usage
+    """
+    with open("homepage.txt") as f: # The with keyword automatically closes the file when you are done
+        return f.read()
 
-homepage_message = "Welcome to the homepage. Please type in /getMovie/<some_title> to view the data for that title-- If the movie title has multiple words,please separate them using underscores. For example, to search the movie Bird Box, you would type the url followed by /getMovie/Bird_Box."
+homepage_message = str(getHomepage())
 @app.route('/')
 def homepage():
     """ 
@@ -107,6 +115,7 @@ def getUsage():
     """
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
         return f.read()
+
 
 
 @app.route('/usage/', strict_slashes=False)
