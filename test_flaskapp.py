@@ -28,6 +28,15 @@ class TestHELPERS(unittest.TestCase):
         testTitle = helperParser("Catch_Me_If_You_Can")
         self.assertEqual(testTitle, "Catch Me If You Can", "Helper function does not convert underscores into spaces.")
 
+class testMATCHINGMOVIES(unittest.TestCase):
+    def testMatchingMovies(self):
+        '''Does the site return all the movies from 1969?'''
+        self.app = app.test_client()
+        movies_1969 = ['Prince', 'True Grit']
+        response = self.app.get('/findMatchingMovies/-year/1969')
+        for movie in movies_1969:
+            self.assertIn(bytes(movie, 'utf-8'), response.data)
+
 
 class TestFunction(unittest.TestCase):
     def test_route(self):
