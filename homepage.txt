@@ -1,4 +1,4 @@
-Welcome to the homepage. Please type in /getMovie/<some_title> to search the data for that title-- If the movie title has multiple words,please separate them using underscores. For example, to search the movie Bird Box, you would type the url followed by /getMovie/Bird_Box.------------------------------ 
+Please type in /getMovie/<some_title> to search the data for that title-- If the movie title has multiple words,please separate them using underscores. For example, to search the movie Bird Box, you would type the url followed by /getMovie/Bird_Box.------------------------------ 
 Alternatively, if you want a list of movies that fit a certain criterion, type in /findMatchingMovies followed by pairs of categories and examples, as shown below:
 
 /findMatchingMovies/-g/Documentaries returns all the movies that are listed as Documentary genre. ---------------------------

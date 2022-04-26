@@ -38,7 +38,7 @@ def homepage():
         @params: None
         @returns: home message
     """
-    return homepage_message
+    return "Welcome to the homepage. " + homepage_message
 
 
 @app.route('/getMovie/<title>', strict_slashes=False)
@@ -125,7 +125,7 @@ def usage() -> str:
 
 @app.errorhandler(404)
 def page_not_found(e):
-     return 'sorry, wrong format. To get info from the dataset, your URL should be formatted as URL/function_name, or as URL/function_name/category/keyword if that function takes search criteria. The home page provides examples of how you may search for movie information using each function.'
+     return "Error: The URL you inputted did not map to a page. " + getHomepage()
 
 
 @app.errorhandler(500)
