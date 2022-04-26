@@ -13,6 +13,23 @@ class TestHomepage(unittest.TestCase):
         #checks if the last part of the homepage introduction works
         self.assertIn(b'followed by /getMovie/Bird_Box.', response.data)
 
+class TestRandom(unittest.TestCase):
+
+    #test a specific case (Klara) which should always give the same movie
+    def test_Klara(self):
+        """checks if getRandomMovie with specific filtering returns the information of the only movie that works "Confessions of an Invisible Girl"""
+        self.app = app.test_client()
+        response = self.app.get('/getRandomMovie/-ca/Klara Castanho', follow_redirects=True)
+        self.assertEqual(str.encode(str(['s14', 'Movie', 'Confessions of an Invisible Girl', 'Bruno Garotti', 'Klara Castanho, Lucca Picon, Júlia Gomes, Marcus Bessa, Kiria Malheiros, Fernanda Concon, Gabriel Lima, Caio Cabral, Leonardo Cidade, Jade Cardozo', '', 'September 22, 2021', '2021', 'TV-PG', '91 min', 'Children & Family Movies, Comedies', "When the clever but socially-awkward Tetê joins a new school, she'll do anything to fit in. But the queen bee among her classmates has other ideas."])), response.data,"Klara Castanho example does not work.")
+    
+    #test the randomness of the generic getRandomMovie function
+    def test_Random(self):
+        """checks if getRandomMovie without arguments is actually random (gives a new movie each time"""
+        self.app = app.test_client()
+        response1 = self.app.get('/getRandomMovie/', follow_redirects=True)
+        response2 = self.app.get('/getRandomMovie/', follow_redirects=True)
+        self.assertEqual(response1.data, response2.data,"Klara Castanho example does not work.")
+
 class TestPopularMoviespage(unittest.TestCase):
     """Checks if the popular movies page is working correctly"""
     def test_popMoviesRoute(self):
