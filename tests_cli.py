@@ -7,16 +7,22 @@ data = main.initializeData()
 rawData = [movie.getMovieInfo() for movie in data]
  
 class TestRandom(unittest.TestCase):
-    """A GOOD DOCSTRING """
+    """ A test class for the function getRandomMovie"""
+
     def test_basicRandom(self):
+        """checks if getRandomMovie with no arguments returns the information of a movie that is actually in the dataset"""
         self.assertIn(main.getRandomMovie(main.Parser([])), rawData, "Ouput is not a valid show/movie in dataset.")
-    def test_certainCriteria(self):
-        self.assertEqual(main.getRandomMovie(main.Parser(["-cast", "Klara Castanho"])),data[13].getMovieInfo(),"Does not provide correct movie.")
+
     def test_optionsRandom(self):
+        """checks if getRandomMovie filtered by multiple criteria returns the information of a movie that are actually in the dataset"""
         self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-di", "Spielberg"])), rawData, "Ouput is not a valid documentary movie in dataset.")
+    
     def test_edgeRandom(self):
+        """checks if getRandomMovie with specific filtering returns the information of the only movie that works "Confessions of an Invisible Girl"""
         self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-di", "Bruno Garotti", "-ca", "Klara Castanho", "-y", "2021"])), rawData, "Ouput is not a valid documentary movie in dataset.")
+    
     def test_Randomness(self):
+        """checks if getRandomMovie without arguments is actually random (gives a new movie each time"""
         self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
     
 class TestGettingPopularMovies(unittest.TestCase):
@@ -45,40 +51,51 @@ class TestGettingPopularMovies(unittest.TestCase):
         self.assertIn(["newTitle", 11], main.updatePopularMoviesList(movieList, currentMovie), "updatePopularMoviesList function does not replace less popular movie in list with more popular movie when list is full")
 
 class TestGETMOVIE(unittest.TestCase):
+    """A test class for the function getMovie"""
+
     def testReturnValue(self):
+        """checks that getMovie actually returns a list"""
         result = main.getMovie("Je Suis Karl")
         self.assertIsInstance(result, list, "Function does not return a list of datapoints")
 
     def testMovieContents(self):
+        """checks that getMovie actually returns the information of a particular movie"""
         result = main.getMovie("Sankofa")
         self.assertEqual(result, data[7].getMovieInfo(), "Function return value does not represent correct dataset entries")
 
     def testNoisyData(self):
+        """checks that getMovie actually returns the information of a particular movie given input with weird space"""
         result = main.getMovie("Seabiscuit ")
         self.assertEqual(result, data[349].getMovieInfo(), "Function does not correct for spaces at end of text")
 
 class TestPROCESSING(unittest.TestCase):
+    """A test class for the data"""
     def testDataset(self):
         self.assertEqual(len(data), 8807, "Dataset not fully processed")
 
         
 class testPARSER(unittest.TestCase):
+    """A test class for the Parser class"""
     def testParseArgs(self):
         testString = ["-cast", "Ryan", "Gosling", "-year", "1969", "1984"]
         result = main.Parser(testString)
         self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
         self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
-        badInput = ["-c", "Ryan", "Gosling", "-year", "1969", "1984"]
-        #self.assertEqual(main.Parser(badInput),"Incorrect definition of a category. Use \"usage\" function to get help.", "Doesn't throw error for faulty category in command line.")
+
 
 class testFINDMATCHINGMOVIES(unittest.TestCase):
+    """A test class for the function findMatchingMovies"""
+
     def testSearchOneTerm(self):
+        """checks that findMatchingMovies actually returns the movie Bangkok given a search criteria"""
         parsedArgs = main.Parser([])
         parsedArgs.title = ["Bangkok"]
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
             self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
+
     def testParseAndSearch(self):
+        """checks that findMatchingMovies actually returns the movie Bangkok given a search criteria put into parser"""
         parsedArgs = main.Parser(["-title", "Bangkok"])
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
