@@ -33,7 +33,7 @@ class TestGettingPopularMovies(unittest.TestCase):
 
     def test_popularTitlesFunction(self):
         """Checks if getPopularTitles returns the correct list of movies"""
-        #entire popular movies list cannot be tested because it is subject to change
+        #entire popular movies list cannot be tested because it is extremely variable
         #the popular movie tested here may need to be changed, especially if it is no longer popular
         popularMovie = 'Sankofa'
         self.assertIn(popularMovie, main.getPopularMovies())
