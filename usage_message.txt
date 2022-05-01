@@ -2,40 +2,32 @@
 |       USAGE       |
 ---------------------
 
-Generic usage: 
-
-main.py Feature Filter1 Filter2 ... FilterN
-
+To reach usage statement, enter one of the following:
 usage
 -usage
 help
 -help
-
-Feature: to pull up the usage statement, or any of the main functions, getMovie, getRandomMovie, or getPopularMovies
-
-Filter1--N: used to filter the results for the different functions. Look at the function descriptions below
-to understand how filters work for each function.
 __________________________
 getMovie usage: 
 
 main.py getMovie -ti title
 
--- After typing getMovie as the Feature, there's one command line argument representing the title of the desired movie, which should be entered with quotes--
-for example, Bird Box would be searched as python3 main.py getMovie "Bird Box". 
-The function returns a list of all the relevant film information stored by the dataset.
+-- title should be entered in quotes, e.g.
+
+Example: main.py getMovie -ti "Bird Box"
+
+Returns: a list of all the relevant film information stored by the dataset.
 __________________________
 getRandomMovie() usage: 
 
 main.py getRandomMovie category1 descriptor1 category2 descriptor2 ... category12 descriptor12
 
--- It can be used without any arguments (besides main.py and getRandomMovie) or has a maximum of 12. 
-The function returns a random movie out of the ones filtered by the command line requirements.
+-- Possible categories and descriptions listed below; category goes with a descriptor as shown with example
+Returns: a random movie out of the ones filtered by the command line requirements.
 
-Example:
+Example: main.py getRandomMovie -di "Spielberg"
 
-main.py getRandomMovie -di "Spielberg"
-
-returns random movie directed by Spielberg
+Returns: random movie directed by Spielberg
 
 ___________________________
 findMatchingMovies() usage:
@@ -44,17 +36,19 @@ main.py getRandomMovie category1 descriptor1 category2 descriptor2 ... category1
 
 -- Requires an argument as a filter to return movies that match that criteria.
 
-Example:
+Example: main.py findMatchingMovies -di "Spielberg"
 
-main.py findMatchingMovies -di "Spielberg"
+Returns: List of titles that match given criteria
 ___________________________
 getPopularMovie usage: 
 
 main.py getPopularMovie
 
--- getPopularMovie has no command line arguments because it simply returns a list of the ten most popular movies, based on how frequently they've been searched on getMovie.
+-- No command line arguments
+
+Returns: a list of the ten most popular movies, based on how frequently they've been searched on getMovie
 ____________________________
-The arguments for getMovie (only title), getRandomMovie, and findMatchingMovies are structured in pairs, with the first one representing a category of the dataset: 
+Arguments for getMovie (only title), getRandomMovie, and findMatchingMovies are structured in pairs, with the first one representing a category of the dataset: 
 
 -ti or -title for title
 -ty or -type for type(Movie or TV show)
