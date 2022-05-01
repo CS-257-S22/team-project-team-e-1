@@ -57,7 +57,7 @@ def initializeData():
     @params: None
     @returns: None
     """
-    with open('Data/netflix_titles.csv', newline='') as csvfile:
+    with open('Data/streaming_services.csv', newline='') as csvfile:
         data = csv.reader(csvfile)
         movieArray = []
         next(data)
