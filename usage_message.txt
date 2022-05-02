@@ -26,7 +26,7 @@ getMovie usage:
 
     main.py getMovie -ti <movie title>
 
--- returns all information for <movie title>, where <movie title> is the complete title for a movie
+-- returns all information for <movie title>, where <movie title> is the complete title for a movie, tpyed in quotes
 __________________________
 getRandomMovie() usage: 
 
@@ -46,7 +46,7 @@ findMatchingMovies() usage:
 
 -- returns the names of all movies matching at least one of the filters following the command
 
-Example:
+Example: main.py findMatchingMovies -di "Spielberg"
 
     main.py findMatchingMovies -di Spielberg Tarantino
 

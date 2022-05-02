@@ -3,7 +3,7 @@ TV Show|Blood & Water|0|
 TV Show|Ganglands|0|
 TV Show|Jailbirds New Orleans|0|
 TV Show|Kota Factory|0|
-TV Show|Midnight Mass|0|
+TV Show|Midnight Mass|3|
 Movie|My Little Pony: A New Generation|0|
 Movie|Sankofa|0|
 TV Show|The Great British Baking Show|0|
@@ -19935,7 +19935,7 @@ Movie|Acapulco Gold|0|
 Movie|Abducted: The Jocelyn Shaker Story|0|
 Movie|A Werewolf In England|0|
 Movie|A State of Mind|0|
-Movie|A Dog Barking at the Moon|0|
+Movie|A Dog Barking at the Moon|1|
 Movie|4X4|0|
 Movie|2nd Chances|0|
 Movie|Zabardast|0|
@@ -21518,7 +21518,7 @@ Movie|The Assignment|0|
 Movie|Tekken|0|
 Movie|Teeth|0|
 Movie|Sweet Sunshine|0|
-Movie|Street Dogs of South Central|0|
+Movie|Street Dogs of South Central|1|
 Movie|Star Kid|0|
 Movie|Shoot First And Pray You Live|0|
 Movie|Salome's Last Dance|0|
