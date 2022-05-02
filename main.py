@@ -71,7 +71,7 @@ def initializeData():
     return movieArray
 
 
-def getMovie(title):
+def getMovie(parsedArgs):
     """
                   getMovie
 
@@ -80,10 +80,12 @@ def getMovie(title):
         @params: title - a str that provides the title of the movie
         @returns: movieInfo - a list that has the information of a movie
     """
+    if (len(parsedArgs.title) < 1):
+        printUsage("getMovie")
+    title = parsedArgs.getTitle()[0] 
     title = title.strip()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
-        return(Usage())
     movieInfo = dataSearch(title) #need to call dataSearch before increaseMoviePopularity
     return movieInfo #Definitely clearer, not sure if it's actually less code
 
@@ -101,7 +103,7 @@ def dataSearch(keyword):
     while curMovie != keyword:
         if index+1 == len(movieArray):
             print("ERROR:Title not found.", file = sys.stderr)
-            return(Usage())
+            sys.exit(sys.argv)
         index += 1
         curMovie = movieArray[index].getTitle()
     increaseMoviePopularity(keyword)
@@ -315,13 +317,11 @@ class Parser:
                         self.service.append(args[i])    
                     else:
                         print("ERROR:Invalid command line arguments.")
-                        print(Usage())
-                        sys.exit(args[i])
+                        printUsage("filters")
                     i += 1
             else:
-                print("ERROR:Incorrect definition of a category.")
-                print(Usage())
-                sys.exit(args[i])
+                print("ERROR:Invalid command line arguments.")
+                printUsage("filters")
             
     #to access all the instance variables
     def getType(self):
@@ -395,12 +395,52 @@ def findMatchingMovies(parsedArgs):
 
 def Usage():
     """
-        @description: displays the usage text as given by the usage_message.txt file
+        @description: Loads the usage statement as an array so that we may index the txt file
         @params: None
-        @return: the string to be displayed in the command line
+        @return: array containing each line of the usage statement as an element
     """
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
-        return str(f.read())
+        usageArray = []
+        line = f.readline()
+        while line:
+         usageArray.append(line.strip())
+         line = f.readline()
+        
+        return usageArray
+
+def printUsage(functionName):
+    """
+        @descrption: prints either the general usage statement, or the statement
+        for the desired function
+        @params: function name
+        @returns: None
+    """
+    usage = Usage()
+    for i in range(0, 3):
+        print(usage[i])
+    if functionName == "general":
+        for i in range(3, 24):
+            print(usage[i])
+    if functionName == "getMovie":
+        for i in range(24, 30):
+            print(usage[i])
+    
+    if functionName == "getRandomMovie":
+        for i in range(30, 42):
+            print(usage[i])
+    
+    if functionName == "findMatchingMovies":
+        for i in range(42, 54):
+            print(usage[i])
+    
+    if functionName == "getPopularMovie":
+        for i in range(54, 61):
+            print(usage[i])
+    
+    if functionName == "filters":
+        for i in range(61, 83):
+            print(usage[i])
+    sys.exit(sys.argv)
 
 
 def main():
@@ -411,24 +451,42 @@ def main():
         @returns: None
     """
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
-    if(len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
-        print("ERROR:No function in command line.")
-        print(Usage())
-        sys.exit(sys.argv)
+    #print usage statements
+    if(len(sys.argv) < 2):
+        printUsage("general")
+    if (sys.argv[1] not in potentialFunctions):
+        if sys.argv[1] in ["help", "-help", "usage", "-usage"]:
+            if(len(sys.argv) < 3):
+                printUsage("general")
+            functionName = sys.argv[2]
+            if functionName in potentialFunctions:
+                printUsage(functionName)
+            if functionName == "filters":
+                printUsage(functionName)
+            else:
+                printUsage("general")
+        else:
+            printUsage("general")
+
+        
+
     #pull function and args
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
     if functionName == "getMovie":
-        print(getMovie(parsedArgs.getTitle()[0]))
+        if (len(sys.argv) < 3):
+            printUsage("getMovie")
+        if (len(sys.argv) < 3):
+            printUsage("getMovie")
+        print(getMovie(parsedArgs))
     elif functionName == "findMatchingMovies":
         print(findMatchingMovies(parsedArgs))
     elif functionName=="getRandomMovie":
         print(getRandomMovie(parsedArgs))
     elif functionName == "getPopularMovies":
-        print(getPopularMovies())
+        print(getPopularMovies())   
     else:
         print("You should not be here... it is not possible. You have broken logic.", file = sys.stderr)
-        print(Usage())
         sys.exit(functionName)
 
 
