@@ -21,6 +21,7 @@ class Movie:
         self.duration = movieInfo[9]
         self.listed_in = movieInfo[10]
         self.description = movieInfo[11]
+        self.service = movieInfo[12]
 
     #methods to get info about a particular movie
     def getMovieInfo(self):
@@ -47,6 +48,8 @@ class Movie:
         return self.listed_in
     def getDescription(self):
         return self.description
+    def getService(self):
+        return self.service
 
     
 
@@ -253,7 +256,7 @@ def isCategory(category):
     """
     if category in ["-ty","-type", "-ti",
         "-title", "-di", "-director", "-ca","-a", 
-        "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description"]:
+        "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description","-ser","-service"]:
         return True
     return False
 
@@ -276,6 +279,7 @@ class Parser:
         self.duration = []
         self.listed_in = []
         self.description = []
+        self.service = []
 
         if len(args)>0:
             self.noArgs = False
@@ -306,7 +310,9 @@ class Parser:
                     elif category in ["-g","-genre"]:
                         self.listed_in.append(args[i])
                     elif category in ["-de","-description"]:
-                        self.duration.append(args[i])  
+                        self.duration.append(args[i])
+                    elif category in ["-ser","-service"]:
+                        self.service.append(args[i])    
                     else:
                         print("ERROR:Invalid command line arguments.")
                         print(Usage())
@@ -340,6 +346,8 @@ class Parser:
         return self.listed_in
     def getDescription(self):
         return self.description
+    def getService(self):
+        return self.service
     def isEmpty(self):
         return self.noArgs
 
@@ -366,6 +374,7 @@ def findMatchingMovies(parsedArgs):
     criteria[9] = parsedArgs.getDuration()
     criteria[10] = parsedArgs.getListedIn()
     criteria[11] = parsedArgs.getDescription()
+    criteria[12] = parsedArgs.getService()
  
     #for each movie in the csv, check the content in each column
     #and see if it matches at least one of the search criteria.
