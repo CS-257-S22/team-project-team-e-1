@@ -196,8 +196,8 @@ def increaseMoviePopularity(movieTitle):
 
     #finds the movie that was viewed and adds 1 to its popularity tracker
     for movieInfo in allMoviesList:
-        if movieTitle in movieInfo:
-            tempMovieInfo = movieInfo.split('|')
+        tempMovieInfo = movieInfo.split('|')
+        if movieTitle == tempMovieInfo[1]:
             tempMovieInfo[2] = int(tempMovieInfo[2]) + 1
             tempMovieInfo[2] = str(tempMovieInfo[2])
             movieNewPopularity = '|'.join(tempMovieInfo)
