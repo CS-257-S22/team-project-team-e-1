@@ -362,7 +362,7 @@ def findMatchingMovies(parsedArgs):
     movieArray = initializeData()
 
     matchingMovies = []
-    criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
+    criteria = [[], [], [], [], [], [], [], [], [], [], [], [],[]]
     criteria[1] = parsedArgs.getType()
     criteria[2] = parsedArgs.getTitle()
     criteria[3] = parsedArgs.getDirector()
@@ -380,7 +380,7 @@ def findMatchingMovies(parsedArgs):
     #and see if it matches at least one of the search criteria.
     index = 0 
     while index < len(movieArray):
-        for column in range(12):
+        for column in range(13):
             item = movieArray[index].getMovieInfo()[column]
             itemWords = item.split(",")
             for word in itemWords:

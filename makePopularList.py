@@ -1,7 +1,7 @@
 import csv
 import sys
 
-with open('Data (CS257)/netflix_titles.csv', newline='') as csvfile:
+with open('Data/streaming_services.csv', newline='') as csvfile:
     data = csv.reader(csvfile)
     dataArray = []
     for row in data:

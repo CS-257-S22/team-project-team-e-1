@@ -25,9 +25,10 @@ for i,file in enumerate(datasetsLoc):
                 row.append("Disney Plus")
             elif i==3 and j>0:
                 row.append("Amazon Prime")
-
-            # write a row to the csv file
-            writer.writerow(row)
+            
+            if j!=0 or i==0:
+                # write a row to the csv file
+                writer.writerow(row)
 
 # close the file
 f.close()
