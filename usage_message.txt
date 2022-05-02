@@ -61,6 +61,7 @@ Arguments for getMovie (only title), getRandomMovie, and findMatchingMovies are 
 -du or -duration for film/show duration
 -g or -genre for genre
 -de or -description for description
+-ser or -service for streaming service
 
 The second argument represents a value in the specified category.
 
