@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Netflix Database</title>
+        <link rel="stylesheet" href="../static/filmstyle.css">
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+        <div>
+            <h2>Basic Info</h2>
+            <p>
+                First released in {{ release_year}}, {{ title }} is a {{ type }} directed by {{ director}} and featuring
+                {{cast}}. Check out the boxes below to get more info!
+            </p>
+        </div>
+        <div class = "Data">
+            <h2>Highlights</h2>
+            <ul>
+                <li>Duration: {{runtime}}</li>
+                <li>Filming Locations: {{locations}}</li>
+                <li>Genre grouping: {{genres}}</li>
+                <li>Rated {{rating}} by the MPAA</li>
+            </ul>
+        </div>
+        <div class = "Synopsis">
+            <h2>Synopsis</h2>
+            <p>
+                {{ description }}
+            </p>
+        </div>
+
+        
+    </body>
+</html>
