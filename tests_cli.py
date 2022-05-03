@@ -55,23 +55,29 @@ class TestGETMOVIE(unittest.TestCase):
 
     def testReturnValue(self):
         """checks that getMovie actually returns a list"""
-        result = main.getMovie("Je Suis Karl")
+        parsedArgs = main.Parser([])
+        parsedArgs.title = ["Je Suis Karl"]
+        result = main.getMovie(parsedArgs)
         self.assertIsInstance(result, list, "Function does not return a list of datapoints")
 
     def testMovieContents(self):
         """checks that getMovie actually returns the information of a particular movie"""
-        result = main.getMovie("Sankofa")
+        parsedArgs = main.Parser([])
+        parsedArgs.title = ["Sankofa"]
+        result = main.getMovie(parsedArgs)
         self.assertEqual(result, data[7].getMovieInfo(), "Function return value does not represent correct dataset entries")
 
     def testNoisyData(self):
         """checks that getMovie actually returns the information of a particular movie given input with weird space"""
-        result = main.getMovie("Seabiscuit ")
+        parsedArgs = main.Parser([])
+        parsedArgs.title = ["Seabiscuit "]
+        result = main.getMovie(parsedArgs)
         self.assertEqual(result, data[349].getMovieInfo(), "Function does not correct for spaces at end of text")
 
 class TestPROCESSING(unittest.TestCase):
     """A test class for the data"""
     def testDataset(self):
-        self.assertEqual(len(data), 8807, "Dataset not fully processed")
+        self.assertEqual(len(data), 22998, "Dataset not fully processed")
 
         
 class testPARSER(unittest.TestCase):
