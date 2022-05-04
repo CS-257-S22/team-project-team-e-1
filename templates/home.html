@@ -3,7 +3,7 @@
         <title>Streaming Database</title>
     </head>
     <body>
-        <h2>Streaming Filter</h2>
+        <h1>Streaming Filter</h1>
         <div class = "form">
             <h2>Film Search</h2>
             <p>Select one of the options below to filter potential movies</p>
@@ -17,5 +17,7 @@
                 <input type="submit" value="Submit">
             </form>
         </div>
+
+        <a href= {{ url_for('get_popular_movies') }}>Check Out The Most Popular Titles!</a>
     </body>
 </html>

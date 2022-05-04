@@ -31,7 +31,14 @@ def functionSwitchboard():
         return render_template('movieInfo.html', type = result[1], title = title, director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12])
 
 
-
+@app.route('/popularmovies', strict_slashes=False)
+def get_popular_movies():
+    """
+        @description: Returns a list of the most viewed movies as determined by popularMovies.txt 
+        by running getPopularMovies() from main.py. 
+        @return: getPopularMovies() - the list of popular movies, which here is casted to a string type. 
+    """
+    return render_template('matchingMovie.html', movies = main.getPopularMovies(), keyword="popular movies")
 
 
 
