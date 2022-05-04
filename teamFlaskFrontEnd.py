@@ -22,10 +22,10 @@ homepage_message = str(getHomepage())
 def homepage():
     return render_template("home.html")
 
-@app.route('/filmFilter', methods =['GET', 'POST']) 
+@app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  
     if True:
-        title = request.args['titleChoice']
+        title = request.args['q']
         parsedArgs = main.Parser(["-ti", title])
         result = main.getMovie(parsedArgs)
         return render_template('movieInfo.html', type = result[1], title = title, director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12])
