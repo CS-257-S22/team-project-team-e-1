@@ -7,15 +7,12 @@
         <div class = "form">
             <h2>Film Search</h2>
             <p>Select one of the options below to filter potential movies</p>
-            <form action="filmFilter">
-                <label for="movies">Options</label>
-                <select name="titleChoice">
-                       
-                    <option value="Bird Box">Bird Box</option>
-                       
-                </select>
-                <input type="submit" value="Submit">
-            </form>
+            <form id="form" action="search">
+                <input type="search" id="query" name="q"
+                 placeholder="Search..."
+                 aria-label="Search through site content">
+                 <input type="submit" value="Submit">
+              </form>
         </div>
     </body>
 </html>
