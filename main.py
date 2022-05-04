@@ -129,7 +129,8 @@ def getRandomMovie(parsedArgs):
         #generate random number for this filter data
         randInt = random.randint(0,len(filteredMovies)-1)
         #return/print the random movie from the subsetted data
-        return getMovie(filteredMovies[randInt])
+        parsedArgs = Parser(["-ti", filteredMovies[randInt]])
+        return getMovie(parsedArgs)
 
 
 def getPopularMovies():
