@@ -22,8 +22,13 @@
                  placeholder="Search..."
                  aria-label="Enter a director to filter">
                  <label for="query3">Director</label>
+                 <label for="randomCheck">Random pick</label>
+                 <input type="radio" id="randomCheck" name="randomnessChoice" value="Random">
+                 <label for="standardCheck">All matching entertainment</label>
+                 <input type="radio" id="standardCheck" name="standardChoice" value="Standard">
                  <input type="submit" value="Submit">
               </form>
+
         </div>
 
         <a href= {{ url_for('get_popular_movies') }}>Check Out The Most Popular Titles!</a>
