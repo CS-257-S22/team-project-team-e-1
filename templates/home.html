@@ -12,10 +12,16 @@
                  placeholder="Search..."
                  aria-label="Enter a title of a movie or tv show">
                  <label for="query1">Title</label>
-                 <input type="search" id="query2" name="genreChoice"
-                 placeholder="Search..."
-                 aria-label="Enter a genre to filter">
+                 <select name="genreChoice">
+                        
+                     <option value="Comedies">Comedies</option>
+                     <option value="Documentaries">Documentaries</option>   
+                 </select>
                  <label for="query2">Genre</label>
+                 <input type="search" id="query3" name="directorChoice"
+                 placeholder="Search..."
+                 aria-label="Enter a director to filter">
+                 <label for="query3">Director</label>
                  <input type="submit" value="Submit">
               </form>
         </div>
