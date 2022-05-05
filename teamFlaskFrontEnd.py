@@ -54,6 +54,10 @@ def getUsage():
         return f.read()
 
 
+@app.route('/FAQs', strict_slashes=False) 
+def FAQpage():
+    return render_template('help.html')
+
 
 @app.route('/usage/', strict_slashes=False)
 def usage() -> str:
