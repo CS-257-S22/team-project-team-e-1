@@ -355,8 +355,8 @@ class Parser:
 
 def findMatchingMovies(parsedArgs):
     """
-        @description: gives a list of all movies matching the given filters; does an OR search, so any title that 
-        fits one of the entered criteria gets returned
+        @description: gives a list of all movies matching the given filters; does an AND search, so any title returned
+        must match all of the criteria
         @params: parsedArgs - the filters we are searching for
         @returns: matchingMovies - a list of movies matching the criteria
     """
@@ -378,21 +378,23 @@ def findMatchingMovies(parsedArgs):
     criteria[12] = parsedArgs.getService()
  
     #for each movie in the csv, check the content in each column
-    #and see if it matches at least one of the search criteria.
+    #and ensure that it matches the given search criteria
     index = 0 
     while index < len(movieArray):
+        addMovie = True
         for column in range(13):
             item = movieArray[index].getMovieInfo()[column]
             itemWords = item.split(",")
             for word in itemWords:
                 for criterion in criteria[column]:
-                    if criterion.lower() in word.lower(): 
-                        title = movieArray[index].getTitle()
-                        matchingMovies.append(title)
+                    if criterion.lower() not in word.lower():             
+                        addMovie = False
+        if addMovie:
+            title = movieArray[index].getTitle()
+            matchingMovies.append(title)
         index += 1
 
     return matchingMovies
-
 
 def Usage():
     """
