@@ -8,24 +8,33 @@
             <h2>Film Search</h2>
             <p>Select one of the options below to filter potential movies</p>
             <form id="form" action="search">
+                <label for="query1">Title</label>
                 <input type="search" id="query1" name="titleChoice"
                  placeholder="Search..."
                  aria-label="Enter a title of a movie or tv show">
-                 <label for="query1">Title</label>
-                 <select name="genreChoice">
-                        
+                 <label for="query2">Genre</label>
+                 <select name="genreChoice">  
                      <option value="Comedies">Comedies</option>
                      <option value="Documentaries">Documentaries</option>   
                  </select>
-                 <label for="query2">Genre</label>
+                 <label for="query3">Director</label>
                  <input type="search" id="query3" name="directorChoice"
                  placeholder="Search..."
                  aria-label="Enter a director to filter">
-                 <label for="query3">Director</label>
+                 <label for ="Entertainment type">Entertainment type</label>
+                 <select name="Entertainment type">
+                        
+                    <option value="Movie">Movie</option>
+                    <option value="TV Show">TV Show</option>   
+                </select>
+                <label for ="Cast member">Cast member</label>
+
                  <label for="randomCheck">Random pick</label>
                  <input type="radio" id="randomCheck" name="randomnessChoice" value="Random">
                  <label for="standardCheck">All matching entertainment</label>
                  <input type="radio" id="standardCheck" name="standardChoice" value="Standard">
+
+
                  <input type="submit" value="Submit">
               </form>
 
