@@ -8,9 +8,14 @@
             <h2>Film Search</h2>
             <p>Select one of the options below to filter potential movies</p>
             <form id="form" action="search">
-                <input type="search" id="query" name="q"
+                <input type="search" id="query1" name="titleChoice"
                  placeholder="Search..."
-                 aria-label="Search through site content">
+                 aria-label="Enter a title of a movie or tv show">
+                 <label for="query1">Title</label>
+                 <input type="search" id="query2" name="genreChoice"
+                 placeholder="Search..."
+                 aria-label="Enter a genre to filter">
+                 <label for="query2">Genre</label>
                  <input type="submit" value="Submit">
               </form>
         </div>
