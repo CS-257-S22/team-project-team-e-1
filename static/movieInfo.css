@@ -1,0 +1,62 @@
+body {
+    margin-left: 5%;
+    margin-right: 5%;
+    background-color: whitesmoke;
+}
+
+h1 {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background-color: green;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+}
+
+h1, h2 {
+   font-family: Verdana, Geneva, sans-serif; 
+}
+
+p {
+    font-family: Verdana, Geneva, sans-serif;
+    line-height: 1.4;
+}
+
+div {
+    clear: left;
+    padding-bottom: 10px;
+}
+
+ul {
+    width: 65%;
+}
+
+li {
+    font-family: Verdana, Geneva, sans-serif;
+    line-height: 1.4;
+}
+
+
+div.movieInfo {
+    background-color: azure;
+    width: 300px;
+    border: 2px solid blue;
+    border-radius: 8px;
+    float: right;
+    padding: 10px;
+    margin: 10px;
+}
+
+
+div.reRandom {
+    border: 2px solid blue;
+    border-radius: 8px;
+    list-style-type: none;
+    overflow: hidden;
+    width: 96%;
+}
+
+div.reRandom:hover {
+    color: white;
+    background-color: blue;
+}
