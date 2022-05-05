@@ -166,7 +166,7 @@ Movie|Mystery Men|0|
 TV Show|Oldsters|0|
 Movie|Once Upon a Time in America|0|
 Movie|Open Season 2|0|
-Movie|Osmosis Jones|0|
+Movie|Osmosis Jones|99999|
 Movie|Poseidon|0|
 Movie|Rhyme & Reason|0|
 Movie|Same Kind of Different as Me|0|
