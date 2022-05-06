@@ -9,39 +9,60 @@
             <h2>Film Search</h2>
             <p>Select one of the options below to filter potential movies</p>
             <form id="form" action="search">
-                <label for="query1">Title</label>
-                <input type="search" id="query1" name="titleChoice"
-                 placeholder="Search..."
-                 aria-label="Enter a title of a movie or tv show">
-                 <label for="query2">Genre</label>
-                 <select name="genreChoice">
-                    <option value=""> </option>  
-                     <option value="Comedies">Comedies</option>
-                     <option value="Documentaries">Documentaries</option>   
-                 </select>
-                 <label for="query3">Director</label>
-                 <input type="search" id="query3" name="directorChoice"
-                 placeholder="Search..."
-                 aria-label="Enter a director to filter">
-                 <label for ="entertainmentType">Entertainment type</label>
-                 <select name="entertainmentType">
+                <div>
+                    <label for="query1">Title</label>
+                    <input type="search" id="query1" name="titleChoice"
+                    placeholder="Search..."
+                    aria-label="Enter a title of a movie or tv show">
+                </div>
+                <div>
+                    <label for="query2">Genre</label>
+                    <select name="genreChoice">
+                        <option value=""> </option>  
+                        <option value="Comedies">Comedies</option>
+                        <option value="Documentaries">Documentaries</option>   
+                    </select>
+                </div>
+                <div>
+                    <label for="query3">Director</label>
+                    <input type="search" id="query3" name="directorChoice"
+                    placeholder="Search..."
+                    aria-label="Enter a director to filter">
+                </div>
+                <div>
+                    <label for ="entertainmentType">Entertainment type</label>
+                    <select name="entertainmentType">
                 
-                    <option value="Movie">Movie</option>
-                    <option value="TV Show">TV Show</option>   
-                </select>
-                <label for ="query4">Cast member</label>
-                <input type="search" id="query4" name="castChoice"
-                 placeholder="Search..."
-                 aria-label="Enter a cast member">
-                 <label for ="query5">Filming Location(country)</label>
-                <input type="search" id="query5" name="countryChoice"
-                 placeholder="Search..."
-                 aria-label="Enter a filming location(country)">
-                <label for ="query6">Release Year</label>
-                <input type="search" id="query6" name="yearChoice"
+                        <option value="Movie">Movie</option>
+                        <option value="TV Show">TV Show</option>   
+                    </select>
+                </div>
+                 <div>
+                    <label for ="query4">Cast member</label>
+                        <input type="search" id="query4" name="castChoice"
+                        placeholder="Search..."
+                        aria-label="Enter a cast member">
+                 </div>
+                 <div>
+                    <label for ="query5">Filming Location(country)</label>
+                    <input type="search" id="query5" name="countryChoice"
+                    placeholder="Search..."
+                    aria-label="Enter a filming location(country)">
+                 </div>
+                 <div>
+                    <label for ="query6">Release Year</label>
+                    <input type="search" id="query6" name="yearChoice"
                  placeholder="Search..."
                  aria-label="Enter a year to filter">
+                 </div>
+                
                  <label for ="Rating">Rating</label>
+                 <select name="Rating">
+                
+                    <option value="PG-13">PG-13</option>
+                    <option value="PG">PG</option>   
+                </select>
+                <label for ="Rating">Rating</label>
                  <select name="Rating">
                 
                     <option value="PG-13">PG-13</option>

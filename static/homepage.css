@@ -93,3 +93,9 @@ div.description {
     padding: 10px;
     margin: 10px;
 }
+
+input[type=submit] {
+    float: left;
+    margin:8px 0;
+    width: 25%;
+}
