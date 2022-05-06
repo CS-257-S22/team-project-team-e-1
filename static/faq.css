@@ -1,3 +1,24 @@
+h1 {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background-color: rgb(25, 0, 255);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    border-radius: 8px;
+}
+
+h1, h2 {
+   font-family: Verdana, Geneva, sans-serif; 
+}
+
+p {
+    font-family: Verdana, Geneva, sans-serif;
+    line-height: 1.4;
+}
+
+/* This CSS structure was taken from W3 Schools 
+https://www.w3schools.com/howto/howto_js_collapsible.asp */
+  
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {
     background-color: #777;
@@ -23,4 +44,16 @@
     overflow: hidden;
     transition: max-height 0.2s ease-out;
     background-color: #f1f1f1;
+}
+
+.collapsible:after {
+    content: '\002B';
+    color: white;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+  
+.active:after {
+    content: "\2212";
 }
