@@ -24,13 +24,21 @@ def homepage():
 
 @app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  
-    if request.args['titleChoice']:
+    #if request.args['titleChoice']:
+        #title = request.args['titleChoice']
+        #parsedArgs = main.Parser(["-ti", title])
+        #result = main.getMovie(parsedArgs)
+        #return render_template('movieInfo.html', type = result[1], title = title, director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
+    #else:
         title = request.args['titleChoice']
-        parsedArgs = main.Parser(["-ti", title])
-        result = main.getMovie(parsedArgs)
-        return render_template('movieInfo.html', type = result[1], title = title, director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
-    else:
-        return "other functionality not yet implemented"
+        genre = request.args['genreChoice']        
+        director = request.args['directorChoice']
+        entertainment = request.args['entertainmentType']
+        cast = request.args['castChoice']
+        country = request.args['countryChoice']        
+        parsedArgs = main.Parser(["-ti", title, "-g", genre, "-di", director, "-ty", entertainment, 
+        "-ca", cast, "-co", country])
+        return render_template('matchingMovie.html', movies = main.findMatchingMovies(parsedArgs), keyword="matching movies")
 
 
 @app.route('/popularmovies', strict_slashes=False)
