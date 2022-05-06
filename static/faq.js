@@ -1,3 +1,5 @@
+/* This script was made by W3 Schools https://www.w3schools.com/howto/howto_js_collapsible.asp */
+/* This code allows for the collapsible FAQs to open and close smoothly */
 var coll = document.getElementsByClassName("collapsible");
 var i;
 
