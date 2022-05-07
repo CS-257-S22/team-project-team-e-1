@@ -62,7 +62,12 @@ def functionSwitchboard():
         country = request.args['countryChoice']        
         parsedArgs = main.Parser(["-ti", title, "-g", genre, "-di", director, "-ty", entertainment, 
         "-ca", cast, "-co", country])
-        return render_template('matchingMovie.html', movies = main.findMatchingMovies(parsedArgs), keyword="matching movies")
+        if request.args['randomnessChoice'] == "Random":
+            movieInfo = main.getRandomMovie(parsedArgs)
+            movies = [movieInfo[2]]
+        else:
+            movies = main.findMatchingMovies(parsedArgs)
+        return render_template('matchingMovie.html', movies = movies, keyword="matching movies")
 
 
 @app.route('/popularmovies', strict_slashes=False)

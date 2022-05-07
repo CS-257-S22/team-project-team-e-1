@@ -99,11 +99,16 @@ img.logo {
     padding: 20px;
     margin-top: 5px;
     font-size: 25px;
-    color: rgb(88, 31, 15);
+    background-color: darkgreen;
+    color: white;
     margin-right: 20px;
-    border: 3px solid blue;
+    position: relative;
+    right: -200px;
+    bottom: -100px;
 
 }
+
+
 
 
 nav ul {
