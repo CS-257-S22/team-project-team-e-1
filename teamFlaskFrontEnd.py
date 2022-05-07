@@ -22,9 +22,9 @@ def getCategories():
     ratingList = []
     movieArray = main.initializeData()
     for movie in movieArray:
-        if movie.title == "Dick Johnson Is Dead":
-            print(movie.rating)
         if movie.rating not in ratingList:
+            if "min" in movie.rating:
+                print(movie.title, movie.service)
             ratingList.append(movie.rating)
         genres = movie.listed_in.split(",")
         for genre in genres:
