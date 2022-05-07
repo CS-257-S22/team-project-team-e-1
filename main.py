@@ -66,6 +66,8 @@ def initializeData():
         next(data)
         for movie in data:
             movieObject = Movie(movie)
+            if "min" in movieObject.rating or "Season" in movieObject.rating:
+                movieObject.rating = "NR"
             movieArray.append(movieObject)
 
     return movieArray
