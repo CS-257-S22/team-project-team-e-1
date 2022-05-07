@@ -7,7 +7,7 @@
         <h1>Streaming Filter</h1>
         <div class = "form">
             <h2>Film Search</h2>
-            <p>Select one of the options below to filter potential movies</p>
+            <p>Select one of the options below to filter entertainment options</p>
             <form id="form" action="search">
                 <div>
                     <label for="query1">Title</label>
@@ -90,6 +90,13 @@
 
         </div>
 
-        <a href= {{ url_for('get_popular_movies') }}>Check Out The Most Popular Titles!</a>
+        <a id = "popularLink", href= {{ url_for('get_popular_movies') }}>Check Out The Most Popular Titles!</a>
+        <div><em><nav>
+            <ul>
+            <li id="Home"><a href="http://127.0.0.1:8000/">Streaming Comparator</a></li>
+            <li><a href="http://127.0.0.1:8000/faqs/">FAQs</a></li>
+            <li><a href="http://127.0.0.1:8000/AboutUs/">About Us</a></li>
+            </ul>
+        </nav></em></div>
     </body>
 </html>
