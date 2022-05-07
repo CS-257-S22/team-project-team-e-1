@@ -40,6 +40,12 @@ def homepage():
     genreList, ratingList = getCategories()
     return render_template("home.html", genreList = genreList, ratingList = ratingList)
 
+@app.route('/test')
+def moviePage():
+    parsedArgs = main.Parser(["-ti", "Bird Box"])
+    result = main.getMovie(parsedArgs)
+    return render_template('movieInfo.html', type = result[1], title = "Bird Box", director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
+
 @app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  
     #if request.args['titleChoice']:
