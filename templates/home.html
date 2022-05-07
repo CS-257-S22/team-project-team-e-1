@@ -19,8 +19,9 @@
                     <label for="query2">Genre</label>
                     <select name="genreChoice">
                         <option value=""> </option>  
-                        <option value="Comedies">Comedies</option>
-                        <option value="Documentaries">Documentaries</option>   
+                        {% for genre in genreList: %}
+                            <option value ={{genre}}>{{genre}}</option>
+                           {% endfor %} 
                     </select>
                 </div>
                 <div>
@@ -56,22 +57,32 @@
                  aria-label="Enter a year to filter">
                  </div>
                 
-                 <label for ="Rating">Rating</label>
-                 <select name="Rating">
+                 <div>
+                    <label for ="Rating">Rating</label>
+                    <select name="Rating">
+                        <option value=""> </option>
+                        {% for rating in ratingList: %}
+                            <option value ={{rating}}>{{rating}}</option>
+                           {% endfor %} 
+                    </select>
+                 </div>
+                 <div>
+                    <label for ="Streaming">Streaming Service</label>
+                    <select name="Streaming">
                 
-                    <option value="PG-13">PG-13</option>
-                    <option value="PG">PG</option>   
-                </select>
-                <label for ="Rating">Rating</label>
-                 <select name="Rating">
-                
-                    <option value="PG-13">PG-13</option>
-                    <option value="PG">PG</option>   
-                </select>
-                 <label for="randomCheck">Random pick</label>
-                 <input type="radio" id="randomCheck" name="randomnessChoice" value="Random">
-                 <label for="standardCheck">All matching entertainment</label>
-                 <input type="radio" id="standardCheck" name="randomnessChoice" value="Standard">
+                        <option value="Netflix">Netflix</option>
+                        <option value="Hulu">Hulu</option>   
+                        <option value="Disney">Disney+</option> 
+                        <option value="Amazon">Amazon Prime</option>
+                        
+                    </select>
+                 </div>
+                 <div>
+                    <label for="randomCheck">Random pick</label>
+                    <input type="radio" id="randomCheck" name="randomnessChoice" value="Random">
+                    <label for="standardCheck">All matching entertainment</label>
+                    <input type="radio" 3id="standardCheck" name="randomnessChoice" value="Standard">
+                 </div>
 
 
                  <input type="submit" value="Submit">

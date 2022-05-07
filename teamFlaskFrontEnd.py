@@ -17,10 +17,28 @@ def getHomepage():
     with open("homepage.txt") as f: # The with keyword automatically closes the file when you are done
         return f.read()
 
+def getCategories():
+    genreList = []
+    ratingList = []
+    movieArray = main.initializeData()
+    for movie in movieArray:
+        if movie.title == "Dick Johnson Is Dead":
+            print(movie.rating)
+        if movie.rating not in ratingList:
+            ratingList.append(movie.rating)
+        genres = movie.listed_in.split(",")
+        for genre in genres:
+            genre = genre.strip()
+            if genre not in genreList:
+                genreList.append(genre)
+    
+    return genreList, ratingList
+
 homepage_message = str(getHomepage())
 @app.route('/')
 def homepage():
-    return render_template("home.html")
+    genreList, ratingList = getCategories()
+    return render_template("home.html", genreList = genreList, ratingList = ratingList)
 
 @app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  
