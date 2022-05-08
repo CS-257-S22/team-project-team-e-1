@@ -38,7 +38,8 @@ homepage_message = str(getHomepage())
 @app.route('/')
 def homepage():
     genreList, ratingList = getCategories()
-    return render_template("home.html", genreList = genreList, ratingList = ratingList)
+    topFilms = main.getPopularMovies()[0:3]
+    return render_template("home.html", genreList = genreList, ratingList = ratingList, topFilms = topFilms)
 
 @app.route('/test')
 def moviePage():
