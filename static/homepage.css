@@ -35,9 +35,38 @@ li {
     line-height: 1.4;
 }
 
+#popularList{
+    position: relative;
+    top: -370px;
+    right: -450px;
+    border: none;
+}
+
+li.topHits {
+    float: left;
+    width: 8em;
+    display: inline;
+    padding: 20px;
+    margin-top: 5px;
+    font-size: 25px;
+    color: rgb(88, 31, 15);
+    margin-right: 20px;
+    border: 3px solid blue;
+
+}
+
+
+
+
+
 h2.title {
     text-align: center;
     font-weight: bold;
+}
+#tops {
+    position: relative;
+    top: -140px;
+    right: -30px;
 }
 
 div.info {
@@ -104,7 +133,7 @@ img.logo {
     margin-right: 20px;
     position: relative;
     right: -200px;
-    bottom: -100px;
+    bottom: -300px;
 
 }
 
