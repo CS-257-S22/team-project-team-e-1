@@ -1,3 +1,9 @@
+body {
+    margin-left: 5%;
+    margin-right: 5%;
+    background-color: whitesmoke;
+}
+
 h1 {
     padding-top: 1em;
     padding-bottom: 1em;
@@ -56,4 +62,65 @@ https://www.w3schools.com/howto/howto_js_collapsible.asp */
   
 .active:after {
     content: "\2212";
+}
+ 
+h2.title {
+    float: left;
+    text-align: center;
+    font-weight: bold;
+}
+
+div.header:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+
+div.body:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+@media screen and (max-width:600px) {
+div.body {
+    width: 100%;
+    }
+}
+
+h1.Home:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 174, 255);
+}
+
+nav ul {
+    border: 2px solid blue;
+    border-radius: 8px;
+    list-style-type: none;
+    overflow: hidden;
+    width: 96%;
+}
+
+nav li {
+    float: left;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+nav li a {
+    display: block;
+    color: blue;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+}
+
+nav li a:hover {
+    color: white;
+    background-color: blue;
+}
+
+li.Home {
+    font-size: medium;
 }

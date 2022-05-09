@@ -26,7 +26,8 @@ h1, h2 {
      padding-bottom: 10px;
  }
  
-h2.title {
+
+ h2.title {
     float: left;
     text-align: center;
     font-weight: bold;
@@ -37,34 +38,22 @@ div.header:after {
     display: table;
     clear: both;
   }
-
-
-div.body:after {
-    content: "";
-    display: table;
-    clear: both;
+  div.movieInfo1 {
+    float: left;
+    width: 30%;
+    padding: 10px;
+    background-color: azure;
+    border: 2px solid blue;
+    border-radius: 8px;
+    margin: 10px;
   }
 
-@media screen and (max-width:600px) {
-div.description {
-    width: 100%;
-    }
-}
 
 h1.Home:hover {
     color: rgb(255, 255, 255);
     background-color: rgb(0, 174, 255);
 }
 
-div.description {
-    background-color: azure;
-    width: 90%;
-    border: 2px solid blue;
-    border-radius: 8px;
-    float: left;
-    padding: 10px;
-    margin: 10px;
-}
 
 nav ul {
     border: 2px solid blue;

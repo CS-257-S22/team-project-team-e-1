@@ -5,7 +5,7 @@
     </head>
     <body>
             <div class="header" id="header">
-                <a href="http://127.0.0.1:5000/" id="homeLink" class="homeLink">
+                <a href="{{ url_for('homepage') }}" id="homeLink" class="homeLink">
                     <h1 class="Home" id="Home"> Streaming Comparator </h1>
                 </a>
                 <h2 id="title" class="title">
@@ -66,9 +66,9 @@
         
         <div><em><nav>
             <ul>
-            <li id="Home"><a href="http://127.0.0.1:8000/">Streaming Comparator</a></li>
-            <li><a href="http://127.0.0.1:8000/faqs/">FAQs</a></li>
-            <li><a href="http://127.0.0.1:8000/AboutUs/">About Us</a></li>
+            <li id="Home"><a href="{{ url_for('homepage') }}">Streaming Comparator</a></li>
+            <li><a href="{{ url_for('FAQpage') }}">FAQs</a></li>
+            <li><a href="{{ url_for('aboutUs') }}">About Us</a></li>
             </ul>
         </nav></em></div>
     

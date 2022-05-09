@@ -5,9 +5,16 @@
     </head>
 
     <body>
-        <h1>Streaming Filter</h1>
-        <h2>Frequently Asked Questions</h2>
+        <div class="header" id="header">
+            <a href="{{ url_for('homepage') }}" id="homeLink" class="homeLink">
+                <h1 class="Home" id="Home"> Streaming Comparator </h1>
+            </a>
+            <h2 id="title" class="title">
+                Frequently Asked Questions
+            </h2>
+        </div>
         
+        <div class="body" id="body">
         <!--The structure for these buttons was taken from W3 Schools https://www.w3schools.com/howto/howto_js_collapsible.asp-->
         <button class="collapsible">What is this website?</button>
         <div class="content">
@@ -35,6 +42,13 @@
         </div>
 
         <script src="../static/faq.js"></script>
-
+        </div>
+        <div><em><nav>
+            <ul>
+            <li id="Home"><a href={{ url_for('homepage') }}>Streaming Comparator</a></li>
+            <li><a href={{ url_for('FAQpage') }}>FAQs</a></li>
+            <li><a href={{ url_for('aboutUs') }}>About Us</a></li>
+            </ul>
+        </nav></em></div>
     </body>
 </html>
