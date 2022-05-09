@@ -94,7 +94,7 @@
             <h2 id = "tops">Previous Top Searches</h2>
             <ul id = "popularList">
                 {% for movie in topFilms: %}
-                    <li class = "topHits" href = "http://127.0.0.1:8000/getMovie/{{movie}}">{{movie}}</li>
+                    <li>  <a class = "topHits" href = "{{ url_for('moviePage', title = movie) }}">{{movie}}</a></li>
                            {% endfor %} 
             </ul>
         </nav></em></div>
