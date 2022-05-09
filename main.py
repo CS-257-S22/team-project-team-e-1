@@ -383,14 +383,15 @@ def findMatchingMovies(parsedArgs):
     #and ensure that it matches the given search criteria
     index = 0 
     while index < len(movieArray):
-        addMovie = True
+        addMovie = False
         for column in range(13):
             item = movieArray[index].getMovieInfo()[column]
             itemWords = item.split(",")
             for word in itemWords:
                 for criterion in criteria[column]:
-                    if criterion.lower() not in word.lower():             
-                        addMovie = False
+                    if criterion != "":
+                        if criterion.lower() in word.lower():             
+                            addMovie = True
         if addMovie:
             title = movieArray[index].getTitle()
             matchingMovies.append(title)
