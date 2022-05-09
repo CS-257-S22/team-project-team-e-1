@@ -104,16 +104,22 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
         parsedArgs = main.Parser(["-title", "Bangkok"])
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
-            self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")    
+            self.assertIn("Bangkok", movie, "Returns movies which don't match the criterion")    
 
     def searchEachCriterion(self):
         """Search for Pulp Fiction using every available search category, and return only the movie Pulp Fiction"""
         parsedArgs = main.Parser(["-type", "movie", "-title", "pulp fiction", "-director", "quentin tarantino", 
-        "-cast", "uma thurman", "-country", "united states", "-year", "1994", "-rating", "R", "-date_added", "January 1, 2019" "-duration", "154",
+        "-cast", "uma thurman", "-country", "united states", "-year", "1994", "-rating", "R",
         "-genre", "cult movies", "-description", "burger-loving hit man", "-service", "netflix"])
         result = main.findMatchingMovies(parsedArgs)
         self.assertEqual(1, len(result), "Doesn't return exactly one movie")
-        self.assertEqual("Pulp Fiction", result[0], "returned movie is not Pulp Fiction")
+
+    def invalidSearch(self):
+        """Check that a search for a movie which doesn't exist returns no movies"""
+        parsedArgs = main.Parser(["-title", "Pulpless Fiction"])
+        result = main.findMatchingMovies(parsedArgs)
+        self.assertEqual([], result, "Returns a movie that doesn't exist!")
+
 
 if __name__ == '__main__':
     unittest.main()
