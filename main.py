@@ -15,8 +15,7 @@ def processGetMovie(parsedArgs):
     title = parsedArgs.getTitle()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
-        printUsage()
-        sys.exit(title)
+        return(Usage())
     title = title[0]
     print(title)
     filmInfo = getMovie(title)
@@ -36,8 +35,7 @@ def dataSearch(keyword):
     while curMovie != keyword:
         if curRow+1 == len(dataArray):
             print("ERROR:Title not found.", file = sys.stderr)
-            printUsage()
-            sys.exit(keyword)
+            return(Usage())
         curRow += 1
         curMovie = dataArray[curRow][2]
     return dataArray[curRow]
@@ -290,6 +288,10 @@ def findMatchingMovies(parsedArgs):
 def printUsage():
     with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
         print(f.read())
+
+def Usage():
+    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
+        return(str(f.read()))
 
 def main():
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
