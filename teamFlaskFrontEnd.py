@@ -68,7 +68,10 @@ def functionSwitchboard():
         "-ca", cast, "-co", country, "-y", year, "-r", rating, "-ser", streaming])
         if request.args['randomnessChoice'] == "Random":
             movieInfo = main.getRandomMovie(parsedArgs)
-            movies = [movieInfo[2]]
+            if movieInfo != []:
+                movies = [movieInfo[2]]
+            else: 
+                movies = []
         else:
             movies = main.findMatchingMovies(parsedArgs)
         return render_template('matchingMovie.html', movies = movies, keyword="matching movies")
