@@ -81,7 +81,7 @@ def functionSwitchboard():
             else: 
                 movies = []
         else:
-            movies = main.findMatchingMovies(parsedArgs)
+            movies = main.findMatchingMovies(parsedArgs)  
         return render_template('matchingMovie.html', movies = movies, keyword="matching movies")
 
 
