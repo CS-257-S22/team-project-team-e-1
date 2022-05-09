@@ -114,7 +114,7 @@ def usage() -> str:
 
 @app.errorhandler(404)
 def page_not_found(e):
-     return "Error: The URL you inputted did not map to a page. " + getHomepage()
+     return render_template("404.html")
 
 
 @app.errorhandler(500)
