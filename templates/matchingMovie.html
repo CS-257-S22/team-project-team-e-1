@@ -1,13 +1,34 @@
 <html>
-        <head>
-        <title> Search For: {{keyword}}</title>
-        </head>
-        <body>
-            <h1>Your search for "{{keyword}}" returned:</h1>
+    <head>
+        <title>Search For: {{keyword}}</title>
+        <link rel="stylesheet" href="../static/matchingMovie.css">
+    </head>
+    <body>
+            <div class="header" id="header">
+                <a href="http://127.0.0.1:5000/" id="homeLink" class="homeLink">
+                    <h1 class="Home" id="Home"> Streaming Comparator </h1>
+                </a>
+                <h2 id="title" class="title">
+                    Your search for "{{keyword}}" returned:
+                </h2>
+            </div>
+            <div class="body" id="body">
+
+                <ul>
+                    {% for movie in movies: %}
+                    <a href="movie/"+{{movie}}><li>{{  movie  }}</li></a>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        
+        <div><em><nav>
             <ul>
-                {% for movie in movies: %}
-                <li>{{  movie  }}</li>
-                {% endfor %}
+            <li id="Home"><a href="http://127.0.0.1:8000/">Streaming Comparator</a></li>
+            <li><a href="http://127.0.0.1:8000/faqs/">FAQs</a></li>
+            <li><a href="http://127.0.0.1:8000/AboutUs/">About Us</a></li>
             </ul>
-        </body>
+        </nav></em></div>
+    
+    </body>
 </html>
