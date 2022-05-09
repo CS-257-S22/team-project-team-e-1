@@ -41,11 +41,12 @@ def homepage():
     topFilms = main.getPopularMovies()[0:3]
     return render_template("home.html", genreList = genreList, ratingList = ratingList, topFilms = topFilms)
 
-@app.route('/test')
+@app.route('/moviepage')
 def moviePage():
-    parsedArgs = main.Parser(["-ti", "Bird Box"])
+    title = request.args['title']
+    parsedArgs = main.Parser(["-ti", title ])
     result = main.getMovie(parsedArgs)
-    return render_template('movieInfo.html', type = result[1], title = "Bird Box", director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
+    return render_template('movieInfo.html', type = result[1], title = result[2], director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
 
 @app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  

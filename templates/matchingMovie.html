@@ -16,7 +16,7 @@
 
                 <ul>
                     {% for movie in movies: %}
-                    <a href="movie/"+{{movie}}><li>{{  movie  }}</li></a>
+                    <a href="{{ url_for('moviePage', title = movie) }}"+{{movie}}><li>{{  movie  }}</li></a>
                     {% endfor %}
                 </ul>
 
@@ -26,11 +26,10 @@
             <ul>
             <li id="Home"><a href="{{ url_for('homepage') }}">Streaming Comparator</a></li>
             <li><a href="{{ url_for('FAQpage') }}">FAQs</a></li>
-            <li><a href="{{ url_for('AboutUs') }}">About Us</a></li>
+            <li><a href="{{ url_for('aboutUs') }}">About Us</a></li>
             </ul>
         </nav></em></div>
     
     </body>
 </html>
 
-<a href="{{ url_for('index') }}"><button>Home</button></a>
