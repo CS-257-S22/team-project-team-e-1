@@ -3,7 +3,7 @@ TV Show|Blood & Water|1|
 TV Show|Ganglands|2|
 TV Show|Jailbirds New Orleans|1|
 TV Show|Kota Factory|0|
-TV Show|Midnight Mass|4|
+TV Show|Midnight Mass|5|
 Movie|My Little Pony: A New Generation|0|
 Movie|Sankofa|1|
 TV Show|The Great British Baking Show|0|
