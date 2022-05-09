@@ -102,6 +102,9 @@ def getUsage():
 def FAQpage():
     return render_template('help.html')
 
+@app.route('/AboutUs', strict_slashes=False)
+def aboutUs():
+    return render_template('/aboutus.html')
 
 @app.route('/usage/', strict_slashes=False)
 def usage() -> str:
