@@ -37,9 +37,10 @@ li {
 
 #popularList{
     position: relative;
-    top: -370px;
+    top: -430px;
     right: -450px;
     border: none;
+    
 }
 
 li.topHits {
@@ -49,9 +50,9 @@ li.topHits {
     padding: 20px;
     margin-top: 5px;
     font-size: 25px;
-    color: rgb(88, 31, 15);
+    color: white;
     margin-right: 20px;
-    border: 3px solid blue;
+    background-color: rgb(0, 0, 128);
 
 }
 
@@ -133,7 +134,7 @@ img.logo {
     margin-right: 20px;
     position: relative;
     right: -200px;
-    bottom: -300px;
+    bottom: -200px;
 
 }
 
