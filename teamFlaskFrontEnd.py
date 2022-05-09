@@ -34,6 +34,7 @@ def getCategories():
     
     return genreList, ratingList
 
+
 homepage_message = str(getHomepage())
 @app.route('/')
 def homepage():
@@ -45,6 +46,12 @@ def homepage():
 def moviePage():
     title = request.args['title']
     parsedArgs = main.Parser(["-ti", title ])
+    result = main.getMovie(parsedArgs)
+    return render_template('movieInfo.html', type = result[1], title = result[2], director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
+
+@app.route('/getMovie/<title>')
+def getFilm(title):
+    parsedArgs = main.Parser(["-ti",title])
     result = main.getMovie(parsedArgs)
     return render_template('movieInfo.html', type = result[1], title = result[2], director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
 
