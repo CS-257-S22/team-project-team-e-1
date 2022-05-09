@@ -60,9 +60,12 @@ def functionSwitchboard():
         director = request.args['directorChoice']
         entertainment = request.args['entertainmentType']
         cast = request.args['castChoice']
-        country = request.args['countryChoice']        
+        country = request.args['countryChoice']
+        year = request.args['yearChoice']
+        rating = request.args['Rating']
+        streaming = request.args['Streaming']        
         parsedArgs = main.Parser(["-ti", title, "-g", genre, "-di", director, "-ty", entertainment, 
-        "-ca", cast, "-co", country])
+        "-ca", cast, "-co", country, "-y", year, "-r", rating, "-ser", streaming])
         if request.args['randomnessChoice'] == "Random":
             movieInfo = main.getRandomMovie(parsedArgs)
             movies = [movieInfo[2]]
