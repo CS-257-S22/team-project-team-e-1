@@ -11,11 +11,11 @@ class TestRandom(unittest.TestCase):
 
     def test_basicRandom(self):
         """checks if getRandomMovie with no arguments returns the information of a movie that is actually in the dataset"""
-        self.assertIn(main.getRandomMovie(main.Parser([])), rawData, "Ouput is not a valid show/movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ti"])), rawData, "Ouput is not a valid show/movie in dataset.")
 
     def test_optionsRandom(self):
         """checks if getRandomMovie filtered by multiple criteria returns the information of a movie that are actually in the dataset"""
-        self.assertIn(main.getRandomMovie(main.Parser(["-ti", "Movie", "-di", "Spielberg"])), rawData, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie", "-di", "Spielberg"])), rawData, "Ouput is not a valid documentary movie in dataset.")
     
     def test_edgeRandom(self):
         """checks if getRandomMovie with specific filtering returns the information of the only movie that works "Confessions of an Invisible Girl"""
@@ -23,7 +23,7 @@ class TestRandom(unittest.TestCase):
     
     def test_Randomness(self):
         """checks if getRandomMovie without arguments is actually random (gives a new movie each time"""
-        self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Ouput is not random (or the odds are for ever in your favor)")
+        self.assertNotEqual(main.getRandomMovie(main.Parser(["-ti"])), main.getRandomMovie(main.Parser(["-ti"])), "Ouput is not random (or the odds are for ever in your favor)")
     
 class TestGettingPopularMovies(unittest.TestCase):
     def test_popularTitlestxtExists(self):
@@ -35,7 +35,7 @@ class TestGettingPopularMovies(unittest.TestCase):
         """Checks if getPopularTitles returns the correct list of movies"""
         #entire popular movies list cannot be tested because it is extremely variable
         #the popular movie tested here may need to be changed, especially if it is no longer popular
-        popularMovie = 'Sankofa'
+        popularMovie = 'Pulp Fiction'
         self.assertIn(popularMovie, main.getPopularMovies())
 
     def test_sortingAlgorithmHelper(self):
@@ -78,7 +78,6 @@ class TestPROCESSING(unittest.TestCase):
     """A test class for the data"""
     def testDataset(self):
         self.assertEqual(len(data), 22998, "Dataset not fully processed")
-
         
 class testPARSER(unittest.TestCase):
     """A test class for the Parser class"""
@@ -88,12 +87,11 @@ class testPARSER(unittest.TestCase):
         self.assertEqual(result.getCast(), ["Ryan", "Gosling"], "Doesn't parse cast search terms")
         self.assertEqual(result.getYear(), ["1969", "1984"], "Doesn't parse year search terms")
 
-
 class testFINDMATCHINGMOVIES(unittest.TestCase):
     """A test class for the function findMatchingMovies"""
 
     def testSearchOneTerm(self):
-        """checks that findMatchingMovies actually returns the movie Bangkok given a search criteria"""
+        """checks that findMatchingMovies actually returns movies with titles containing the word 'Bangkok'"""
         parsedArgs = main.Parser([])
         parsedArgs.title = ["Bangkok"]
         result = main.findMatchingMovies(parsedArgs)
@@ -101,11 +99,27 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
             self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
 
     def testParseAndSearch(self):
-        """checks that findMatchingMovies actually returns the movie Bangkok given a search criteria put into parser"""
+        """checks that findMatchingMovies actually returns movies with titles containing the work 'Bangkok', 
+        after first parsing the search term through our parser."""
         parsedArgs = main.Parser(["-title", "Bangkok"])
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
-            self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
+            self.assertIn("Bangkok", movie, "Returns movies which don't match the criterion")    
+
+    def searchEachCriterion(self):
+        """Search for Pulp Fiction using every available search category, and return only the movie Pulp Fiction"""
+        parsedArgs = main.Parser(["-type", "movie", "-title", "pulp fiction", "-director", "quentin tarantino", 
+        "-cast", "uma thurman", "-country", "united states", "-year", "1994", "-rating", "R",
+        "-genre", "cult movies", "-description", "burger-loving hit man", "-service", "netflix"])
+        result = main.findMatchingMovies(parsedArgs)
+        self.assertEqual(1, len(result), "Doesn't return exactly one movie")
+
+    def invalidSearch(self):
+        """Check that a search for a movie which doesn't exist returns no movies"""
+        parsedArgs = main.Parser(["-title", "Pulpless Fiction"])
+        result = main.findMatchingMovies(parsedArgs)
+        self.assertEqual([], result, "Returns a movie that doesn't exist!")
+
 
 if __name__ == '__main__':
     unittest.main()

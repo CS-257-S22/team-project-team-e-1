@@ -129,7 +129,9 @@ def getRandomMovie(parsedArgs):
         #filter data using criteria in arguments (if no args, full data is used)
         filteredMovies = findMatchingMovies(parsedArgs)
         #generate random number for this filter data
-        randInt = random.randint(0,len(filteredMovies)-1)
+        if len(filteredMovies) == 0:
+            return []
+        randInt = random.randint(0,len(filteredMovies) - 1)
         #return/print the random movie from the subsetted data
         parsedArgs = Parser(["-ti", filteredMovies[randInt]])
         return getMovie(parsedArgs)
@@ -383,15 +385,19 @@ def findMatchingMovies(parsedArgs):
     #and ensure that it matches the given search criteria
     index = 0 
     while index < len(movieArray):
-        addMovie = False
+        addMovie = True
         for column in range(13):
             item = movieArray[index].getMovieInfo()[column]
             itemWords = item.split(",")
+            categoryMatch = False
             for word in itemWords:
+                if criteria[column] == []:
+                    categoryMatch = True
                 for criterion in criteria[column]:
-                    if criterion != "":
-                        if criterion.lower() in word.lower():             
-                            addMovie = True
+                    if criterion.lower() in word.lower():             
+                        categoryMatch = True
+            if not categoryMatch:
+                addMovie = False
         if addMovie:
             title = movieArray[index].getTitle()
             matchingMovies.append(title)

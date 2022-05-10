@@ -9,11 +9,11 @@
                     <h1 class="Home" id="Home"> Streaming Comparator </h1>
                 </a>
                 <h2 id="title" class="title">
-                    Your search for "{{keyword}}" returned:
+                    Your search for {{keyword}} returned:
                 </h2>
             </div>
             <div class="body" id="body">
-
+                {{message}}
                 <ul>
                     {% for movie in movies: %}
                     <a href="{{ url_for('moviePage', title = movie) }}"+{{movie}}><li>{{  movie  }}</li></a>
