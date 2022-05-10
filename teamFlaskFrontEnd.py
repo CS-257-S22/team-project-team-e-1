@@ -78,10 +78,10 @@ def functionSwitchboard():
             movieInfo = main.getRandomMovie(parsedArgs)
             if movieInfo != []:
                 movies = [movieInfo[2]]
-                keyword = "random matching movie"
             else: 
                 movies = []
                 message = "No results!"
+            keyword = "random matching movie"
         else:
             movies = main.findMatchingMovies(parsedArgs)
             if len(movies) == 0:
