@@ -82,6 +82,7 @@ def functionSwitchboard():
             movieInfo = main.getRandomMovie(parsedArgs)
             if movieInfo != []:
                 movies = [movieInfo[2]]
+                message = ""  
             else: 
                 movies = []
                 message = "No results!"
