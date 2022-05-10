@@ -63,6 +63,10 @@ def moviePage():
 
 @app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  
+        """@description: Connects inputs from homepage form to either findMatchingMovies or getRandomMovie, sends the result to 
+        matchingMovie.html
+        @params:None
+        @returns: Formatted movie search page based on the search categories selected in the form""" 
         title = request.args['titleChoice']
         genre = request.args['genreChoice']        
         director = request.args['directorChoice']
@@ -97,7 +101,7 @@ def get_popular_movies():
     """
         @description: Returns a list of the most viewed movies as determined by popularMovies.txt 
         by running getPopularMovies() from main.py. 
-        @return: getPopularMovies() - the list of popular movies, which here is casted to a string type. 
+        @return: getPopularMovies() - returns the list of popular movies in the matching movies html. 
     """
     return render_template('matchingMovie.html', movies = main.getPopularMovies(), keyword="popular movies")
 
