@@ -78,11 +78,13 @@ def functionSwitchboard():
             movieInfo = main.getRandomMovie(parsedArgs)
             if movieInfo != []:
                 movies = [movieInfo[2]]
+                keyword = "random matching movie"
             else: 
                 movies = []
         else:
-            movies = main.findMatchingMovies(parsedArgs)  
-        return render_template('matchingMovie.html', movies = movies, keyword="matching movies")
+            movies = main.findMatchingMovies(parsedArgs)
+            keyword = "matching movies"  
+        return render_template('matchingMovie.html', movies = movies, keyword=keyword)
 
 
 @app.route('/popularmovies', strict_slashes=False)

@@ -24,6 +24,7 @@ p {
 
 div {
     padding-bottom: 10px;
+    overflow: auto;
 }
 
 ul {
@@ -34,45 +35,26 @@ li {
     font-family: Verdana, Geneva, sans-serif;
     line-height: 1.4;
 }
-
-#popularList{
-    position: relative;
-    top: -430px;
-    right: -450px;
-    border: none;
-    
-}
-
-li.topHits {
-    float: left;
-    width: 8em;
-    display: inline;
-    padding: 20px;
-    margin-top: 5px;
-    font-size: 25px;
-    color: white;
-    margin-right: 20px;
-    background-color: rgb(0, 0, 128);
-
-}
+a:link { text-decoration: none; }
 
 
+a:visited { text-decoration: none; }
 
+div.header:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
 
 
 h2.title {
     text-align: center;
     font-weight: bold;
 }
-#tops {
-    position: relative;
-    top: -140px;
-    right: -30px;
-}
 
-div.info {
+div.first {
     float: left;
-    width: 30%;
+    width: 50%;
     padding: 10px;
     background-color: azure;
     border: 2px solid blue;
@@ -80,67 +62,74 @@ div.info {
     margin: 10px;
   }
 
-  div.movieInfo1 {
-    float: left;
-    width: 30%;
-    padding: 10px;
-    background-color: azure;
-    border: 2px solid blue;
-    border-radius: 8px;
-    margin: 10px;
-  }
-
-div.body:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
-@media screen and (max-width:600px) {
-div.info {
-    width: 100%;
-    }
-}
 
 h1.Home:hover {
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     background-color: rgb(0, 174, 255);
 }
 
-img.logo {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+#formFirst {
+    width: 30%;
 }
 
-#form {
-    background-color: azure;
-    width: 30%;
-    border: 2px solid blue;
-    border-radius: 8px;
-    float: left;
-    padding: 10px;
-    margin: 10px;
+div.label {
+    width: 100%;
 }
 
 #popularLink{
-    width: 8em;
+    text-align: center;
+    float: right;
+    display: inline;
+    padding: 20px;
+    font-size: 25px;
+    width: 50%;
+    border: 2px solid blue;
+    border-radius: 8px;
+    border-width: thick;
+    background-color: gainsboro;
+    color: rgb(0, 0, 0);
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+@media screen and (max-width: 600px) {
+    div.first { 
+      width: 75% ;
+    }
+    #formFirst {
+        width: 75%;
+    }
+    #popularLink{
+        margin-left: 20%;
+    }
+}
+
+#popularLink:hover{
+    width: 50%;
     padding: 20px;
     margin-top: 5px;
     font-size: 25px;
-    background-color: darkgreen;
-    color: white;
-    margin-right: 20px;
-    position: relative;
-    right: -200px;
-    bottom: -200px;
+    color: gainsboro;
+    background-color:  blue;
 
 }
 
-
-
-
+nav li.topHits {
+    width: 30%;
+    float: left;
+    display: inline;
+    text-align: left;
+    padding: 20px;
+    margin-top: 5px;
+    font-size: 25px;
+    color: white;
+    margin: 10%;
+    background-color: rgb(0, 0, 128);
+    border: 2px solid blue;
+}
+nav ul.popularList {
+    border: none;
+}
 nav ul {
     border: 2px solid blue;
     border-radius: 8px;

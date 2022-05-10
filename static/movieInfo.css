@@ -35,6 +35,11 @@ li {
     line-height: 1.4;
 }
 
+a:link { text-decoration: none; }
+
+
+a:visited { text-decoration: none; }
+
 h2.title {
     float: left;
     text-align: center;
@@ -57,16 +62,6 @@ div.info {
     margin: 10px;
   }
 
-  div.movieInfo1 {
-    float: left;
-    width: 30%;
-    padding: 10px;
-    background-color: azure;
-    border: 2px solid blue;
-    border-radius: 8px;
-    margin: 10px;
-  }
-
 div.body:after {
     content: "";
     display: table;
@@ -80,7 +75,7 @@ div.info {
 }
 
 h1.Home:hover {
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     background-color: rgb(0, 174, 255);
 }
 
