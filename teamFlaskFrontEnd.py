@@ -66,7 +66,7 @@ def functionSwitchboard():
     """@description: Connects inputs from homepage form to either findMatchingMovies or getRandomMovie, sends the result to 
     matchingMovie.html
         @params:None
-        @returns: Formatted movie search page based on the search terms selected""" 
+        @returns: Formatted movie search page based on the search categories selected in the form""" 
     title = request.args['titleChoice']
     genre = request.args['genreChoice']        
     director = request.args['directorChoice']
@@ -107,27 +107,25 @@ def get_popular_movies():
 
 
 
-def getUsage():
-    """
-        @description: displays the usage text as given by the usage_message.txt file
-        @params: None - the file is predetermined
-        @return: the string to be displayed on the webpage for usage
-    """
-    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
-        return f.read()
 
 
 @app.route('/FAQs', strict_slashes=False) 
 def FAQpage():
+    """
+        @description: displays FAQ page
+        @params: None
+        @returns: help.html
+    """
     return render_template('help.html')
 
 @app.route('/AboutUs', strict_slashes=False)
 def aboutUs():
+    """
+        @description: displays About Us page
+        @params: None
+        @returns: aboutus.html
+    """
     return render_template('/aboutus.html')
-
-@app.route('/usage/', strict_slashes=False)
-def usage() -> str:
-    return getUsage()
 
 
 @app.errorhandler(404)
