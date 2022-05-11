@@ -18,6 +18,10 @@ def getHomepage():
         return f.read()
 
 def getCategories():
+    """@description: Loads dropdown categories for the homepage by taking in the dataset
+    and running through the list of genres and ratings
+        @params:None-- initializeData takes in the data file
+        @return: genreList and ratingList, which are the full list of genres and ratings used in the table"""
     genreList = []
     ratingList = []
     movieArray = main.initializeData()
@@ -38,31 +42,31 @@ def getCategories():
 homepage_message = str(getHomepage())
 @app.route('/')
 def homepage():
+    """@description: Loads genre and rating lists, along with the three top films, then opens the html file
+    for the homepage with those inputs
+        @params:None
+        @return: Formatted home page with search form and popular movies"""
     genreList, ratingList = getCategories()
     topFilms = main.getPopularMovies()[0:3]
     return render_template("home.html", genreList = genreList, ratingList = ratingList, topFilms = topFilms)
 
 @app.route('/moviepage')
 def moviePage():
+    """@description: Connects links on the movie results page to pages for individual movies
+        @params:None
+        @returns: Formatted movie template based on the movie selected"""
     title = request.args['title']
     parsedArgs = main.Parser(["-ti", title ])
     result = main.getMovie(parsedArgs)
     return render_template('movieInfo.html', type = result[1], title = result[2], director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
 
-@app.route('/getMovie/<title>')
-def getFilm(title):
-    parsedArgs = main.Parser(["-ti",title])
-    result = main.getMovie(parsedArgs)
-    return render_template('movieInfo.html', type = result[1], title = result[2], director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
 
 @app.route('/search', methods =['GET', 'POST']) 
 def functionSwitchboard():  
-    #if request.args['titleChoice']:
-        #title = request.args['titleChoice']
-        #parsedArgs = main.Parser(["-ti", title])
-        #result = main.getMovie(parsedArgs)
-        #return render_template('movieInfo.html', type = result[1], title = title, director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
-    #else:
+        """@description: Connects inputs from homepage form to either findMatchingMovies or getRandomMovie, sends the result to 
+        matchingMovie.html
+        @params:None
+        @returns: Formatted movie search page based on the search categories selected in the form""" 
         title = request.args['titleChoice']
         genre = request.args['genreChoice']        
         director = request.args['directorChoice']
@@ -78,18 +82,19 @@ def functionSwitchboard():
             movieInfo = main.getRandomMovie(parsedArgs)
             if movieInfo != []:
                 movies = [movieInfo[2]]
-                message = ""
+                message = ""  
             else: 
                 movies = []
                 message = "No results!"
-            return render_template('matchingMovie.html', movies = movies, keyword="a random movie", message = message)
+            keyword = "random matching movie"
         else:
             movies = main.findMatchingMovies(parsedArgs)
             if len(movies) == 0:
                 message = "No results!"
             else:
                 message = ""  
-        return render_template('matchingMovie.html', movies = movies, keyword="matching movies", message = message)
+            keyword = "matching movies"  
+        return render_template('matchingMovie.html', movies = movies, keyword=keyword, message = message)
 
 
 @app.route('/popularmovies', strict_slashes=False)
@@ -97,33 +102,28 @@ def get_popular_movies():
     """
         @description: Returns a list of the most viewed movies as determined by popularMovies.txt 
         by running getPopularMovies() from main.py. 
-        @return: getPopularMovies() - the list of popular movies, which here is casted to a string type. 
+        @return: getPopularMovies() - returns the list of popular movies in the matching movies html. 
     """
     return render_template('matchingMovie.html', movies = main.getPopularMovies(), keyword="popular movies")
 
 
-
-def getUsage():
-    """
-        @description: displays the usage text as given by the usage_message.txt file
-        @params: None - the file is predetermined
-        @return: the string to be displayed on the webpage for usage
-    """
-    with open("usage_message.txt") as f: # The with keyword automatically closes the file when you are done
-        return f.read()
-
-
 @app.route('/FAQs', strict_slashes=False) 
 def FAQpage():
+    """
+        @description: displays FAQ page
+        @params: None
+        @returns: help.html
+    """
     return render_template('help.html')
 
 @app.route('/AboutUs', strict_slashes=False)
 def aboutUs():
+    """
+        @description: displays About Us page
+        @params: None
+        @returns: aboutus.html
+    """
     return render_template('/aboutus.html')
-
-@app.route('/usage/', strict_slashes=False)
-def usage() -> str:
-    return getUsage()
 
 
 @app.errorhandler(404)

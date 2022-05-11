@@ -35,6 +35,11 @@ li {
     line-height: 1.4;
 }
 
+a:link { text-decoration: none; }
+
+
+a:visited { text-decoration: none; }
+
 h2.title {
     float: left;
     text-align: center;
@@ -55,7 +60,7 @@ div.body:after {
   }
 
 h1.Home:hover {
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     background-color: rgb(0, 174, 255);
 }
 
