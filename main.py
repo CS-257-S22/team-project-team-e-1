@@ -1,14 +1,28 @@
 import csv
 import sys
 import random
+import psycopg2
+import psqlConfig as config
 
+class DataSource:
+        
+    def __init__(self):
+         self.connection = self.connect()
 
-class Movie:
+    def connect(self):
+        try:
+            connection = psycopg2.connect(database=config.database, user=config.user, password=config.password, host="localhost")
+        except Exception as e:
+            print("Connection error: ", e)
+            exit()
+        return connection
+
+#class Movie:
 
     '''a class to store movie information in a neat organized fashion '''
 
     #creates a movie object
-    def __init__(self, movieInfo):
+    #def __init__(self, movieInfo):
         self.movieInfo = movieInfo
         self.type = movieInfo[1]
         self.title = movieInfo[2]
@@ -53,22 +67,23 @@ class Movie:
 
     
 
-def initializeData():
+def initializeData(my_data):
     """
     @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array.
     **THIS DOES NOT INCLUDE HEADER**
     @params: None
     @returns: None
     """
-    with open('Data/streaming_services.csv', newline='') as csvfile:
-        data = csv.reader(csvfile)
-        movieArray = []
-        next(data)
-        for movie in data:
-            movieObject = Movie(movie)
-            if "min" in movieObject.rating or "Season" in movieObject.rating:
-                movieObject.rating = "NR"
-            movieArray.append(movieObject)
+    return my_data.connect()
+    #with open('Data/streaming_services.csv', newline='') as csvfile:
+        #data = csv.reader(csvfile)
+        #movieArray = []
+        #next(data)
+        #for movie in data:
+            #movieObject = Movie(movie)
+            #if "min" in movieObject.rating or "Season" in movieObject.rating:
+                #movieObject.rating = "NR"
+            #movieArray.append(movieObject)
 
     return movieArray
 
@@ -91,6 +106,21 @@ def getMovie(parsedArgs):
     movieInfo = dataSearch(title) #need to call dataSearch before increaseMoviePopularity
     return movieInfo #Definitely clearer, not sure if it's actually less code
 
+def dataSearch(self, title):
+        '''
+        @description: Uses database query to return database row matching inputted title
+        @arguments: A user inputted title
+        @returns: None
+        '''
+        try:
+            cursor = self.connection.cursor()
+            query = "SELECT * FROM movies WHERE title = %s"
+            cursor.execute(query, (title,))
+            return(cursor.fetchall())
+        except Exception as e:
+            print("ERROR:Title not found.", file = sys.stderr)
+            sys.exit(0)
+            return None
 
 def dataSearch(keyword):
     """
