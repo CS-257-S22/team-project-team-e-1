@@ -1,10 +1,13 @@
 import os.path
 import unittest
 import main
+import psycopg2
+import psqlConfig as config
 
 
-data = main.initializeData()
-rawData = [movie.getMovieInfo() for movie in data]
+#data = main.initializeData()
+#rawData = [movie.getMovieInfo() for movie in data]
+rawData = main.DataSource()
  
 class TestRandom(unittest.TestCase):
     """ A test class for the function getRandomMovie"""
@@ -33,8 +36,8 @@ class TestGettingPopularMovies(unittest.TestCase):
 
     def test_popularTitlesFunction(self):
         """Checks if getPopularTitles returns the correct list of movies"""
-        #entire popular movies list cannot be tested because it is extremely variable
-        #the popular movie tested here may need to be changed, especially if it is no longer popular
+        entire popular movies list cannot be tested because it is extremely variable
+        the popular movie tested here may need to be changed, especially if it is no longer popular
         popularMovie = 'Pulp Fiction'
         self.assertIn(popularMovie, main.getPopularMovies())
 
@@ -65,7 +68,10 @@ class TestGETMOVIE(unittest.TestCase):
         parsedArgs = main.Parser([])
         parsedArgs.title = ["Sankofa"]
         result = main.getMovie(parsedArgs)
-        self.assertEqual(result, data[7].getMovieInfo(), "Function return value does not represent correct dataset entries")
+        cursor = rawData.connection.cursor()
+        cursor.execute("SELECT * FROM movies WHERE title = 'Sankofa'")
+        databaseInfo = list(cursor.fetchall()[0])
+        self.assertEqual(result, databaseInfo, "Function return value does not represent correct dataset entries")
 
     def testNoisyData(self):
         """checks that getMovie actually returns the information of a particular movie given input with weird space"""
@@ -80,7 +86,7 @@ class TestPROCESSING(unittest.TestCase):
         self.assertEqual(len(data), 22998, "Dataset not fully processed")
         
 class testPARSER(unittest.TestCase):
-    """A test class for the Parser class"""
+   """A test class for the Parser class"""
     def testParseArgs(self):
         testString = ["-cast", "Ryan", "Gosling", "-year", "1969", "1984"]
         result = main.Parser(testString)
@@ -96,11 +102,11 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
         parsedArgs.title = ["Bangkok"]
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
-            self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
+            #self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
 
     def testParseAndSearch(self):
-        """checks that findMatchingMovies actually returns movies with titles containing the work 'Bangkok', 
-        after first parsing the search term through our parser."""
+       """checks that findMatchingMovies actually returns movies with titles containing the work 'Bangkok', 
+        #after first parsing the search term through our parser."""
         parsedArgs = main.Parser(["-title", "Bangkok"])
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
