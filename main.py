@@ -17,7 +17,7 @@ class DataSource:
             exit()
         return connection
 
-    def dataSearch(self, title):
+    def searchByTitle(self, title):
         '''
         @description: Uses database query to return database row matching inputted title
         @arguments: A user inputted title
@@ -27,7 +27,8 @@ class DataSource:
             cursor = self.connection.cursor()
             query = "SELECT * FROM movies WHERE title = %s"
             cursor.execute(query, (title,))
-            return(cursor.fetchall())
+            movieDetails = list(cursor.fetchall()[0])
+            return movieDetails
         except Exception as e:
             print("ERROR:Title not found.", file = sys.stderr)
             sys.exit(title)
@@ -119,8 +120,8 @@ def getMovie(parsedArgs):
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
     database = DataSource()
-    movieInfo = database.dataSearch(title) #need to call dataSearch before increaseMoviePopularity
-    return movieInfo #Definitely clearer, not sure if it's actually less code
+    movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
+    return movieInformation #Definitely clearer, not sure if it's actually less code
 
 
 
