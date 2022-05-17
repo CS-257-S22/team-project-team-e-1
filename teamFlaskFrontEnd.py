@@ -23,19 +23,34 @@ def getCategories():
         @params:None-- initializeData takes in the data file
         @return: genreList and ratingList, which are the full list of genres and ratings used in the table"""
     genres = []
+    ratings = []
     cursor = streamingDatabase.connection.cursor()
     ratingQuery = "SELECT rating FROM movies"
-    ratings = list(cursor.fetchall()[0])
+    cursor.execute(ratingQuery)
+    ratingAggregate = list(cursor.fetchall())
+    for rating in ratingAggregate:
+        if rating[0] != None:
+            rating = ', '.join(rating)
+            rating = rating.strip()
+            if rating not in ratings:
+                ratings.append(rating)
     genreQuery = "SELECT genre FROM movies"
-    genreAggregate = list(cursor.fetchall()[0])
-        for genre in genreAggregate:
-            if genre.type() = list:
-                
+    cursor.execute(genreQuery)
+    genreAggregate = list(cursor.fetchall())
+    for genre in genreAggregate:
+        genre = ', '.join(genre)
+        if ',' in genre:
+           genreGrouping = genre.split(',')
+           for genre in genreGrouping:
+               genre = genre.strip() 
+               if genre not in genres:
+                    genres.append(genre)  
+        else:
             genre = genre.strip()
-            if genre not in genreList:
-                genreList.append(genre)
+            if genre not in genres:
+                genres.append(genre)
     
-    return genreList, ratingList
+    return genres, ratings
 
 
 homepage_message = str(getHomepage())
