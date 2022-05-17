@@ -33,6 +33,13 @@ class DataSource:
             print("ERROR:Title not found.", file = sys.stderr)
             sys.exit(title)
             return None
+        
+    def getTopTenMovies(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT title FROM populartitles ORDER BY popularity DESC LIMIT 10")
+        topTenMovies = cursor.fetchall()
+        return topTenMovies
+
 
 class Movie:
 
@@ -158,48 +165,8 @@ def getPopularMovies():
         @returns: finishedPopularMoviesList - a list of the top 10 most popular movies as recorded in the popularTitles.txt 
         using the helper function finishedPopularMoviesList
     """
-    finalList = []
-    popularTitlesList = open("popularTitles.txt", 'r')
-    for line in popularTitlesList:
-        currline = line.split('|')
-        if currline[0] == "Movie":
-            finalList = updatePopularMoviesList(finalList, currline)
-    popularTitlesList.close()
-
-    return finishedPopularMoviesList(finalList)
-
-
-def updatePopularMoviesList(movieList, currentMovie):
-    """
-        @description: helper method for popular movies that updates the current list of the 10 most frequently searched movies 
-        @params: movieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
-        @returns: movieList - a list of the updated top 10 movies
-    """
-    #ensures that the popular list has only 10 movies 
-    if len(movieList) != 10:
-        movieList.append([currentMovie[1], currentMovie[2]])
-        movieList = bubble_sort(movieList)            
-            
-    #checks popularity of current movie with that of the least popular movie currently in the final list
-    #always sorts after a change so the movies are always listed in ascending popularity order
-    else:
-        if movieList[0][1] < currentMovie[2]:
-            movieList[0] = [currentMovie[1], currentMovie[2]]
-            movieList = bubble_sort(movieList)
-
-    return movieList
-
-
-def finishedPopularMoviesList(popularMovieList):    
-    """
-        @description: Helper function for getPopularMovies() - reorganizes final list so only titles are printed (ie respective popularity ranks aren't shown)
-        @params: popularMovieList - the list of popular movies we are editing , currentMovie - the movie that was just searched for
-        @returns: popularMovieList (list) - the final list to be displayed in the command line
-    """
-    count = 0
-    for title in popularMovieList:
-        popularMovieList[count] = title[0]
-        count += 1
+    database = DataSource()
+    popularMovieList = list(database.getTopTenMovies())
     return popularMovieList
 
 
@@ -230,43 +197,6 @@ def increaseMoviePopularity(movieTitle):
     file = open('popularTitles.txt', 'w')
     file.writelines(allMoviesList)  
     file.close()        
-
-
-def bubble_sort(array):
-    '''
-This sorting algorithm was made by Santiago Valdarrama 
-and taken from https://realpython.com/sorting-algorithms-python/#the-bubble-sort-algorithm-in-python.
-Only the indices in the if statement were changed from the original function.
-'''
-    n = len(array)
-
-    for i in range(n):
-        # Create a flag that will allow the function to
-        # terminate early if there's nothing left to sort
-        already_sorted = True
-
-        # Start looking at each item of the list one by one,
-        # comparing it with its adjacent value. With each
-        # iteration, the portion of the array that you look at
-        # shrinks because the remaining items have already been
-        # sorted.
-        for j in range(n - i - 1):
-            if array[j][1] > array[j + 1][1]:
-                # If the item you're looking at is greater than its
-                # adjacent value, then swap them
-                array[j], array[j + 1] = array[j + 1], array[j]
-
-                # Since you had to swap two elements,
-                # set the `already_sorted` flag to `False` so the
-                # algorithm doesn't finish prematurely
-                already_sorted = False
-
-        # If there were no swaps during the last iteration,
-        # the array is already sorted, and you can terminate
-        if already_sorted:
-            break
-
-    return array
 
 
 def isCategory(category):
