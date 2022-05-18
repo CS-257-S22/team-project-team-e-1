@@ -21,18 +21,18 @@ class DataSource:
         """
             @description: Uses database query to return database row matching inputted title
             @params: A user inputted title
-            @returns: None
+            @returns: movieDetails - a list of all the information pertaining to the certain movie
         """
         try:
             cursor = self.connection.cursor()
             query = "SELECT * FROM movies WHERE title = %s"
             cursor.execute(query, (title,))
-            movieDetails = list(cursor.fetchall()[0])
-            return movieDetails
+            movieDetails = formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)[0]
         except Exception as e:
             print("ERROR:Title not found.", file = sys.stderr)
             sys.exit(title)
-            
+
+        return movieDetails   
         
     def getTopTenMovies(self):
         """
@@ -43,6 +43,7 @@ class DataSource:
         cursor = self.connection.cursor()
         cursor.execute("SELECT title FROM populartitles ORDER BY popularity DESC LIMIT 10")
         topTenMovies = cursor.fetchall()
+
         return topTenMovies
 
     def incrementMoviePopularity(title):
@@ -58,11 +59,10 @@ class DataSource:
         """
             @description: Uses database query to find movies matching the given filters
             @params: parsedArgs - the filters we are searching for
-            @returns: cursor.fetchall() - the tupled list of matching movies
+            @returns: movies - the tupled list of matching movies
         """
         query = "SELECT * FROM movies WHERE"
         
-        matchingMovies = []
         criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
         categories = ["showtype", "title", "director", "actors", "country", "dateadded", "releaseyear", "rating", "duration", "genre", "synopsis", "platform"]
         criteria[0] = parsedArgs.getType()
@@ -91,11 +91,12 @@ class DataSource:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query,)
-            return(cursor.fetchall())
+            movies = cursor.fetchall()
         except Exception as e:
             print("ERROR: Parsed Args.", file = sys.stderr)
             sys.exit()
-            
+
+        return movies 
     
     def getAllMovies(self):
         """
@@ -106,13 +107,16 @@ class DataSource:
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM movies")
         allMovies = cursor.fetchall()
-        return formatToList(allMovies)
+        return formatToList(allMovies,returnTitles=False,isPopular=False)
 
 
 class Parser:
-    '''@description: a class that takes command-line arguments from the user, tests them for correct format, and stores them to use in functions
-       @args: command line filters inputted by the user at runtime
-       @returns: None: creates object containing the inputted category and criterion'''
+    '''
+        @description: a class that takes command-line arguments from the user, tests them for correct format, and stores them to use in functions
+        @args: command line filters inputted by the user at runtime
+        @returns: None: creates object containing the inputted category and criterion
+    '''
+    
     def __init__(self, args):
         self.numArgs = len(args)
         self.noArgs = self.numArgs==0
@@ -204,18 +208,23 @@ def getMovie(parsedArgs):
         @params: title - a str that provides the title of the movie
         @returns: movieInformation - a list that has the information of a movie
     """
-    if (len(parsedArgs.title) < 1):
+    titleList = parsedArgs.getTitle()
+    isEmpty = len(titleList)<1
+
+    if (isEmpty):
         printUsage("getMovie")
-    title = parsedArgs.getTitle()[0] 
-    title = title.strip()
-    if len(title)==0:
+
+    title = titleList[0].strip()
+    isTitle = len(title)>0
+
+    if not isTitle:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
         sys.exit(title)
+
     database = DataSource()
     movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
+
     return movieInformation #Definitely clearer, not sure if it's actually less code
-
-
 
 
 def getRandomMovie(parsedArgs):
@@ -228,20 +237,17 @@ def getRandomMovie(parsedArgs):
     if parsedArgs.isEmpty():
         database = DataSource()
         movies = database.getAllMovies()
-        movieArray = formatToTitle(movies,False)
-        randInt = random.randint(0,len(movieArray)-1)
-        print(movieArray[randInt])
-        parsedArgs = Parser(["-ti", movieArray[randInt]])
-        return getMovie(parsedArgs)
-    
+        movieArray = formatToList(movies,returnTitles=True,isPopular=False)
     else:
-        filteredMovies = findMatchingMovies(parsedArgs)
-        if len(filteredMovies) == 0:
+        movieArray = findMatchingMovies(parsedArgs)
+    
+    numMovies = len(movieArray)
+    if numMovies == 0:
             return []
-        randInt = random.randint(0,len(filteredMovies) - 1)
-        
-        parsedArgs = Parser(["-ti", filteredMovies[randInt]])
-        return getMovie(parsedArgs)
+    randInt = random.randint(0,numMovies-1)
+    parsedArgs = Parser(["-ti", movieArray[randInt]])
+    
+    return getMovie(parsedArgs)
 
 
 def getPopularMovies():
@@ -252,7 +258,8 @@ def getPopularMovies():
     """
     database = DataSource()
     popularMovieList = database.getTopTenMovies()
-    return formatToTitle(popularMovieList, True)
+
+    return formatToList(popularMovieList,returnTitles=True,isPopular=True)
 
 
 def increaseMoviePopularity(movieTitle):
@@ -278,7 +285,6 @@ def isCategory(category):
     return False
 
 
-
 def findMatchingMovies(parsedArgs):
     """
         @description: gives a list of titles of movies matching the given filters; does an AND search, so any title returned
@@ -288,32 +294,27 @@ def findMatchingMovies(parsedArgs):
     """
     dataSource = DataSource()
     movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
-    return formatToTitle(movies, False)
+    return formatToList(movies,returnTitles=True,isPopular=False)
 
 
-def formatToTitle(movies, isPopular):
-    """Helper method to change tupled list from database into list"""
-    titles = []
-    i = 0
-    #helper fcn lists of tuples containing all the info for each movie, and we just want the title
-    while i < len(movies):
-        movie = list(movies[i])
-        title = movie[not isPopular]
-        titles.append(title)
-        i = i + 1
-    return titles
-
-def formatToList(movies):
-    """Helper method to changed tupled list from database into list of lists"""
+def formatToList(movies, returnTitles, isPopular):
+    """
+        @description: Helper method to change tupled list from database into list
+        @params: a list of movies and a booleans indicating if we want to return only titles and if the list is from the popular data base
+        @returns: a list of all the titles or movies.
+    """
     allMovies = []
     i = 0
+    numMovies = len(movies)
     #helper fcn lists of tuples containing all the info for each movie, and we just want the title
-    while i < len(movies):
+    while i < numMovies:
         movie = list(movies[i])
+        if returnTitles:
+            movie = movie[not isPopular]
         allMovies.append(movie)
         i = i + 1
-    return allMovies
 
+    return allMovies
 
 
 def Usage():
@@ -366,6 +367,7 @@ def printUsage(functionName):
             print(usage[i])
     sys.exit(sys.argv)
 
+
 def processUsage(system_args):
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
     #print usage statements
@@ -384,6 +386,7 @@ def processUsage(system_args):
                 printUsage("general")
         else:
             printUsage("general")
+
 
 def callFunction(system_args):
     functionName = system_args[1]

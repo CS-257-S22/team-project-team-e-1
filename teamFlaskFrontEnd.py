@@ -99,6 +99,7 @@ def moviePage():
     title = request.args['title']
     parsedArgs = main.Parser(["-ti", title ])
     result = main.getMovie(parsedArgs)
+    print(result)
     return render_template('movieInfo.html', type = result[0], title = result[1], director = result[2], cast = result[3], locations = result[4], dateAdded = result[5], releaseYear = result[6], rating = result[7], runtime = result[8], genres = result[9], description = result[10], streamingService = result[11],logos = logosImg,links=logosLinks)
 
 
