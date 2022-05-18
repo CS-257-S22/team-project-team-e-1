@@ -18,11 +18,11 @@ class DataSource:
         return connection
 
     def searchByTitle(self, title):
-        '''
-        @description: Uses database query to return database row matching inputted title
-        @arguments: A user inputted title
-        @returns: None
-        '''
+        """
+            @description: Uses database query to return database row matching inputted title
+            @params: A user inputted title
+            @returns: None
+        """
         try:
             cursor = self.connection.cursor()
             query = "SELECT * FROM movies WHERE title = %s"
@@ -35,16 +35,31 @@ class DataSource:
             return None
         
     def getTopTenMovies(self):
+        """
+            @description: Uses database query to find ten movies with highest popularity 
+            @params: None
+            @returns: topTenMovies - list of tuples containing the ten most popular movies
+        """
         cursor = self.connection.cursor()
         cursor.execute("SELECT title FROM populartitles ORDER BY popularity DESC LIMIT 10")
         topTenMovies = cursor.fetchall()
         return topTenMovies
 
     def incrementMoviePopularity(title):
+        """
+            @description: Uses database query to increment popularity of 
+            @params: title - the movie that was just searched for in getMovie()
+            @returns: None
+        """
         cursor = self.connection.cursor()
         cursor.execute("UPDATE populartitles SET popularity = popularity+1 WHERE title = %s")
         
     def findMatchingMoviesHelper(self, parsedArgs):
+        """
+            @description: Uses database query to find movies matching the given filters
+            @params: parsedArgs - the filters we are searching for
+            @returns: cursor.fetchall() - the tupled list of matching movies
+        """
         query = "SELECT * FROM movies WHERE"
         
         matchingMovies = []
@@ -134,10 +149,10 @@ class Movie:
 
 def initializeData():
     """
-    @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array.
-    **THIS DOES NOT INCLUDE HEADER**
-    @params: None
-    @returns: None
+        @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array.
+          **THIS DOES NOT INCLUDE HEADER**
+        @params: None
+        @returns: None
     """
     #with open('Data/streaming_services.csv', newline='') as csvfile:
         #data = csv.reader(csvfile)
@@ -154,12 +169,10 @@ def initializeData():
 
 def getMovie(parsedArgs):
     """
-                  getMovie
-
         @description: takes in a movie title, initializes the data, and searches for and returns a list containing all the info 
         pertaining to that movie
         @params: title - a str that provides the title of the movie
-        @returns: movieInfo - a list that has the information of a movie
+        @returns: movieInformation - a list that has the information of a movie
     """
     if (len(parsedArgs.title) < 1):
         printUsage("getMovie")
@@ -203,8 +216,7 @@ def getPopularMovies():
     """
         @description: gives the most popular movie suggestions based off how often they have been searched for using getMovie and getRandomMovie
         @params: None
-        @returns: finishedPopularMoviesList - a list of the top 10 most popular movies as recorded in the popularTitles.txt 
-        using the helper function finishedPopularMoviesList
+        @returns: popularMovieList - a list of the top 10 most popular movies as recorded in the populartitles database
     """
     database = DataSource()
     popularMovieList = list(database.getTopTenMovies())
@@ -213,7 +225,7 @@ def getPopularMovies():
 
 def increaseMoviePopularity(movieTitle):
     """
-        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity by 1)
+        @description: Helper function for getMovie() - Updates populartitles database when a movie is viewed (increases movie's popularity by 1)
         @params: movieTitle - the movie that was just searched for in getMovie()
         @returns: None
     """
@@ -236,9 +248,11 @@ def isCategory(category):
 
 
 class Parser:
-    '''@description: a class that takes command-line arguments from the user, tests them for correct format, and stores them to use in functions
-       @args: command line filters inputted by the user at runtime
-       @returns: None: creates object containing the inputted category and criterion'''
+    """
+        @description: a class that takes command-line arguments from the user, tests them for correct format, and stores them to use in functions
+        @args: command line filters inputted by the user at runtime
+        @returns: None: creates object containing the inputted category and criterion
+    """
     def __init__(self, args):
         self.noArgs = True
         self.type = []
