@@ -64,17 +64,15 @@ class DataSource:
         for i in range(11):
             if criteria[i] != []:
                 if firstCategory:
-                    query = query + " {} LIKE '%{}%'"
+                    query = query + " {} ILIKE '%{}%'"
                     query = query.format(categories[i], criteria[i][0])
                     firstCategory = False    
                 else:        
-                    query = query + " AND {} LIKE '%{}%'"
+                    query = query + " AND {} ILIKE '%{}%'"
                     query = query.format(categories[i], criteria[i][0])
-        print(query)
         try:
             cursor = self.connection.cursor()
             cursor.execute(query,)
-            print(cursor.fetchall())
             return(cursor.fetchall())
         except Exception as e:
             print("ERROR:Title not found.", file = sys.stderr)
@@ -348,51 +346,16 @@ def findMatchingMovies(parsedArgs):
         @params: parsedArgs - the filters we are searching for
         @returns: matchingMovies - a list of movies matching the criteria
     """
-    """
-    movieArray = initializeData()
-
-    matchingMovies = []
-    criteria = [[], [], [], [], [], [], [], [], [], [], [], [],[]]
-    criteria[1] = parsedArgs.getType()
-    criteria[2] = parsedArgs.getTitle()
-    criteria[3] = parsedArgs.getDirector()
-    criteria[4] = parsedArgs.getCast()
-    criteria[5] = parsedArgs.getCountry()
-    criteria[6] = parsedArgs.getDateAdded()
-    criteria[7] = parsedArgs.getYear()
-    criteria[8] = parsedArgs.getRating()
-    criteria[9] = parsedArgs.getDuration()
-    criteria[10] = parsedArgs.getListedIn()
-    criteria[11] = parsedArgs.getDescription()
-    criteria[12] = parsedArgs.getService()
- 
-    #for each movie in the csv, check the content in each column
-    #and ensure that it matches the given search criteria
-    index = 0 
-    while index < len(movieArray):
-        addMovie = True
-        for column in range(13):
-            item = movieArray[index].getMovieInfo()[column]
-            itemWords = item.split(",")
-            categoryMatch = False
-            for word in itemWords:
-                if criteria[column] == []:
-                    categoryMatch = True
-                for criterion in criteria[column]:
-                    if criterion.lower() in word.lower():             
-                        categoryMatch = True
-            if not categoryMatch:
-                addMovie = False
-        if addMovie:
-            title = movieArray[index].getTitle()
-            matchingMovies.append(title)
-        index += 1
-
-    return matchingMovies
-    """
     dataSource = DataSource()
-    return dataSource.findMatchingMoviesHelper(parsedArgs)
-
+    movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
+    titles = []
+    i = 0
+    while i < len(movies):
+        movie = list(movies[i])
+        title = movie[1]
+        titles.append(title)
+        i = i + 1
+    return titles
 def Usage():
     """
         @description: Loads the usage statement as an array so that we may index the txt file
