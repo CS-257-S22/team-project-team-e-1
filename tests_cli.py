@@ -5,26 +5,27 @@ import psycopg2
 import psqlConfig as config
 
 rawData = main.DataSource()
+allmovies = rawData.getAllMovies()
  
-'''class TestRandom(unittest.TestCase):
+class TestRandom(unittest.TestCase):
     """ A test class for the function getRandomMovie"""
 
     def test_basicRandom(self):
         """checks if getRandomMovie with no arguments returns the information of a movie that is actually in the dataset"""
-        self.assertIn(main.getRandomMovie(main.Parser(["-ti"])), rawData, "Ouput is not a valid show/movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser([])), allmovies, "Output is not a valid show/movie in dataset.")
 
     def test_optionsRandom(self):
         """checks if getRandomMovie filtered by multiple criteria returns the information of a movie that are actually in the dataset"""
-        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie", "-di", "Spielberg"])), rawData, "Ouput is not a valid documentary movie in dataset.")
+        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie", "-di", "Spielberg"])), allmovies, "Output is not a valid documentary movie in dataset.")
     
     def test_edgeRandom(self):
         """checks if getRandomMovie with specific filtering returns the information of the only movie that works "Confessions of an Invisible Girl"""
-        self.assertIn(main.getRandomMovie(main.Parser(["-ty", "Movie","-di", "Bruno Garotti", "-ca", "Klara Castanho", "-y", "2021"])), rawData, "Ouput is not a valid documentary movie in dataset.")
+        self.assertListEqual(main.getRandomMovie(main.Parser(["-ty", "Movie","-di", "Bruno Garotti", "-ca", "Klara Castanho", "-y", "2021"])), main.getMovie(main.Parser(["-ti","Confessions of an Invisible Girl"])), "Output is not a valid documentary movie in dataset.")
     
     def test_Randomness(self):
         """checks if getRandomMovie without arguments is actually random (gives a new movie each time"""
-        self.assertNotEqual(main.getRandomMovie(main.Parser(["-ti"])), main.getRandomMovie(main.Parser(["-ti"])), "Ouput is not random (or the odds are for ever in your favor)")
-    '''
+        self.assertNotEqual(main.getRandomMovie(main.Parser([])), main.getRandomMovie(main.Parser([])), "Output is not random (or the odds are for ever in your favor)")
+
 class TestGettingPopularMovies(unittest.TestCase):
     def test_popularTitlestxtExists(self):
         """Checks if popularTitles.txt is already made"""
@@ -35,14 +36,9 @@ class TestGettingPopularMovies(unittest.TestCase):
         """Checks if getPopularTitles returns the correct list of movies
         entire popular movies list cannot be tested because it is extremely variable
         the popular movie tested here may need to be changed, especially if it is no longer popular"""
-        popularMovie = ('Jaws',)
+        popularMovie = 'Jaws'
         self.assertIn(popularMovie, main.getPopularMovies())
 
-    '''def test_sortingAlgorithmHelper(self):
-        """checks if the bubble sort algorithm works correctly on the list it's given"""
-        testList = [['MovieTitle1',1], ["MovieTitle2",4], ["MovieTitle3",3], ["MovieTitle4",5], ["MovieTitle5",2]]
-        sortedtestList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5]]
-        self.assertEqual(main.bubble_sort(testList), sortedtestList, "Sorting algorithm does not return sorted list")'''
     
 
 class TestGETMOVIE(unittest.TestCase):

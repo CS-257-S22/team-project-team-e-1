@@ -18,11 +18,11 @@ class DataSource:
         return connection
 
     def searchByTitle(self, title):
-        '''
-        @description: Uses database query to return database row matching inputted title
-        @arguments: A user inputted title
-        @returns: None
-        '''
+        """
+            @description: Uses database query to return database row matching inputted title
+            @params: A user inputted title
+            @returns: None
+        """
         try:
             cursor = self.connection.cursor()
             query = "SELECT * FROM movies WHERE title = %s"
@@ -32,19 +32,34 @@ class DataSource:
         except Exception as e:
             print("ERROR:Title not found.", file = sys.stderr)
             sys.exit(title)
-            return None
+            
         
     def getTopTenMovies(self):
+        """
+            @description: Uses database query to find ten movies with highest popularity 
+            @params: None
+            @returns: topTenMovies - list of tuples containing the ten most popular movies
+        """
         cursor = self.connection.cursor()
         cursor.execute("SELECT title FROM populartitles ORDER BY popularity DESC LIMIT 10")
         topTenMovies = cursor.fetchall()
         return topTenMovies
 
     def incrementMoviePopularity(title):
+        """
+            @description: Uses database query to increment popularity of 
+            @params: title - the movie that was just searched for in getMovie()
+            @returns: None
+        """
         cursor = self.connection.cursor()
         cursor.execute("UPDATE populartitles SET popularity = popularity+1 WHERE title = %s")
         
     def findMatchingMoviesHelper(self, parsedArgs):
+        """
+            @description: Uses database query to find movies matching the given filters
+            @params: parsedArgs - the filters we are searching for
+            @returns: cursor.fetchall() - the tupled list of matching movies
+        """
         query = "SELECT * FROM movies WHERE"
         
         matchingMovies = []
@@ -80,13 +95,18 @@ class DataSource:
         except Exception as e:
             print("ERROR: Parsed Args.", file = sys.stderr)
             sys.exit()
-            return None
+            
     
     def getAllMovies(self):
+        """
+            @description: Uses database query to retrieve all movies in the database
+            @params: None
+            @returns: allmovies - formatted to list of lists
+        """
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM movies")
         allMovies = cursor.fetchall()
-        return allMovies
+        return formatToList(allMovies)
 
 
 class Parser:
@@ -94,7 +114,8 @@ class Parser:
        @args: command line filters inputted by the user at runtime
        @returns: None: creates object containing the inputted category and criterion'''
     def __init__(self, args):
-        self.noArgs = True
+        self.numArgs = len(args)
+        self.noArgs = self.numArgs==0
         self.type = []
         self.title = []
         self.director = []
@@ -108,14 +129,13 @@ class Parser:
         self.description = []
         self.service = []
 
-        if len(args)>0:
-            self.noArgs = False
+        
         i = 0
-        while i < len(args):
+        while i < self.numArgs:
             if isCategory(args[i]):
                 category = args[i]
                 i += 1
-                while (i < len(args)) and not isCategory(args[i]):
+                while (i < self.numArgs) and not isCategory(args[i]):
                     if category in ["-ty","-type"]:
                         self.type.append(args[i])
                     elif category in ["-ti","-title"]:
@@ -179,12 +199,10 @@ class Parser:
 
 def getMovie(parsedArgs):
     """
-                  getMovie
-
         @description: takes in a movie title, initializes the data, and searches for and returns a list containing all the info 
         pertaining to that movie
         @params: title - a str that provides the title of the movie
-        @returns: movieInfo - a list that has the information of a movie
+        @returns: movieInformation - a list that has the information of a movie
     """
     if (len(parsedArgs.title) < 1):
         printUsage("getMovie")
@@ -192,6 +210,7 @@ def getMovie(parsedArgs):
     title = title.strip()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
+        sys.exit(title)
     database = DataSource()
     movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
     return movieInformation #Definitely clearer, not sure if it's actually less code
@@ -208,13 +227,15 @@ def getRandomMovie(parsedArgs):
     
     if parsedArgs.isEmpty():
         database = DataSource()
-        movieArray = database.getAllMovies()
+        movies = database.getAllMovies()
+        movieArray = formatToTitle(movies,False)
         randInt = random.randint(0,len(movieArray)-1)
-        return self.getMovie(movieArray[randInt].getTitle())
+        print(movieArray[randInt])
+        parsedArgs = Parser(["-ti", movieArray[randInt]])
+        return getMovie(parsedArgs)
     
     else:
         filteredMovies = findMatchingMovies(parsedArgs)
-        print(filteredMovies[0])
         if len(filteredMovies) == 0:
             return []
         randInt = random.randint(0,len(filteredMovies) - 1)
@@ -227,17 +248,16 @@ def getPopularMovies():
     """
         @description: gives the most popular movie suggestions based off how often they have been searched for using getMovie and getRandomMovie
         @params: None
-        @returns: finishedPopularMoviesList - a list of the top 10 most popular movies as recorded in the popularTitles.txt 
-        using the helper function finishedPopularMoviesList
+        @returns: popularMovieList - a list of the top 10 most popular movies as recorded in the populartitles database
     """
     database = DataSource()
-    popularMovieList = list(database.getTopTenMovies())
-    return popularMovieList
+    popularMovieList = database.getTopTenMovies()
+    return formatToTitle(popularMovieList, True)
 
 
 def increaseMoviePopularity(movieTitle):
     """
-        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity by 1)
+        @description: Helper function for getMovie() - Updates populartitles database when a movie is viewed (increases movie's popularity by 1)
         @params: movieTitle - the movie that was just searched for in getMovie()
         @returns: None
     """
@@ -268,15 +288,32 @@ def findMatchingMovies(parsedArgs):
     """
     dataSource = DataSource()
     movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
+    return formatToTitle(movies, False)
+
+
+def formatToTitle(movies, isPopular):
+    """Helper method to change tupled list from database into list"""
     titles = []
     i = 0
     #helper fcn lists of tuples containing all the info for each movie, and we just want the title
     while i < len(movies):
         movie = list(movies[i])
-        title = movie[1]
+        title = movie[not isPopular]
         titles.append(title)
         i = i + 1
     return titles
+
+def formatToList(movies):
+    """Helper method to changed tupled list from database into list of lists"""
+    allMovies = []
+    i = 0
+    #helper fcn lists of tuples containing all the info for each movie, and we just want the title
+    while i < len(movies):
+        movie = list(movies[i])
+        allMovies.append(movie)
+        i = i + 1
+    return allMovies
+
 
 
 def Usage():
@@ -329,23 +366,16 @@ def printUsage(functionName):
             print(usage[i])
     sys.exit(sys.argv)
 
-
-def main():
-    """
-        @description: our main method that runs when main.py is called; checks if user input is incomplete and calls an error, 
-        if not puts arguments into the Parser class and calls the correct function
-        @params: None
-        @returns: None
-    """
+def processUsage(system_args):
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
     #print usage statements
-    if(len(sys.argv) < 2):
+    if(len(system_args) < 2):
         printUsage("general")
-    if (sys.argv[1] not in potentialFunctions):
-        if sys.argv[1] in ["help", "-help", "usage", "-usage"]:
-            if(len(sys.argv) < 3):
+    if (system_args[1] not in potentialFunctions):
+        if system_args[1] in ["help", "-help", "usage", "-usage"]:
+            if(len(system_args) < 3):
                 printUsage("general")
-            functionName = sys.argv[2]
+            functionName = system_args[2]
             if functionName in potentialFunctions:
                 printUsage(functionName)
             if functionName == "filters":
@@ -355,15 +385,11 @@ def main():
         else:
             printUsage("general")
 
-        
-
-    #pull function and args
-    functionName = sys.argv[1]
-    parsedArgs = Parser(sys.argv[2:])
+def callFunction(system_args):
+    functionName = system_args[1]
+    parsedArgs = Parser(system_args[2:])
     if functionName == "getMovie":
-        if (len(sys.argv) < 3):
-            printUsage("getMovie")
-        if (len(sys.argv) < 3):
+        if (len(system_args) < 3):
             printUsage("getMovie")
         print(getMovie(parsedArgs))
     elif functionName == "findMatchingMovies":
@@ -375,6 +401,21 @@ def main():
     else:
         print("You should not be here... it is not possible. You have broken logic.", file = sys.stderr)
         sys.exit(functionName)
+
+
+def main():
+    """
+        @description: our main method that runs when main.py is called; checks if user input is incomplete and calls an error, 
+        if not puts arguments into the Parser class and calls the correct function
+        @params: None
+        @returns: None
+    """
+    potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
+    if (len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
+        processUsage(sys.argv)
+    else:
+        callFunction(sys.argv)
+    #pull function and args
 
 
 if __name__ == '__main__':
