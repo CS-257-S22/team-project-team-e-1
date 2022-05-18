@@ -25,6 +25,14 @@ def getCategories():
     genres = []
     ratings = []
     cursor = streamingDatabase.connection.cursor()
+    ratings = getRatings(cursor)
+    genres = getGenres(cursor)
+    
+    
+    return genres, ratings
+
+def getRatings(cursor):
+    ratings = []
     ratingQuery = "SELECT rating FROM movies"
     cursor.execute(ratingQuery)
     ratingAggregate = list(cursor.fetchall())
@@ -34,23 +42,34 @@ def getCategories():
             rating = rating.strip()
             if rating not in ratings:
                 ratings.append(rating)
+    return ratings
+
+def getGenres(cursor):
+    genres = []
     genreQuery = "SELECT genre FROM movies"
     cursor.execute(genreQuery)
     genreAggregate = list(cursor.fetchall())
+    genres = makeUniqueGenreList(genreAggregate)
+    return genres
+
+
+def makeUniqueGenreList(genreAggregate):
+    genres = []
     for genre in genreAggregate:
         genre = ', '.join(genre)
         if ',' in genre:
-           genreGrouping = genre.split(',')
-           for genre in genreGrouping:
-               genre = genre.strip() 
-               if genre not in genres:
+            genreGrouping = genre.split(',')
+            for genre in genreGrouping:
+                genre = genre.strip() 
+                if genre not in genres:
                     genres.append(genre)  
         else:
             genre = genre.strip()
             if genre not in genres:
                 genres.append(genre)
-    
-    return genres, ratings
+    return genres
+
+
 
 
 homepage_message = str(getHomepage())
