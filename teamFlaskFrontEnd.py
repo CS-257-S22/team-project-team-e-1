@@ -20,18 +20,19 @@ def getHomepage():
 def getCategories():
     """@description: Loads dropdown categories for the homepage by taking in the dataset
     and running through the list of genres and ratings
-        @params:None-- initializeData takes in the data file
-        @return: genreList and ratingList, which are the full list of genres and ratings used in the table"""
+        @params:None
+        @return: genres and ratings, which are the full list of genres and ratings used in the table"""
     genres = []
     ratings = []
     cursor = streamingDatabase.connection.cursor()
     ratings = getRatings(cursor)
     genres = getGenres(cursor)
-    
-    
     return genres, ratings
 
 def getRatings(cursor):
+    """@description: Helper function that loads list of unique ratings from database
+        @params:Cursor pointing to database
+        @returns: ratings"""
     ratings = []
     ratingQuery = "SELECT rating FROM movies"
     cursor.execute(ratingQuery)
@@ -45,6 +46,9 @@ def getRatings(cursor):
     return ratings
 
 def getGenres(cursor):
+    """@description: Helper function that loads list of unique genres from database
+        @params:Cursor pointing to database
+        @returns: genres"""
     genres = []
     genreQuery = "SELECT genre FROM movies"
     cursor.execute(genreQuery)
@@ -54,6 +58,10 @@ def getGenres(cursor):
 
 
 def makeUniqueGenreList(genreAggregate):
+    """@description: Helper function for getGenres that processes tuples and lists within lists
+    to put all genres in a single list 
+        @params:Aggregate of each movie's genre label
+        @returns: List of unique genre labels"""
     genres = []
     for genre in genreAggregate:
         genre = ', '.join(genre)
