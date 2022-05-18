@@ -86,7 +86,7 @@ class DataSource:
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM movies")
         allMovies = cursor.fetchall()
-        return allMovies
+        return formatToList(allMovies)
 
 
 class Parser:
@@ -208,13 +208,15 @@ def getRandomMovie(parsedArgs):
     
     if parsedArgs.isEmpty():
         database = DataSource()
-        movieArray = database.getAllMovies()
+        movies = database.getAllMovies()
+        movieArray = formatToTitle(movies,False)
         randInt = random.randint(0,len(movieArray)-1)
-        return self.getMovie(movieArray[randInt].getTitle())
+        print(movieArray[randInt])
+        parsedArgs = Parser(["-ti", movieArray[randInt]])
+        return getMovie(parsedArgs)
     
     else:
         filteredMovies = findMatchingMovies(parsedArgs)
-        print(filteredMovies[0])
         if len(filteredMovies) == 0:
             return []
         randInt = random.randint(0,len(filteredMovies) - 1)
@@ -231,8 +233,8 @@ def getPopularMovies():
         using the helper function finishedPopularMoviesList
     """
     database = DataSource()
-    popularMovieList = list(database.getTopTenMovies())
-    return popularMovieList
+    popularMovieList = database.getTopTenMovies()
+    return formatToTitle(popularMovieList, True)
 
 
 def increaseMoviePopularity(movieTitle):
@@ -268,15 +270,30 @@ def findMatchingMovies(parsedArgs):
     """
     dataSource = DataSource()
     movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
+    return formatToTitle(movies, False)
+
+
+def formatToTitle(movies, isPopular):
     titles = []
     i = 0
     #helper fcn lists of tuples containing all the info for each movie, and we just want the title
     while i < len(movies):
         movie = list(movies[i])
-        title = movie[1]
+        title = movie[not isPopular]
         titles.append(title)
         i = i + 1
     return titles
+
+def formatToList(movies):
+    allMovies = []
+    i = 0
+    #helper fcn lists of tuples containing all the info for each movie, and we just want the title
+    while i < len(movies):
+        movie = list(movies[i])
+        allMovies.append(movie)
+        i = i + 1
+    return allMovies
+
 
 
 def Usage():
