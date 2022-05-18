@@ -161,7 +161,7 @@ class Parser:
                     elif category in ["-g","-genre"]:
                         self.listed_in.append(args[i])
                     elif category in ["-de","-description"]:
-                        self.duration.append(args[i])
+                        self.description.append(args[i])
                     elif category in ["-ser","-service"]:
                         self.service.append(args[i])    
                     else:

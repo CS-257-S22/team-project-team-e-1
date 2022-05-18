@@ -4,9 +4,6 @@ import main
 import psycopg2
 import psqlConfig as config
 
-
-#data = main.initializeData()
-#rawData = [movie.getMovieInfo() for movie in data]
 rawData = main.DataSource()
 allmovies = rawData.getAllMovies()
  
@@ -111,16 +108,20 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
         for movie in result:
             self.assertIn("Bangkok", movie, "Returns movies which don't match the criterion")    
 
-    def searchEachCriterion(self):
+    def testSearchEachCriterion(self):
         """Search for Pulp Fiction using every available search category, and return only the movie Pulp Fiction"""
+
         parsedArgs = main.Parser(["-type", "movie", "-title", "pulp fiction", "-director", "quentin tarantino", 
         "-cast", "uma thurman", "-country", "united states", "-year", "1994", "-rating", "R",
         "-genre", "cult movies", "-description", "burger-loving hit man", "-service", "netflix"])
         result = main.findMatchingMovies(parsedArgs)
         self.assertEqual(1, len(result), "Doesn't return exactly one movie")
+        errorMessage = "Returns " + result[0] + " instead of Pulp Fiction"
+        self.assertEqual("Pulp Fiction", result[0], errorMessage )
 
-    def invalidSearch(self):
+    def testInvalidSearch(self):
         """Check that a search for a movie which doesn't exist returns no movies"""
+
         parsedArgs = main.Parser(["-title", "Pulpless Fiction"])
         result = main.findMatchingMovies(parsedArgs)
         self.assertEqual([], result, "Returns a movie that doesn't exist!")
