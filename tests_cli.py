@@ -9,7 +9,7 @@ import psqlConfig as config
 #rawData = [movie.getMovieInfo() for movie in data]
 rawData = main.DataSource()
  
-class TestRandom(unittest.TestCase):
+'''class TestRandom(unittest.TestCase):
     """ A test class for the function getRandomMovie"""
 
     def test_basicRandom(self):
@@ -27,7 +27,7 @@ class TestRandom(unittest.TestCase):
     def test_Randomness(self):
         """checks if getRandomMovie without arguments is actually random (gives a new movie each time"""
         self.assertNotEqual(main.getRandomMovie(main.Parser(["-ti"])), main.getRandomMovie(main.Parser(["-ti"])), "Ouput is not random (or the odds are for ever in your favor)")
-    
+    '''
 class TestGettingPopularMovies(unittest.TestCase):
     def test_popularTitlestxtExists(self):
         """Checks if popularTitles.txt is already made"""
@@ -35,23 +35,18 @@ class TestGettingPopularMovies(unittest.TestCase):
         self.assertTrue(popularTitlesTextExists, "The text file popularTitles.txt does not exist")
 
     def test_popularTitlesFunction(self):
-        """Checks if getPopularTitles returns the correct list of movies"""
+        """Checks if getPopularTitles returns the correct list of movies
         entire popular movies list cannot be tested because it is extremely variable
-        the popular movie tested here may need to be changed, especially if it is no longer popular
-        popularMovie = 'Pulp Fiction'
+        the popular movie tested here may need to be changed, especially if it is no longer popular"""
+        popularMovie = ('Jaws',)
         self.assertIn(popularMovie, main.getPopularMovies())
 
-    def test_sortingAlgorithmHelper(self):
+    '''def test_sortingAlgorithmHelper(self):
         """checks if the bubble sort algorithm works correctly on the list it's given"""
         testList = [['MovieTitle1',1], ["MovieTitle2",4], ["MovieTitle3",3], ["MovieTitle4",5], ["MovieTitle5",2]]
         sortedtestList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5]]
-        self.assertEqual(main.bubble_sort(testList), sortedtestList, "Sorting algorithm does not return sorted list")
+        self.assertEqual(main.bubble_sort(testList), sortedtestList, "Sorting algorithm does not return sorted list")'''
     
-    def test_movieListUpdateHelper(self):
-        """Checks if the list of popular movies is updated when a more popular movie is found."""
-        currentMovie = ["Movie", "newTitle", 11]
-        movieList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5], ["MovieTitle7",6], ["MovieTitle8",7], ["MovieTitle10",8], ["MovieTitle6",9], ["MovieTitle9",10]]
-        self.assertIn(["newTitle", 11], main.updatePopularMoviesList(movieList, currentMovie), "updatePopularMoviesList function does not replace less popular movie in list with more popular movie when list is full")
 
 class TestGETMOVIE(unittest.TestCase):
     """A test class for the function getMovie"""
@@ -78,15 +73,22 @@ class TestGETMOVIE(unittest.TestCase):
         parsedArgs = main.Parser([])
         parsedArgs.title = ["Seabiscuit "]
         result = main.getMovie(parsedArgs)
-        self.assertEqual(result, data[349].getMovieInfo(), "Function does not correct for spaces at end of text")
+        cursor = rawData.connection.cursor()
+        cursor.execute("SELECT * FROM movies WHERE title = 'Seabiscuit'")
+        databaseSeabiscuit = list(cursor.fetchall()[0])
+        self.assertEqual(result, databaseSeabiscuit, "Function does not correct for spaces at end of text")
 
 class TestPROCESSING(unittest.TestCase):
     """A test class for the data"""
     def testDataset(self):
-        self.assertEqual(len(data), 22998, "Dataset not fully processed")
-        
+        cursor = rawData.connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM movies")
+        databaseCount = list(cursor.fetchall()[0])[0]
+        self.assertEqual(databaseCount, 22998, "Dataset not fully processed")
+         
 class testPARSER(unittest.TestCase):
-   """A test class for the Parser class"""
+    """A test class for the Parser class"""
+
     def testParseArgs(self):
         testString = ["-cast", "Ryan", "Gosling", "-year", "1969", "1984"]
         result = main.Parser(testString)
@@ -102,11 +104,12 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
         parsedArgs.title = ["Bangkok"]
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
-            #self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
+            self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
 
     def testParseAndSearch(self):
-       """checks that findMatchingMovies actually returns movies with titles containing the work 'Bangkok', 
-        #after first parsing the search term through our parser."""
+        """checks that findMatchingMovies actually returns movies with titles containing the work 'Bangkok', 
+        after first parsing the search term through our parser."""
+
         parsedArgs = main.Parser(["-title", "Bangkok"])
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
