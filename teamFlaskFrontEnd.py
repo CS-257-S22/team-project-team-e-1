@@ -20,11 +20,20 @@ def getHomepage():
 def getCategories():
     """@description: Loads dropdown categories for the homepage by taking in the dataset
     and running through the list of genres and ratings
-        @params:None-- initializeData takes in the data file
-        @return: genreList and ratingList, which are the full list of genres and ratings used in the table"""
+        @params:None
+        @return: genres and ratings, which are the full list of genres and ratings used in the table"""
     genres = []
     ratings = []
     cursor = streamingDatabase.connection.cursor()
+    ratings = getRatings(cursor)
+    genres = getGenres(cursor)
+    return genres, ratings
+
+def getRatings(cursor):
+    """@description: Helper function that loads list of unique ratings from database
+        @params:Cursor pointing to database
+        @returns: ratings"""
+    ratings = []
     ratingQuery = "SELECT rating FROM movies"
     cursor.execute(ratingQuery)
     ratingAggregate = list(cursor.fetchall())
@@ -34,23 +43,41 @@ def getCategories():
             rating = rating.strip()
             if rating not in ratings:
                 ratings.append(rating)
+    return ratings
+
+def getGenres(cursor):
+    """@description: Helper function that loads list of unique genres from database
+        @params:Cursor pointing to database
+        @returns: genres"""
+    genres = []
     genreQuery = "SELECT genre FROM movies"
     cursor.execute(genreQuery)
     genreAggregate = list(cursor.fetchall())
+    genres = makeUniqueGenreList(genreAggregate)
+    return genres
+
+
+def makeUniqueGenreList(genreAggregate):
+    """@description: Helper function for getGenres that processes tuples and lists within lists
+    to put all genres in a single list 
+        @params:Aggregate of each movie's genre label
+        @returns: List of unique genre labels"""
+    genres = []
     for genre in genreAggregate:
         genre = ', '.join(genre)
         if ',' in genre:
-           genreGrouping = genre.split(',')
-           for genre in genreGrouping:
-               genre = genre.strip() 
-               if genre not in genres:
+            genreGrouping = genre.split(',')
+            for genre in genreGrouping:
+                genre = genre.strip() 
+                if genre not in genres:
                     genres.append(genre)  
         else:
             genre = genre.strip()
             if genre not in genres:
                 genres.append(genre)
-    
-    return genres, ratings
+    return genres
+
+
 
 
 homepage_message = str(getHomepage())
@@ -88,14 +115,14 @@ def functionSwitchboard():
         cast = request.args['castChoice']
         country = request.args['countryChoice']
         year = request.args['yearChoice']
-        rating = request.args['Rating']
+        rating = request.args['rating']
         streaming = request.args['Streaming']        
         parsedArgs = main.Parser(["-ti", title, "-g", genre, "-di", director, "-ty", entertainment, 
         "-ca", cast, "-co", country, "-y", year, "-r", rating, "-ser", streaming])
         if request.args['randomnessChoice'] == "Random":
             movieInfo = main.getRandomMovie(parsedArgs)
             if movieInfo != []:
-                movies = [movieInfo[2]]
+                movies = [movieInfo[1]]
                 message = ""  
             else: 
                 movies = []
