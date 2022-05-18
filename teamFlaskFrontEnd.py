@@ -95,7 +95,7 @@ def functionSwitchboard():
         if request.args['randomnessChoice'] == "Random":
             movieInfo = main.getRandomMovie(parsedArgs)
             if movieInfo != []:
-                movies = [movieInfo[2]]
+                movies = [movieInfo[1]]
                 message = ""  
             else: 
                 movies = []

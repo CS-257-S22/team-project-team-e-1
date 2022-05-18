@@ -78,161 +78,15 @@ class DataSource:
             cursor.execute(query,)
             return(cursor.fetchall())
         except Exception as e:
-            print("ERROR:Title not found.", file = sys.stderr)
+            print("ERROR: Parsed Args.", file = sys.stderr)
             sys.exit()
             return None
-
-class Movie:
-
-    '''a class to store movie information in a neat organized fashion '''
-
-    #creates a movie object
-    def __init__(self, movieInfo):
-        self.movieInfo = movieInfo
-        self.type = movieInfo[1]
-        self.title = movieInfo[2]
-        self.director = movieInfo[3]
-        self.cast = movieInfo[4]
-        self.country = movieInfo[5]
-        self.date_added = movieInfo[6]
-        self.release_year = movieInfo[7]
-        self.rating = movieInfo[8]
-        self.duration = movieInfo[9]
-        self.listed_in = movieInfo[10]
-        self.description = movieInfo[11]
-        self.service = movieInfo[12]
-
-    #methods to get info about a particular movie
-    def getMovieInfo(self):
-        return self.movieInfo
-    def getType(self):
-        return self.type
-    def getTitle(self):
-        return self.title
-    def getDirector(self):
-        return self.director
-    def getCast(self):
-        return self.cast
-    def getCountry(self):
-        return self.country
-    def getDateAdded(self):
-        return self.date_added
-    def getYear(self):
-        return self.release_year
-    def getRating(self):
-        return self.rating
-    def getDuration(self):
-        return self.duration
-    def getListedIn(self):
-        return self.listed_in
-    def getDescription(self):
-        return self.description
-    def getService(self):
-        return self.service
-
     
-
-def initializeData():
-    """
-    @description: initializes the dataset by pulling from csv, making movie objects, and putting them into an array.
-    **THIS DOES NOT INCLUDE HEADER**
-    @params: None
-    @returns: None
-    """
-    #with open('Data/streaming_services.csv', newline='') as csvfile:
-        #data = csv.reader(csvfile)
-        #movieArray = []
-        #next(data)
-        #for movie in data:
-            #movieObject = Movie(movie)
-            #if "min" in movieObject.rating or "Season" in movieObject.rating:
-                #movieObject.rating = "NR"
-            #movieArray.append(movieObject)
-
-    #return movieArray
-
-
-def getMovie(parsedArgs):
-    """
-                  getMovie
-
-        @description: takes in a movie title, initializes the data, and searches for and returns a list containing all the info 
-        pertaining to that movie
-        @params: title - a str that provides the title of the movie
-        @returns: movieInfo - a list that has the information of a movie
-    """
-    if (len(parsedArgs.title) < 1):
-        printUsage("getMovie")
-    title = parsedArgs.getTitle()[0] 
-    title = title.strip()
-    if len(title)==0:
-        print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
-    database = DataSource()
-    movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
-    return movieInformation #Definitely clearer, not sure if it's actually less code
-
-
-
-
-def getRandomMovie(parsedArgs):
-    """
-        @description: gives a random movie suggestion based off given criteria (uses getMovie and findMatchingMovies)
-        @params: parsedArgs - a Parser object containing the search criteria as specified in the command line
-        @returns:  getMovie - a list of the movie info using the function getMovie() as a helper
-    """
-    movieArray = initializeData()
-    #first check if there are no args
-    if parsedArgs.isEmpty():
-        randInt = random.randint(0,len(movieArray)-1)
-        #also return it for testing
-        return getMovie(movieArray[randInt].getTitle())
-    
-    else:
-        #filter data using criteria in arguments (if no args, full data is used)
-        filteredMovies = findMatchingMovies(parsedArgs)
-        #generate random number for this filter data
-        if len(filteredMovies) == 0:
-            return []
-        randInt = random.randint(0,len(filteredMovies) - 1)
-        #return/print the random movie from the subsetted data
-        parsedArgs = Parser(["-ti", filteredMovies[randInt]])
-        return getMovie(parsedArgs)
-
-
-def getPopularMovies():
-    """
-        @description: gives the most popular movie suggestions based off how often they have been searched for using getMovie and getRandomMovie
-        @params: None
-        @returns: finishedPopularMoviesList - a list of the top 10 most popular movies as recorded in the popularTitles.txt 
-        using the helper function finishedPopularMoviesList
-    """
-    database = DataSource()
-    popularMovieList = list(database.getTopTenMovies())
-    return popularMovieList
-
-
-def increaseMoviePopularity(movieTitle):
-    """
-        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity by 1)
-        @params: movieTitle - the movie that was just searched for in getMovie()
-        @returns: None
-    """
-    database = DataSource()
-    database.incrementMoviePopularity(movieTitle)
-
-
-def isCategory(category):
-    """
-        @description: Helper function for Parser class - helps determine if a category is one of the listed headings in the dataset
-        @params: category - given category shorthand we are testing
-        @returns: Boolean representing if the category was valid or not
-    """
-    if category in ["-ty","-type", "-ti",
-        "-title", "-di", "-director", "-ca","-a", 
-        "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description","-ser","-service"]:
-        return True
-    return False
-
+    def getAllMovies(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM movies")
+        allMovies = cursor.fetchall()
+        return allMovies
 
 
 class Parser:
@@ -323,6 +177,88 @@ class Parser:
         return self.noArgs
 
 
+def getMovie(parsedArgs):
+    """
+                  getMovie
+
+        @description: takes in a movie title, initializes the data, and searches for and returns a list containing all the info 
+        pertaining to that movie
+        @params: title - a str that provides the title of the movie
+        @returns: movieInfo - a list that has the information of a movie
+    """
+    if (len(parsedArgs.title) < 1):
+        printUsage("getMovie")
+    title = parsedArgs.getTitle()[0] 
+    title = title.strip()
+    if len(title)==0:
+        print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
+    database = DataSource()
+    movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
+    return movieInformation #Definitely clearer, not sure if it's actually less code
+
+
+
+
+def getRandomMovie(parsedArgs):
+    """
+        @description: gives a random movie suggestion based off given criteria (uses getMovie and findMatchingMovies)
+        @params: parsedArgs - a Parser object containing the search criteria as specified in the command line
+        @returns:  getMovie - a list of the movie info using the function getMovie() as a helper
+    """
+    
+    if parsedArgs.isEmpty():
+        database = DataSource()
+        movieArray = database.getAllMovies()
+        randInt = random.randint(0,len(movieArray)-1)
+        return self.getMovie(movieArray[randInt].getTitle())
+    
+    else:
+        filteredMovies = findMatchingMovies(parsedArgs)
+        print(filteredMovies[0])
+        if len(filteredMovies) == 0:
+            return []
+        randInt = random.randint(0,len(filteredMovies) - 1)
+        
+        parsedArgs = Parser(["-ti", filteredMovies[randInt]])
+        return getMovie(parsedArgs)
+
+
+def getPopularMovies():
+    """
+        @description: gives the most popular movie suggestions based off how often they have been searched for using getMovie and getRandomMovie
+        @params: None
+        @returns: finishedPopularMoviesList - a list of the top 10 most popular movies as recorded in the popularTitles.txt 
+        using the helper function finishedPopularMoviesList
+    """
+    database = DataSource()
+    popularMovieList = list(database.getTopTenMovies())
+    return popularMovieList
+
+
+def increaseMoviePopularity(movieTitle):
+    """
+        @description: Helper function for getMovie() - Updates popularTitles.txt when a movie is viewed (increases movie's popularity by 1)
+        @params: movieTitle - the movie that was just searched for in getMovie()
+        @returns: None
+    """
+    database = DataSource()
+    database.incrementMoviePopularity(movieTitle)
+
+
+def isCategory(category):
+    """
+        @description: Helper function for Parser class - helps determine if a category is one of the listed headings in the dataset
+        @params: category - given category shorthand we are testing
+        @returns: Boolean representing if the category was valid or not
+    """
+    if category in ["-ty","-type", "-ti",
+        "-title", "-di", "-director", "-ca","-a", 
+        "-cast","-co","-country","-da","-date_added", "-y", "-year", "-r", "-rating","-du","-duration","-g","-genre","-de","-description","-ser","-service"]:
+        return True
+    return False
+
+
+
 def findMatchingMovies(parsedArgs):
     """
         @description: gives a list of all movies matching the given filters; does an AND search, so any title returned
@@ -340,6 +276,8 @@ def findMatchingMovies(parsedArgs):
         titles.append(title)
         i = i + 1
     return titles
+
+
 def Usage():
     """
         @description: Loads the usage statement as an array so that we may index the txt file
@@ -354,6 +292,7 @@ def Usage():
          line = f.readline()
         
         return usageArray
+
 
 def printUsage(functionName):
     """
