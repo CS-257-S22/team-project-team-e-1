@@ -32,7 +32,7 @@ class DataSource:
         except Exception as e:
             print("ERROR:Title not found.", file = sys.stderr)
             sys.exit(title)
-            return None
+            
         
     def getTopTenMovies(self):
         """
@@ -95,7 +95,7 @@ class DataSource:
         except Exception as e:
             print("ERROR: Parsed Args.", file = sys.stderr)
             sys.exit()
-            return None
+            
     
     def getAllMovies(self):
         """
@@ -114,7 +114,8 @@ class Parser:
        @args: command line filters inputted by the user at runtime
        @returns: None: creates object containing the inputted category and criterion'''
     def __init__(self, args):
-        self.noArgs = True
+        self.numArgs = len(args)
+        self.noArgs = self.numArgs==0
         self.type = []
         self.title = []
         self.director = []
@@ -128,14 +129,13 @@ class Parser:
         self.description = []
         self.service = []
 
-        if len(args)>0:
-            self.noArgs = False
+        
         i = 0
-        while i < len(args):
+        while i < numArgs:
             if isCategory(args[i]):
                 category = args[i]
                 i += 1
-                while (i < len(args)) and not isCategory(args[i]):
+                while (i < numArgs) and not isCategory(args[i]):
                     if category in ["-ty","-type"]:
                         self.type.append(args[i])
                     elif category in ["-ti","-title"]:
@@ -397,8 +397,6 @@ def main():
     functionName = sys.argv[1]
     parsedArgs = Parser(sys.argv[2:])
     if functionName == "getMovie":
-        if (len(sys.argv) < 3):
-            printUsage("getMovie")
         if (len(sys.argv) < 3):
             printUsage("getMovie")
         print(getMovie(parsedArgs))
