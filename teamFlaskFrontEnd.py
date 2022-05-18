@@ -88,7 +88,7 @@ def functionSwitchboard():
         cast = request.args['castChoice']
         country = request.args['countryChoice']
         year = request.args['yearChoice']
-        rating = request.args['Rating']
+        rating = request.args['rating']
         streaming = request.args['Streaming']        
         parsedArgs = main.Parser(["-ti", title, "-g", genre, "-di", director, "-ty", entertainment, 
         "-ca", cast, "-co", country, "-y", year, "-r", rating, "-ser", streaming])
