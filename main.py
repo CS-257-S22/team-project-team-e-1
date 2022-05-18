@@ -210,6 +210,7 @@ def getMovie(parsedArgs):
     title = title.strip()
     if len(title)==0:
         print("ERROR: Function getMovie needs a title argument (-ti \"title\"). ")
+        sys.exit(title)
     database = DataSource()
     movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
     return movieInformation #Definitely clearer, not sure if it's actually less code
@@ -365,23 +366,16 @@ def printUsage(functionName):
             print(usage[i])
     sys.exit(sys.argv)
 
-
-def main():
-    """
-        @description: our main method that runs when main.py is called; checks if user input is incomplete and calls an error, 
-        if not puts arguments into the Parser class and calls the correct function
-        @params: None
-        @returns: None
-    """
+def processUsage(system_args):
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
     #print usage statements
-    if(len(sys.argv) < 2):
+    if(len(system_args) < 2):
         printUsage("general")
-    if (sys.argv[1] not in potentialFunctions):
-        if sys.argv[1] in ["help", "-help", "usage", "-usage"]:
-            if(len(sys.argv) < 3):
+    if (system_args[1] not in potentialFunctions):
+        if system_args[1] in ["help", "-help", "usage", "-usage"]:
+            if(len(system_args) < 3):
                 printUsage("general")
-            functionName = sys.argv[2]
+            functionName = system_args[2]
             if functionName in potentialFunctions:
                 printUsage(functionName)
             if functionName == "filters":
@@ -391,13 +385,11 @@ def main():
         else:
             printUsage("general")
 
-        
-
-    #pull function and args
-    functionName = sys.argv[1]
-    parsedArgs = Parser(sys.argv[2:])
+def callFunction(system_args):
+    functionName = system_args[1]
+    parsedArgs = Parser(system_args[2:])
     if functionName == "getMovie":
-        if (len(sys.argv) < 3):
+        if (len(system_args) < 3):
             printUsage("getMovie")
         print(getMovie(parsedArgs))
     elif functionName == "findMatchingMovies":
@@ -409,6 +401,21 @@ def main():
     else:
         print("You should not be here... it is not possible. You have broken logic.", file = sys.stderr)
         sys.exit(functionName)
+
+
+def main():
+    """
+        @description: our main method that runs when main.py is called; checks if user input is incomplete and calls an error, 
+        if not puts arguments into the Parser class and calls the correct function
+        @params: None
+        @returns: None
+    """
+    potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
+    if (len(sys.argv < 2) or sys.argv[1] not in potentialFunctions):
+        processUsage(sys.argv)
+    else:
+        callFunction(sys.argv)
+    #pull function and args
 
 
 if __name__ == '__main__':
