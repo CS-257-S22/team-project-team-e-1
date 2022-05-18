@@ -40,7 +40,10 @@ class DataSource:
         topTenMovies = cursor.fetchall()
         return topTenMovies
 
-
+    def incrementMoviePopularity(title):
+        cursor = self.connection.cursor()
+        cursor.execute("UPDATE populartitles SET popularity = popularity+1 WHERE title = %s")
+        
     def findMatchingMoviesHelper(self, parsedArgs):
         query = "SELECT * FROM movies WHERE"
         
@@ -214,27 +217,8 @@ def increaseMoviePopularity(movieTitle):
         @params: movieTitle - the movie that was just searched for in getMovie()
         @returns: None
     """
-    file = open('popularTitles.txt', 'r')
-    allMoviesList = file.readlines()
-    
-    movieNewPopularity = ""
-    counter = 0
-
-    #finds the movie that was viewed and adds 1 to its popularity tracker
-    for movieInfo in allMoviesList:
-        tempMovieInfo = movieInfo.split('|')
-        if movieTitle == tempMovieInfo[1]:
-            tempMovieInfo[2] = int(tempMovieInfo[2]) + 1
-            tempMovieInfo[2] = str(tempMovieInfo[2])
-            movieNewPopularity = '|'.join(tempMovieInfo)
-            break
-        counter += 1 
-          
-    #rewrites the popularTitles file to reflect the viewed movie's new popularity tracker
-    allMoviesList[counter] = movieNewPopularity
-    file = open('popularTitles.txt', 'w')
-    file.writelines(allMoviesList)  
-    file.close()        
+    database = DataSource()
+    database.incrementMoviePopularity(movieTitle)
 
 
 def isCategory(category):
