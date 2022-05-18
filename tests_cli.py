@@ -42,11 +42,6 @@ class TestGettingPopularMovies(unittest.TestCase):
         popularMovie = 'Jaws'
         self.assertIn(popularMovie, main.getPopularMovies())
 
-    '''def test_sortingAlgorithmHelper(self):
-        """checks if the bubble sort algorithm works correctly on the list it's given"""
-        testList = [['MovieTitle1',1], ["MovieTitle2",4], ["MovieTitle3",3], ["MovieTitle4",5], ["MovieTitle5",2]]
-        sortedtestList = [["MovieTitle1",1], ["MovieTitle5",2], ["MovieTitle3",3], ["MovieTitle2",4], ["MovieTitle4",5]]
-        self.assertEqual(main.bubble_sort(testList), sortedtestList, "Sorting algorithm does not return sorted list")'''
     
 
 class TestGETMOVIE(unittest.TestCase):
