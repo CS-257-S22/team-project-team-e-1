@@ -261,7 +261,7 @@ def isCategory(category):
 
 def findMatchingMovies(parsedArgs):
     """
-        @description: gives a list of all movies matching the given filters; does an AND search, so any title returned
+        @description: gives a list of titles of movies matching the given filters; does an AND search, so any title returned
         must match all of the criteria
         @params: parsedArgs - the filters we are searching for
         @returns: matchingMovies - a list of movies matching the criteria
@@ -270,6 +270,7 @@ def findMatchingMovies(parsedArgs):
     movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
     titles = []
     i = 0
+    #helper fcn lists of tuples containing all the info for each movie, and we just want the title
     while i < len(movies):
         movie = list(movies[i])
         title = movie[1]
