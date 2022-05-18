@@ -72,7 +72,7 @@ def moviePage():
     title = request.args['title']
     parsedArgs = main.Parser(["-ti", title ])
     result = main.getMovie(parsedArgs)
-    return render_template('movieInfo.html', type = result[1], title = result[2], director = result[3], cast = result[4], locations = result[5], dateAdded = result[6], releaseYear = result[7], rating = result[8], runtime = result[9], genres = result[10], description = result[11], streamingService = result[12],logos = logosImg,links=logosLinks)
+    return render_template('movieInfo.html', type = result[0], title = result[1], director = result[2], cast = result[3], locations = result[4], dateAdded = result[5], releaseYear = result[6], rating = result[7], runtime = result[8], genres = result[9], description = result[10], streamingService = result[11],logos = logosImg,links=logosLinks)
 
 
 @app.route('/search', methods =['GET', 'POST']) 
