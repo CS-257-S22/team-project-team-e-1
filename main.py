@@ -98,6 +98,11 @@ class DataSource:
             return None
     
     def getAllMovies(self):
+        """
+            @description: Uses database query to retrieve all movies in the database
+            @params: None
+            @returns: allmovies - formatted to list of lists
+        """
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM movies")
         allMovies = cursor.fetchall()
@@ -286,6 +291,7 @@ def findMatchingMovies(parsedArgs):
 
 
 def formatToTitle(movies, isPopular):
+    """Helper method to change tupled list from database into list"""
     titles = []
     i = 0
     #helper fcn lists of tuples containing all the info for each movie, and we just want the title
@@ -297,6 +303,7 @@ def formatToTitle(movies, isPopular):
     return titles
 
 def formatToList(movies):
+    """Helper method to changed tupled list from database into list of lists"""
     allMovies = []
     i = 0
     #helper fcn lists of tuples containing all the info for each movie, and we just want the title
