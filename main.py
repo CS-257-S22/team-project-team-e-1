@@ -33,6 +33,46 @@ class DataSource:
             sys.exit(title)
             return None
 
+    def findMatchingMoviesHelper(self, parsedArgs):
+        query = "SELECT * FROM movies WHERE"
+        
+        matchingMovies = []
+        criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
+        categories = ["showtype", "title", "director", "actors", "country", "dateadded", "releaseyear", "rating", "duration", "genre", "synopsis", "platform"]
+        criteria[0] = parsedArgs.getType()
+        criteria[1] = parsedArgs.getTitle()
+        criteria[2] = parsedArgs.getDirector()
+        criteria[3] = parsedArgs.getCast()
+        criteria[4] = parsedArgs.getCountry()
+        criteria[5] = parsedArgs.getDateAdded()
+        criteria[6] = parsedArgs.getYear()
+        criteria[7] = parsedArgs.getRating()
+        criteria[8] = parsedArgs.getDuration()
+        criteria[9] = parsedArgs.getListedIn()
+        criteria[10] = parsedArgs.getDescription()
+        criteria[11] = parsedArgs.getService()
+ 
+        firstCategory = True
+        for i in range(11):
+            if criteria[i] != []:
+                if firstCategory:
+                    query = query + " {} LIKE '%{}%'"
+                    query = query.format(categories[i], criteria[i][0])
+                    firstCategory = False    
+                else:        
+                    query = query + " AND {} LIKE '%{}%'"
+                    query = query.format(categories[i], criteria[i][0])
+        print(query)
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query,)
+            print(cursor.fetchall())
+            return(cursor.fetchall())
+        except Exception as e:
+            print("ERROR:Title not found.", file = sys.stderr)
+            sys.exit()
+            return None
+
 class Movie:
 
     '''a class to store movie information in a neat organized fashion '''
@@ -377,6 +417,7 @@ def findMatchingMovies(parsedArgs):
         @params: parsedArgs - the filters we are searching for
         @returns: matchingMovies - a list of movies matching the criteria
     """
+    """
     movieArray = initializeData()
 
     matchingMovies = []
@@ -417,6 +458,9 @@ def findMatchingMovies(parsedArgs):
         index += 1
 
     return matchingMovies
+    """
+    dataSource = DataSource()
+    return dataSource.findMatchingMoviesHelper(parsedArgs)
 
 def Usage():
     """
