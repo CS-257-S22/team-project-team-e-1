@@ -131,11 +131,11 @@ class Parser:
 
         
         i = 0
-        while i < numArgs:
+        while i < self.numArgs:
             if isCategory(args[i]):
                 category = args[i]
                 i += 1
-                while (i < numArgs) and not isCategory(args[i]):
+                while (i < self.numArgs) and not isCategory(args[i]):
                     if category in ["-ty","-type"]:
                         self.type.append(args[i])
                     elif category in ["-ti","-title"]:
@@ -411,7 +411,7 @@ def main():
         @returns: None
     """
     potentialFunctions = ["getMovie", "findMatchingMovies", "getRandomMovie", "getPopularMovies"]
-    if (len(sys.argv < 2) or sys.argv[1] not in potentialFunctions):
+    if (len(sys.argv) < 2 or sys.argv[1] not in potentialFunctions):
         processUsage(sys.argv)
     else:
         callFunction(sys.argv)
