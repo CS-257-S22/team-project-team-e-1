@@ -6,7 +6,7 @@ CREATE TABLE movies (
   actors text,
   country text,
   dateadded text,
-  releaseyear text,
+  releaseyear int,
   rating text,
   duration text,
   genre text,
