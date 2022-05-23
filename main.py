@@ -62,24 +62,12 @@ class DataSource:
             @returns: movies - the tupled list of matching movies
         """
         query = "SELECT * FROM movies WHERE"
-        
-        criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
-        categories = ["showtype", "title", "director", "actors", "country", "dateadded", "releaseyear", "rating", "duration", "genre", "synopsis", "platform"]
-        criteria[0] = parsedArgs.getType()
-        criteria[1] = parsedArgs.getTitle()
-        criteria[2] = parsedArgs.getDirector()
-        criteria[3] = parsedArgs.getCast()
-        criteria[4] = parsedArgs.getCountry()
-        criteria[5] = parsedArgs.getDateAdded()
-        criteria[6] = parsedArgs.getYear()
-        criteria[7] = parsedArgs.getRating()
-        criteria[8] = parsedArgs.getDuration()
-        criteria[9] = parsedArgs.getListedIn()
-        criteria[10] = parsedArgs.getDescription()
-        criteria[11] = parsedArgs.getService()
  
+        categories = parsedArgs.getCategories()
+        criteria = parsedArgs.getArgs()
+
         firstCategory = True
-        for i in range(11):
+        for i in range(len(categories)-1):
             if criteria[i] != []:
                 if firstCategory:
                     query = query + " {} ILIKE '%{}%'"
@@ -199,7 +187,24 @@ class Parser:
         return self.service
     def isEmpty(self):
         return self.noArgs
-
+    def getArgs(self):
+        criteria = [[], [], [], [], [], [], [], [], [], [], [], []]
+        criteria[0] = self.getType()
+        criteria[1] = self.getTitle()
+        criteria[2] = self.getDirector()
+        criteria[3] = self.getCast()
+        criteria[4] = self.getCountry()
+        criteria[5] = self.getDateAdded()
+        criteria[6] = self.getYear()
+        criteria[7] = self.getRating()
+        criteria[8] = self.getDuration()
+        criteria[9] = self.getListedIn()
+        criteria[10] = self.getDescription()
+        criteria[11] = self.getService()
+        return criteria
+    def getCategories(self):
+        categories = ["showtype", "title", "director", "actors", "country", "dateadded", "releaseyear", "rating", "duration", "genre", "synopsis", "platform"]
+        return categories
 
 def getMovie(parsedArgs):
     """
