@@ -46,14 +46,14 @@ class DataSource:
 
         return topTenMovies
 
-    def incrementMoviePopularity(title):
+    def incrementMoviePopularity(self,title):
         """
             @description: Uses database query to increment popularity of 
             @params: title - the movie that was just searched for in getMovie()
             @returns: None
         """
         cursor = self.connection.cursor()
-        cursor.execute("UPDATE populartitles SET popularity = popularity+1 WHERE title = %s")
+        cursor.execute("UPDATE populartitles SET popularity = popularity + 1 WHERE title = %s",(title,))
         
     def findMatchingMoviesHelper(self, parsedArgs):
         """
@@ -228,7 +228,7 @@ def getMovie(parsedArgs):
 
     database = DataSource()
     movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
-    #increaseMoviePopularity(title)
+    increaseMoviePopularity(title)
     return movieInformation #Definitely clearer, not sure if it's actually less code
 
 
