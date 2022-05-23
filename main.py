@@ -86,7 +86,7 @@ class DataSource:
 
         return movies 
     
-    def getAllMovies(self):
+    def getAllMovies(self, returnTitles=False):
         """
             @description: Uses database query to retrieve all movies in the database
             @params: None
@@ -95,7 +95,7 @@ class DataSource:
         cursor = self.connection.cursor()
         cursor.execute("SELECT * FROM movies")
         allMovies = cursor.fetchall()
-        return formatToList(allMovies,returnTitles=False,isPopular=False)
+        return formatToList(allMovies,returnTitles=returnTitles,isPopular=False)
 
 
 class Parser:
@@ -241,8 +241,7 @@ def getRandomMovie(parsedArgs):
     
     if parsedArgs.isEmpty():
         database = DataSource()
-        movies = database.getAllMovies()
-        movieArray = formatToList(movies,returnTitles=True,isPopular=False)
+        movieArray = database.getAllMovies(returnTitles=True)
     else:
         movieArray = findMatchingMovies(parsedArgs)
     

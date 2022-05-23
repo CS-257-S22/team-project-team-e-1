@@ -27,7 +27,9 @@ def getCategories():
     cursor = streamingDatabase.connection.cursor()
     ratings = getRatings(cursor)
     genres = getGenres(cursor)
-    return genres, ratings
+    release_year = getYears(cursor)
+    movies = streamingDatabase.getAllMovies(returnTitles=True)
+    return genres, ratings, release_year, movies
 
 def getRatings(cursor):
     """@description: Helper function that loads list of unique ratings from database
@@ -56,6 +58,15 @@ def getGenres(cursor):
     genres = makeUniqueGenreList(genreAggregate)
     return genres
 
+def getYears(cursor):
+    """@description: Helper function that loads list of unique ratings from database
+        @params:Cursor pointing to database
+        @returns: ratings"""
+
+    yearQuery = "SELECT releaseyear FROM movies"
+    cursor.execute(yearQuery)
+    years = main.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
+    return sorted(makeUniqueGenreList(years),reverse=True)
 
 def makeUniqueGenreList(genreAggregate):
     """@description: Helper function for getGenres that processes tuples and lists within lists
@@ -87,9 +98,9 @@ def homepage():
     for the homepage with those inputs
         @params:None
         @return: Formatted home page with search form and popular movies"""
-    genreList, ratingList = getCategories()
+    genreList, ratingList, releaseyears, movies = getCategories()
     topFilms = main.getPopularMovies()[0:3]
-    return render_template("home.html", genreList = genreList, ratingList = ratingList, topFilms = topFilms)
+    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, topFilms = topFilms)
 
 @app.route('/moviepage')
 def moviePage():

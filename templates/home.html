@@ -2,6 +2,14 @@
     <head>
         <title>Streaming Database</title>
         <link rel="stylesheet" href="../static/homepage.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">  
+        </script>  
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">  
+        </script>  
+        
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+            rel="stylesheet" type="text/css" />  
     </head>
     <body>
         <div class="header" id="header">
@@ -16,9 +24,21 @@
                 <form id="form" action="search">
                     <div class="label">
                         <label for="title">Title</label>
-                        <input type="search" id="title" name="titleChoice"
+                        <input type="search" id="tags" name="titleChoice"
                         placeholder="Search..."
                         aria-label="Enter a title of a movie or tv show">
+                        <script>
+                            $( function() {
+                              var availableTags = [
+                                  {% for movie in movieList %}
+                                      "{{movie}}",
+                                  {% endfor %}
+                              ];
+                              $( "#tags" ).autocomplete({
+                                source: availableTags
+                              });
+                            } );
+                            </script>
                     </div>
                     <div class="label">
                         <label for="genre">Genre</label>
@@ -57,9 +77,12 @@
                     </div>
                     <div class="label">
                         <label for ="year">Release Year</label>
-                        <input type="search" id="year" name="yearChoice"
-                    placeholder="Search..."
-                    aria-label="Enter a year to filter">
+                        <select name="yearChoice">
+                            <option value=""> </option>  
+                            {% for year in yearList: %}
+                                <option value ="{{year}}">{{year}}</option>
+                            {% endfor %} 
+                        </select>
                     </div>
                     
                     <div class="label">
