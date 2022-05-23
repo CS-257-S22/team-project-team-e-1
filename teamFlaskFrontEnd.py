@@ -28,13 +28,15 @@ def getCategories():
     ratings = getRatings(cursor)
     genres = getGenres(cursor)
     release_year = getYears(cursor)
+    countries = getCountries(cursor)
     movies = streamingDatabase.getAllMovies(returnTitles=True)
-    return genres, ratings, release_year, movies
+    return genres, ratings, release_year, movies, countries
 
 def getRatings(cursor):
     """@description: Helper function that loads list of unique ratings from database
         @params:Cursor pointing to database
-        @returns: ratings"""
+        @returns: ratings
+    """
     ratings = []
     ratingQuery = "SELECT rating FROM movies"
     cursor.execute(ratingQuery)
@@ -49,44 +51,57 @@ def getRatings(cursor):
 
 def getGenres(cursor):
     """@description: Helper function that loads list of unique genres from database
-        @params:Cursor pointing to database
-        @returns: genres"""
+        @params: Cursor pointing to database
+        @returns: list of all genres
+    """
     genres = []
     genreQuery = "SELECT genre FROM movies"
     cursor.execute(genreQuery)
     genreAggregate = list(cursor.fetchall())
-    genres = makeUniqueGenreList(genreAggregate)
-    return genres
+    return makeUniqueList(genreAggregate, reverse = False)
 
 def getYears(cursor):
-    """@description: Helper function that loads list of unique ratings from database
-        @params:Cursor pointing to database
-        @returns: ratings"""
+    """@description: Helper function that loads list of unique years from database
+        @params: Cursor pointing to database
+        @returns: list of all release years
+    """
 
     yearQuery = "SELECT releaseyear FROM movies"
     cursor.execute(yearQuery)
     years = main.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
-    return sorted(makeUniqueGenreList(years),reverse=True)
+    return makeUniqueList(years, reverse = True)
 
-def makeUniqueGenreList(genreAggregate):
-    """@description: Helper function for getGenres that processes tuples and lists within lists
-    to put all genres in a single list 
+def getCountries(cursor):
+    """@description: Helper function that loads list of unique countries from database
+        @params:Cursor pointing to database
+        @returns: list of all countries
+    """
+
+    countryQuery = "SELECT country FROM movies"
+    cursor.execute(countryQuery)
+    countries = main.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
+    return makeUniqueList(countries, reverse = False)
+
+def makeUniqueList(messyList, reverse = False):
+    """@description: Helper function for getGenres and getYears that processes tuples and lists within lists
+    to put all items in a single list 
         @params:Aggregate of each movie's genre label
         @returns: List of unique genre labels"""
-    genres = []
-    for genre in genreAggregate:
-        genre = ', '.join(genre)
-        if ',' in genre:
-            genreGrouping = genre.split(',')
-            for genre in genreGrouping:
-                genre = genre.strip() 
-                if genre not in genres:
-                    genres.append(genre)  
+    uniquelist = []
+    messyList = [list(filter(None, i)) for i in messyList]
+    for item in messyList:
+        item = ', '.join(item)
+        if ',' in item:
+            itemGrouping = item.split(',')
+            for item in itemGrouping:
+                item = item.strip() 
+                if item not in uniquelist:
+                    uniquelist.append(item)  
         else:
-            genre = genre.strip()
-            if genre not in genres:
-                genres.append(genre)
-    return genres
+            item = item.strip()
+            if item not in uniquelist:
+                uniquelist.append(item)
+    return sorted(uniquelist,reverse=reverse)
 
 
 
@@ -98,9 +113,9 @@ def homepage():
     for the homepage with those inputs
         @params:None
         @return: Formatted home page with search form and popular movies"""
-    genreList, ratingList, releaseyears, movies = getCategories()
+    genreList, ratingList, releaseyears, movies, countries = getCategories()
     topFilms = main.getPopularMovies()[0:3]
-    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, topFilms = topFilms)
+    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, countryList = countries, topFilms = topFilms)
 
 @app.route('/moviepage')
 def moviePage():

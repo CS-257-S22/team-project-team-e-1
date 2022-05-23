@@ -71,9 +71,12 @@
                     </div>
                     <div class="label">
                         <label for ="country">Filming Location(country)</label>
-                        <input type="search" id="country" name="countryChoice"
-                        placeholder="Search..."
-                        aria-label="Enter a filming location(country)">
+                        <select name="countryChoice">
+                            <option value=""> </option>  
+                            {% for country in countryList: %}
+                                <option value ="{{country}}">{{country}}</option>
+                            {% endfor %} 
+                        </select>
                     </div>
                     <div class="label">
                         <label for ="year">Release Year</label>

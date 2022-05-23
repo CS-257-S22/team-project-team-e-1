@@ -228,7 +228,7 @@ def getMovie(parsedArgs):
 
     database = DataSource()
     movieInformation = database.searchByTitle(title) #need to call dataSearch before increaseMoviePopularity
-    increaseMoviePopularity(title)
+    #increaseMoviePopularity(title)
     return movieInformation #Definitely clearer, not sure if it's actually less code
 
 
