@@ -90,11 +90,11 @@ class DataSource:
             if criteria[i] != []:
                 if firstCategory:
                     query = query + " {} ILIKE '%{}%'"
-                    query = query.format(categories[i], criteria[i][0])
+                    query = query.format(categories[i], str(criteria[i][0]))
                     firstCategory = False    
                 else:        
                     query = query + " AND {} ILIKE '%{}%'"
-                    query = query.format(categories[i], criteria[i][0])
+                    query = query.format(categories[i], str(criteria[i][0]))
         try:
             cursor = self.connection.cursor()
             cursor.execute(query,)
@@ -115,3 +115,14 @@ class DataSource:
         cursor.execute("SELECT * FROM movies")
         allMovies = cursor.fetchall()
         return formatToList(allMovies,returnTitles=returnTitles,isPopular=False)
+
+    def getAllTitles(self):
+        """
+            @description: Uses database query to retrieve all titles in the database
+            @params: None
+            @returns: alltitles - formatted to list of lists
+        """
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT title FROM movies")
+        allMovies = cursor.fetchall()
+        return formatToList(allMovies,returnTitles=False,isPopular=False)

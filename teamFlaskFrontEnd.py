@@ -9,6 +9,7 @@ app = Flask(__name__)
 logosImg = ["https://cdn.vox-cdn.com/thumbor/Yq1Vd39jCBGpTUKHUhEx5FfxvmM=/39x0:3111x2048/1200x800/filters:focal(39x0:3111x2048)/cdn.vox-cdn.com/uploads/chorus_image/image/49901753/netflixlogo.0.0.png","https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg","https://cdn.pastemagazine.com/www/articles/2019/10/18/disney-plus.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/2560px-Amazon_Prime_Video_logo.svg.png"]
 logosLinks = ["https://www.netflix.com/browse","https://www.hulu.com","https://www.disneyplus.com/","https://www.amazon.com/Amazon-Video/b/?ie=UTF8&node=2858778011&ref_=nav_cs_prime_video"]
 streamingDatabase = datasource.DataSource()
+
 def getHomepage():
     """
         @description: displays the homepage text as given by the usage_message.txt file
@@ -105,6 +106,7 @@ def makeUniqueList(messyList, reverse = False):
     uniquelist = []
     messyList = [list(filter(None, i)) for i in messyList]
     for item in messyList:
+        item = str(item)
         item = ', '.join(item)
         if ',' in item:
             itemGrouping = item.split(',')
@@ -120,7 +122,7 @@ def makeUniqueList(messyList, reverse = False):
 
 
 
-
+allCategories = getCategories()
 homepage_message = str(getHomepage())
 @app.route('/')
 def homepage():
@@ -128,7 +130,7 @@ def homepage():
     for the homepage with those inputs
         @params:None
         @return: Formatted home page with search form and popular movies"""
-    genreList, ratingList, releaseyears, movies, countries, cast = getCategories()
+    genreList, ratingList, releaseyears, movies, countries, cast = allCategories
     topFilms = main.getPopularMovies()[0:3]
     return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, countryList = countries, castList = cast, topFilms = topFilms)
 
@@ -158,7 +160,7 @@ def functionSwitchboard():
         country = request.args['countryChoice']
         year = request.args['yearChoice']
         rating = request.args['rating']
-        streaming = request.args['Streaming']        
+        streaming = request.args['Streaming']
         parsedArgs = main.Parser(["-ti", title, "-g", genre, "-di", director, "-ty", entertainment, 
         "-ca", cast, "-co", country, "-y", year, "-r", rating, "-ser", streaming])
         if request.args['randomnessChoice'] == "Random":
