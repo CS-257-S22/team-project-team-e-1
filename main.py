@@ -173,7 +173,7 @@ def getPopularMovies():
     database = datasource.DataSource()
     popularMovieList = database.getTopTenMovies()
 
-    return formatToList(popularMovieList,returnTitles=True,isPopular=True)
+    return datasource.formatToList(popularMovieList,returnTitles=True,isPopular=True)
 
 
 def increaseMoviePopularity(movieTitle):
@@ -208,27 +208,8 @@ def findMatchingMovies(parsedArgs):
     """
     dataSource = datasource.DataSource()
     movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
-    return formatToList(movies,returnTitles=True,isPopular=False)
+    return datasource.formatToList(movies,returnTitles=True,isPopular=False)
 
-
-def formatToList(movies, returnTitles, isPopular):
-    """
-        @description: Helper method to change tupled list from database into list
-        @params: a list of movies and a booleans indicating if we want to return only titles and if the list is from the popular data base
-        @returns: a list of all the titles or movies.
-    """
-    allMovies = []
-    i = 0
-    numMovies = len(movies)
-    #helper fcn lists of tuples containing all the info for each movie, and we just want the title
-    while i < numMovies:
-        movie = list(movies[i])
-        if returnTitles:
-            movie = movie[not isPopular]
-        allMovies.append(movie)
-        i = i + 1
-
-    return allMovies
 
 
 def Usage():

@@ -1,13 +1,14 @@
 import csv
 from flask import Flask, render_template, request
 import main
+import datasource
  
 
 
 app = Flask(__name__)
 logosImg = ["https://cdn.vox-cdn.com/thumbor/Yq1Vd39jCBGpTUKHUhEx5FfxvmM=/39x0:3111x2048/1200x800/filters:focal(39x0:3111x2048)/cdn.vox-cdn.com/uploads/chorus_image/image/49901753/netflixlogo.0.0.png","https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg","https://cdn.pastemagazine.com/www/articles/2019/10/18/disney-plus.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/2560px-Amazon_Prime_Video_logo.svg.png"]
 logosLinks = ["https://www.netflix.com/browse","https://www.hulu.com","https://www.disneyplus.com/","https://www.amazon.com/Amazon-Video/b/?ie=UTF8&node=2858778011&ref_=nav_cs_prime_video"]
-streamingDatabase = main.DataSource()
+streamingDatabase = datasource.DataSource()
 def getHomepage():
     """
         @description: displays the homepage text as given by the usage_message.txt file
@@ -29,8 +30,10 @@ def getCategories():
     genres = getGenres(cursor)
     release_year = getYears(cursor)
     countries = getCountries(cursor)
+    #cast = getCast(cursor)
+    cast = []
     movies = streamingDatabase.getAllMovies(returnTitles=True)
-    return genres, ratings, release_year, movies, countries
+    return genres, ratings, release_year, movies, countries, cast
 
 def getRatings(cursor):
     """@description: Helper function that loads list of unique ratings from database
@@ -60,6 +63,17 @@ def getGenres(cursor):
     genreAggregate = list(cursor.fetchall())
     return makeUniqueList(genreAggregate, reverse = False)
 
+def getCast(cursor):
+    """@description: Helper function that loads list of unique cast members from database
+        @params: Cursor pointing to database
+        @returns: list of all cast members
+    """
+    cast = []
+    castQuery = "SELECT actors FROM movies"
+    cursor.execute(castQuery)
+    castAggregate = list(cursor.fetchall())
+    return makeUniqueList(castAggregate, reverse = False)
+
 def getYears(cursor):
     """@description: Helper function that loads list of unique years from database
         @params: Cursor pointing to database
@@ -68,7 +82,7 @@ def getYears(cursor):
 
     yearQuery = "SELECT releaseyear FROM movies"
     cursor.execute(yearQuery)
-    years = main.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
+    years = datasource.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
     return makeUniqueList(years, reverse = True)
 
 def getCountries(cursor):
@@ -79,14 +93,15 @@ def getCountries(cursor):
 
     countryQuery = "SELECT country FROM movies"
     cursor.execute(countryQuery)
-    countries = main.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
+    countries = datasource.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
     return makeUniqueList(countries, reverse = False)
 
 def makeUniqueList(messyList, reverse = False):
-    """@description: Helper function for getGenres and getYears that processes tuples and lists within lists
-    to put all items in a single list 
+    """@description: Helper function for the "get" functions above that processes tuples and lists within lists
+        to put all items in a single list 
         @params:Aggregate of each movie's genre label
-        @returns: List of unique genre labels"""
+        @returns: List of unique genre labels
+    """
     uniquelist = []
     messyList = [list(filter(None, i)) for i in messyList]
     for item in messyList:
@@ -113,9 +128,9 @@ def homepage():
     for the homepage with those inputs
         @params:None
         @return: Formatted home page with search form and popular movies"""
-    genreList, ratingList, releaseyears, movies, countries = getCategories()
+    genreList, ratingList, releaseyears, movies, countries, cast = getCategories()
     topFilms = main.getPopularMovies()[0:3]
-    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, countryList = countries, topFilms = topFilms)
+    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, countryList = countries, castList = cast, topFilms = topFilms)
 
 @app.route('/moviepage')
 def moviePage():
