@@ -1,15 +1,15 @@
 DROP TABLE IF EXISTS movies;
 CREATE TABLE movies (
-  showtype text,
+  showtype char(10),
   title text,
-  director text,
+  director varchar(500),
   actors text,
-  country text,
-  dateadded text,
-  releaseyear int,
-  rating text,
-  duration text,
+  country varchar(500),
+  dateadded date,
+  releaseyear smallint,
+  rating char(10),
+  duration char(20),
   genre text,
   synopsis text,
-  platform text
+  platform char(30)
 );
