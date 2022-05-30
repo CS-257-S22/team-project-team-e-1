@@ -106,7 +106,7 @@ def makeUniqueList(messyList, reverse = False):
     uniquelist = []
     messyList = [list(filter(None, i)) for i in messyList]
     for item in messyList:
-        item = str(item)
+        item = item
         item = ', '.join(item)
         if ',' in item:
             itemGrouping = item.split(',')
@@ -222,4 +222,4 @@ def python_bug(e):
 
 
 if __name__ == '__main__':
-    app.run(port=5129, debug=True)
+    app.run(host="0.0.0.0",port=5129, debug=False)

@@ -101,6 +101,7 @@ class DataSource:
             movies = cursor.fetchall()
         except Exception as e:
             print("ERROR: Parsed Args.", file = sys.stderr)
+            print(e)
             sys.exit()
 
         return movies 
