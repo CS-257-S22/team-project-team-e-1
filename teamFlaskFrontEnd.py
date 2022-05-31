@@ -30,10 +30,10 @@ def getCategories():
     ratings = getRatings(cursor)
     genres = getGenres(cursor)
     release_year = getYears(cursor)
-    countries = getCountries(cursor)
     #cast = getCast(cursor)
     cast = []
     movies = makeUniqueList(streamingDatabase.getAllTitles(), reverse=False)
+    countries = getCountries(cursor)
     return genres, ratings, release_year, movies, countries, cast
 
 def getRatings(cursor):
@@ -106,7 +106,8 @@ def makeUniqueList(messyList, reverse = False):
     uniquelist = []
     messyList = [list(filter(None, i)) for i in messyList]
     for item in messyList:
-        item = item
+        if item==[]:
+            continue
         item = ', '.join(item)
         if ',' in item:
             itemGrouping = item.split(',')
@@ -132,7 +133,7 @@ def homepage():
         @return: Formatted home page with search form and popular movies"""
     genreList, ratingList, releaseyears, movies, countries, cast = allCategories
     topFilms = main.getPopularMovies()[0:3]
-    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, countryList = countries, castList = cast, topFilms = topFilms)
+    return render_template("home.html", genreList = genreList, ratingList = ratingList, yearList = releaseyears, movieList = movies, countryList = countries[1:], castList = cast, topFilms = topFilms)
 
 @app.route('/moviepage')
 def moviePage():
