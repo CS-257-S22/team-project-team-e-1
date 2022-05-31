@@ -86,8 +86,8 @@ class DataSource:
         criteria = parsedArgs.getArgs()
 
         firstCategory = True
-        for i in range(len(categories)-1):
-            if criteria[i] != []:
+        for i in range(len(categories)):
+            if criteria[i] != [] and criteria[i] != [''] :
                 if firstCategory:
                     query = query + " {} ILIKE '%{}%'"
                     query = query.format(categories[i], str(criteria[i][0]))
@@ -125,5 +125,5 @@ class DataSource:
         """
         cursor = self.connection.cursor()
         cursor.execute("SELECT title FROM movies")
-        allMovies = cursor.fetchall()
+        allMovies = list(cursor.fetchall())
         return formatToList(allMovies,returnTitles=False,isPopular=False)

@@ -33,7 +33,7 @@ def getCategories():
     countries = getCountries(cursor)
     #cast = getCast(cursor)
     cast = []
-    movies = streamingDatabase.getAllMovies(returnTitles=True)
+    movies = makeUniqueList(streamingDatabase.getAllTitles(), reverse=False)
     return genres, ratings, release_year, movies, countries, cast
 
 def getRatings(cursor):
@@ -174,6 +174,7 @@ def functionSwitchboard():
             keyword = "random matching movie"
         else:
             movies = main.findMatchingMovies(parsedArgs)
+            print(parsedArgs.getArgs())
             if len(movies) == 0:
                 message = "No results!"
             else:
@@ -222,4 +223,4 @@ def python_bug(e):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5129, debug=False)
+    app.run(host="0.0.0.0",port=5129, debug=True)
