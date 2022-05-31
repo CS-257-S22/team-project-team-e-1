@@ -151,7 +151,7 @@ def getRandomMovie(parsedArgs):
     
     if parsedArgs.isEmpty():
         database = datasource.DataSource()
-        movieArray = database.getAllMovies(returnTitles=True)
+        movieArray = database.getAllTitles()
     else:
         movieArray = findMatchingMovies(parsedArgs)
     
