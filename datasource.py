@@ -80,8 +80,10 @@ class DataSource:
             @params: parsedArgs - the filters we are searching for
             @returns: movies - the tupled list of matching movies
         """
-        query = "SELECT * FROM movies WHERE"
- 
+        query = "SELECT * FROM movies"
+        if not parsedArgs.isEmpty():
+            query = query + " WHERE"
+
         categories = parsedArgs.getCategories()
         criteria = parsedArgs.getArgs()
 
@@ -126,4 +128,6 @@ class DataSource:
         cursor = self.connection.cursor()
         cursor.execute("SELECT title FROM movies")
         allMovies = list(cursor.fetchall())
-        return formatToList(allMovies,returnTitles=False,isPopular=False)
+        allMovies = formatToList(allMovies,returnTitles=False,isPopular=False)
+        allMovies = sum(allMovies,[])
+        return allMovies

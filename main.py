@@ -17,7 +17,7 @@ class Parser:
     
     def __init__(self, args):
         self.numArgs = len(args)
-        self.noArgs = self.numArgs==0
+        self.noArgs = all(x == "" for x in args[1::2])
         self.type = []
         self.title = []
         self.director = []
@@ -33,7 +33,7 @@ class Parser:
 
         
         i = 0
-        while i < self.numArgs:
+        while i < self.numArgs and not self.noArgs:
             if isCategory(args[i]):
                 category = args[i]
                 i += 1
@@ -120,7 +120,7 @@ def getMovie(parsedArgs):
     """
         @description: takes in a movie title, initializes the data, and searches for and returns a list containing all the info 
         pertaining to that movie
-        @params: title - a str that provides the title of the movie
+        @params: title - a Parser object that provides the title of the movie
         @returns: movieInformation - a list that has the information of a movie
     """
     titleList = parsedArgs.getTitle()
@@ -158,9 +158,10 @@ def getRandomMovie(parsedArgs):
     numMovies = len(movieArray)
     if numMovies == 0:
             return []
+
     randInt = random.randint(0,numMovies-1)
     parsedArgs = Parser(["-ti", movieArray[randInt]])
-    
+
     return getMovie(parsedArgs)
 
 

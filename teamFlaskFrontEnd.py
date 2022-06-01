@@ -175,7 +175,6 @@ def functionSwitchboard():
             keyword = "random matching movie"
         else:
             movies = main.findMatchingMovies(parsedArgs)
-            print(parsedArgs.getArgs())
             if len(movies) == 0:
                 message = "No results!"
             else:
