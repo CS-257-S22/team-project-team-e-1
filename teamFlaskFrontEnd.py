@@ -6,8 +6,16 @@ import datasource
 
 
 app = Flask(__name__)
-logosImg = ["https://cdn.vox-cdn.com/thumbor/Yq1Vd39jCBGpTUKHUhEx5FfxvmM=/39x0:3111x2048/1200x800/filters:focal(39x0:3111x2048)/cdn.vox-cdn.com/uploads/chorus_image/image/49901753/netflixlogo.0.0.png","https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg","https://cdn.pastemagazine.com/www/articles/2019/10/18/disney-plus.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/2560px-Amazon_Prime_Video_logo.svg.png"]
-logosLinks = ["https://www.netflix.com/browse","https://www.hulu.com","https://www.disneyplus.com/","https://www.amazon.com/Amazon-Video/b/?ie=UTF8&node=2858778011&ref_=nav_cs_prime_video"]
+
+logosImg = {"Netflix":"https://cdn.vox-cdn.com/thumbor/Yq1Vd39jCBGpTUKHUhEx5FfxvmM=/39x0:3111x2048/1200x800/filters:focal(39x0:3111x2048)/cdn.vox-cdn.com/uploads/chorus_image/image/49901753/netflixlogo.0.0.png",
+"Hulu":"https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg",
+"Disney Plus":"https://cdn.pastemagazine.com/www/articles/2019/10/18/disney-plus.jpg",
+"Amazon Prime":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/2560px-Amazon_Prime_Video_logo.svg.png"}
+logosLinks = {"netflix":"https://www.netflix.com/browse",
+"Hulu":"https://www.hulu.com",
+"Disney Plus":"https://www.disneyplus.com/",
+"Amazon Prime":"https://www.amazon.com/Amazon-Video/b/?ie=UTF8&node=2858778011&ref_=nav_cs_prime_video"}
+
 streamingDatabase = datasource.DataSource()
 
 def getHomepage():
@@ -32,7 +40,7 @@ def getCategories():
     release_year = getYears(cursor)
     #cast = getCast(cursor)
     cast = []
-    movies = makeUniqueList(streamingDatabase.getAllTitles(), reverse=False)
+    movies = streamingDatabase.getAllTitles()
     countries = getCountries(cursor)
     return genres, ratings, release_year, movies, countries, cast
 
@@ -143,6 +151,7 @@ def moviePage():
     title = request.args['title']
     parsedArgs = main.Parser(["-ti", title ])
     result = main.getMovie(parsedArgs)
+    result[11] = result[11].split(", ")
     print(result)
     return render_template('movieInfo.html', type = result[0], title = result[1], director = result[2], cast = result[3], locations = result[4], dateAdded = result[5], releaseYear = result[6], rating = result[7], runtime = result[8], genres = result[9], description = result[10], streamingService = result[11],logos = logosImg,links=logosLinks)
 
@@ -223,4 +232,4 @@ def python_bug(e):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5129, debug=False)
+    app.run(host="0.0.0.0",port=5129, debug=True)

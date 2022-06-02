@@ -15,6 +15,7 @@
             <div class="main" id="main">
 
             <div class="info" id="movieInfo1">
+                <strong>General:</strong>
                 <ul>
                     <li><strong>Type:</strong> {{type}}</li>
                     <li><strong>Duration:</strong> {{runtime}}</li>
@@ -23,6 +24,7 @@
                 </ul>
             </div>
             <div class="info" id="movieInfo2">
+                <strong>Production:</strong>
                 <ul>
                     <li><strong>Director:</strong> {{director}}</li>
                     <li><strong>Country:</strong> {{locations}}</li>
@@ -32,28 +34,16 @@
                     
             </div>
             <div class="info" id="movieInfo3">
+                <strong>Streaming Services:</strong>
                 <ul>
-                    <li><strong>Streaming Service:</strong> {{streamingService}}</li>
+                {% for service in streamingService %}
+                    <li>{{service}}
+                        <a href={{links[service]}} id="homeLink" class="homeLink" target="blank">
+                            <img src={{logos[service]}} class="logo" id="logo" alt={{service}}+" logo"> 
+                        </a>
+                    </li> 
+                {% endfor %}
                 </ul>
-                {% if streamingService=="Netflix" %}
-                    <a href={{links[0]}} id="homeLink" class="homeLink" target="blank">
-                        <img src={{logos[0]}} class="logo" id="logo" alt="Netlix logo"> 
-                    </a>  
-                {% elif streamingService=="Hulu"%}
-                    <a href={{links[1]}} id="homeLink" class="homeLink" target="blank">
-                        <img src={{logos[1]}} class="logo" id="logo" alt="Hulu logo"> 
-                    </a>  
-                {% elif streamingService=="Disney Plus"%}
-                    <a href={{links[2]}} id="homeLink" class="homeLink" target="blank">
-                        <img src={{logos[2]}} class="logo" id="logo" alt="Disney Plus logo"> 
-                    </a>  
-                {% elif streamingService=="Amazon Prime"%}
-                    <a href={{links[3]}} id="homeLink" class="homeLink" target="blank">
-                        <img src={{logos[3]}} class="logo" id="logo" alt="Amazon Prime logo"> 
-                    </a>  
-                {% else %}
-                <p> Error finding streaming service. </p>
-                {%endif%}
                   
             </div>
 

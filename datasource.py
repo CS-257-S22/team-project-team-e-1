@@ -126,8 +126,8 @@ class DataSource:
             @returns: alltitles - formatted to list of lists
         """
         cursor = self.connection.cursor()
-        cursor.execute("SELECT title FROM movies")
+        cursor.execute("SELECT DISTINCT title FROM movies ORDER BY title ASC")
         allMovies = list(cursor.fetchall())
         allMovies = formatToList(allMovies,returnTitles=False,isPopular=False)
-        allMovies = sum(allMovies,[])
+        allMovies = [movie for aList in allMovies for movie in aList]
         return allMovies
