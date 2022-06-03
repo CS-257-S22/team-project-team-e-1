@@ -92,9 +92,14 @@ class DataSource:
             if criteria[i] != [] and criteria[i] != [''] :
                 print(categories[i])
                 if firstCategory:
-                    query = query + " {} ILIKE '%{}%'"
-                    query = query.format(categories[i], criteria[i][0])
-                    firstCategory = False    
+                    if categories[i] == "releaseyear":
+                        query = query + " {} = {}"
+                        query = query.format(categories[i], criteria[i][0])
+                        firstCategory = False  
+                    else:
+                        query = query + " {} ILIKE '%{}%'"
+                        query = query.format(categories[i], criteria[i][0])
+                        firstCategory = False    
                 if categories[i] == "releaseyear":
                     query = query + " AND {} = {}"
                     query = query.format(categories[i], criteria[i][0])
