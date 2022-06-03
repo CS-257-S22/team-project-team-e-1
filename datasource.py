@@ -17,7 +17,7 @@ def formatToList(movies, returnTitles, isPopular):
     while i < numMovies:
         movie = list(movies[i])
         if returnTitles:
-            movie = movie[not isPopular]
+            movie = movie[0]
         allMovies.append(movie)
         i = i + 1
 
@@ -80,7 +80,7 @@ class DataSource:
             @params: parsedArgs - the filters we are searching for
             @returns: movies - the tupled list of matching movies
         """
-        query = "SELECT * FROM movies"
+        query = "SELECT title FROM movies"
         if not parsedArgs.isEmpty():
             query = query + " WHERE"
 
