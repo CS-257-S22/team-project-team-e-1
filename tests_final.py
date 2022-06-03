@@ -1,10 +1,11 @@
 import os.path
 import unittest
 import main
+import datasource
 import psycopg2
 import psqlConfig as config
 
-rawData = main.DataSource()
+rawData = datasource.DataSource()
 allmovies = rawData.getAllMovies()
  
 class TestRandom(unittest.TestCase):
