@@ -78,7 +78,7 @@ class TestPROCESSING(unittest.TestCase):
         cursor = rawData.connection.cursor()
         cursor.execute("SELECT COUNT(*) FROM movies")
         databaseCount = list(cursor.fetchall()[0])[0]
-        self.assertEqual(databaseCount, 22998, "Dataset not fully processed")
+        self.assertEqual(databaseCount, 22112, "Dataset not fully processed")
          
 class testPARSER(unittest.TestCase):
     """A test class for the Parser class"""
