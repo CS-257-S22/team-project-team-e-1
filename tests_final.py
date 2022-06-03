@@ -94,8 +94,8 @@ class testFINDMATCHINGMOVIES(unittest.TestCase):
 
     def testSearchOneTerm(self):
         """checks that findMatchingMovies actually returns movies with titles containing the word 'Bangkok'"""
-        parsedArgs = main.Parser([])
-        parsedArgs.title = ["Bangkok"]
+        parsedArgs = main.Parser(["-ti","Bangkok"])
+
         result = main.findMatchingMovies(parsedArgs)
         for movie in result:
             self.assertIn("Bangkok", movie, "Returns movie which don't match the criterion")
