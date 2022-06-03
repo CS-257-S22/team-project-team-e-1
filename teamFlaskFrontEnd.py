@@ -92,6 +92,10 @@ def getYears(cursor):
     yearQuery = "SELECT releaseyear FROM movies"
     cursor.execute(yearQuery)
     years = datasource.formatToList(cursor.fetchall(),returnTitles=False,isPopular=False)
+    print(years[:10])
+    print(years[1][0])
+    for i in range(len(years)):
+        years[i] = [str(years[i][0])]
     return makeUniqueList(years, reverse = True)
 
 def getCountries(cursor):
