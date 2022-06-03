@@ -202,10 +202,10 @@ def isCategory(category):
 
 def findMatchingMovies(parsedArgs):
     """
-        @description: gives a list of titles of movies matching the given filters; does an AND search, so any title returned
+        @description: gives a list of all movie info for movies matching the given filters; does an AND search, so any title returned
         must match all of the criteria
         @params: parsedArgs - the filters we are searching for
-        @returns: matchingMovies - a list of movies matching the criteria
+        @returns: matchingMovies - a list of all movie info for movies matching the criteria
     """
     dataSource = datasource.DataSource()
     movies =  dataSource.findMatchingMoviesHelper(parsedArgs)
