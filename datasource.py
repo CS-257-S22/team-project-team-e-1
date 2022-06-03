@@ -102,6 +102,7 @@ class DataSource:
                 else:        
                     query = query + " AND {} ILIKE '%{}%'"
                     query = query.format(categories[i], str(criteria[i][0]))
+        print(query)
         try:
             cursor = self.connection.cursor()
             cursor.execute(query,)
