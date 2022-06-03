@@ -90,7 +90,7 @@ class DataSource:
         firstCategory = True
         for i in range(len(categories)):
             if criteria[i] != [] and criteria[i] != [''] :
-                print(criteria[i])
+                print(categories[i])
                 if firstCategory:
                     query = query + " {} ILIKE '%{}%'"
                     query = query.format(categories[i], criteria[i][0])
