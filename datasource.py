@@ -94,7 +94,7 @@ class DataSource:
                     query = query + " {} ILIKE '%{}%'"
                     query = query.format(categories[i], criteria[i][0])
                     firstCategory = False    
-                if criteria[i] == "release_year":
+                if criteria[i] == "-year":
                     query = query + " AND {} = {}"
                     query = query.format(categories[i], criteria[i][0])
                     firstCategory = False  
