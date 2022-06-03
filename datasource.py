@@ -90,7 +90,7 @@ class DataSource:
         firstCategory = True
         for i in range(len(categories)):
             if criteria[i] != [] and criteria[i] != [''] :
-                print(categories[i])
+                
                 if firstCategory:
                     if categories[i] == "releaseyear":
                         query = query + " {} = {}"
@@ -100,6 +100,7 @@ class DataSource:
                         query = query + " {} ILIKE '%{}%'"
                         query = query.format(categories[i], criteria[i][0])
                         firstCategory = False    
+                        
                 if categories[i] == "releaseyear":
                     query = query + " AND {} = {}"
                     query = query.format(categories[i], criteria[i][0])
@@ -108,7 +109,7 @@ class DataSource:
                 else:        
                     query = query + " AND {} ILIKE '%{}%'"
                     query = query.format(categories[i], str(criteria[i][0]))
-        print(query)
+        
         try:
             cursor = self.connection.cursor()
             cursor.execute(query,)
